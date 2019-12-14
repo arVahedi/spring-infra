@@ -40,6 +40,11 @@ public class ResponseTemplate<T> {
         this.statusCode = error.getCode();
         this.result = (T) error.getDescription();
     }
+
+    public ResponseTemplate(ErrorCode error, T result) {
+        this.statusCode = error.getCode();
+        this.result = result;
+    }
     //endregion
 
     public String makeResponse() throws JsonProcessingException {

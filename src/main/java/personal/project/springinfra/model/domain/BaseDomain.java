@@ -7,6 +7,7 @@ import java.io.Serializable;
 public abstract class BaseDomain<I extends Serializable> {
 
     private I id;
+//    private Long version;
 
     //region Getter and Setter
     @Id
@@ -19,6 +20,12 @@ public abstract class BaseDomain<I extends Serializable> {
     public void setId(I id) {
         this.id = id;
     }
+
+    /*@Version
+    @Column(name = "version")
+    public Long getVersion() {
+        return version;
+    }*/
     //endregion
 
 }

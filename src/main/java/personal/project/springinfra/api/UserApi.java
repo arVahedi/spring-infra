@@ -11,6 +11,7 @@ import personal.project.springinfra.logic.UserBL;
 import personal.project.springinfra.model.domain.User;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +25,13 @@ public class UserApi extends BaseApi {
     @PostMapping("/add")
     public ResponseEntity<ResponseTemplate> add(@Valid @RequestBody AddUserDto request) throws JsonProcessingException {
         User user = this.userBL.add(request);
-        return ResponseEntity.ok(new ResponseTemplate(ErrorCode.NO_ERROR));
+        return ResponseEntity.ok(new ResponseTemplate<>(ErrorCode.NO_ERROR, user));
+    }
+
+    @GetMapping("/find/{id}")
+    public ResponseEntity<ResponseTemplate> find(@Min(1) @PathVariable long id) {
+        User user = this.userBL.find(id);
+        return ResponseEntity.ok(new ResponseTemplate<>(ErrorCode.NO_ERROR, user));
     }
 
     @GetMapping("list")

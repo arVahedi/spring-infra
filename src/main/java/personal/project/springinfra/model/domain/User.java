@@ -2,7 +2,11 @@ package personal.project.springinfra.model.domain;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
+@Entity
+@Table(name = "user")
 public class User extends BaseDomain<Long> {
 
     private String firstName;

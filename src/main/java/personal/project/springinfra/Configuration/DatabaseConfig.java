@@ -17,7 +17,7 @@ import java.util.Properties;
 @EnableTransactionManagement
 public class DatabaseConfig extends BaseConfig {
 
-    @Value("${datasource.jdbcUrl}")
+    /*@Value("${datasource.jdbcUrl}")
     private String jdbcUrl;
     @Value("${datasource.username}")
     private String username;
@@ -30,9 +30,9 @@ public class DatabaseConfig extends BaseConfig {
     @Value("${datasource.hibernate.showSql}")
     private String hibernateShowSql;
     @Value("${datasource.hibernate.formatSql}")
-    private String hibernateFormatSql;
+    private String hibernateFormatSql;*/
 
-    @Bean
+    /*@Bean
     public LocalSessionFactoryBean sessionFactory() {
         LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
         sessionFactory.setDataSource(dataSource());
@@ -72,5 +72,5 @@ public class DatabaseConfig extends BaseConfig {
         hibernateProperties.setProperty("hibernate.format_sql", this.hibernateFormatSql);
 
         return hibernateProperties;
-    }
+    }*/
 }
