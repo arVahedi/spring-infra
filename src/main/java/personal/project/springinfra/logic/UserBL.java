@@ -1,7 +1,5 @@
 package personal.project.springinfra.logic;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import personal.project.springinfra.database.dao.BaseUserDao;
@@ -17,9 +15,17 @@ public class UserBL extends BaseBL {
     @Autowired
     private BaseUserDao userDao;
 
-    public User add(AddUserDto request) throws JsonProcessingException {
-        System.out.println(String.format("add api called: %s", new ObjectMapper().writeValueAsString(request)));
+    public User add(AddUserDto request) {
         User user = new User();
+        user.setEmail(request.getEmail());
+        user.setFirstName(request.getFirstName());
+        user.setLastName(request.getLastName());
+        user.setPhone(request.getPhoneNumber());
+        return this.userDao.save(user);
+    }
+
+    public User update(AddUserDto request) {
+        User user = this.userDao.findById(request.getId()).orElseThrow(UserNotExistException::new);
         user.setEmail(request.getEmail());
         user.setFirstName(request.getFirstName());
         user.setLastName(request.getLastName());

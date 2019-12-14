@@ -1,16 +1,16 @@
 package personal.project.springinfra.api;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import personal.project.springinfra.assets.ErrorCode;
 import personal.project.springinfra.assets.ResponseTemplate;
+import personal.project.springinfra.assets.ValidationGroups.*;
 import personal.project.springinfra.dto.AddUserDto;
 import personal.project.springinfra.logic.UserBL;
 import personal.project.springinfra.model.domain.User;
 
-import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,8 +23,14 @@ public class UserApi extends BaseApi {
     private UserBL userBL;
 
     @PostMapping("/add")
-    public ResponseEntity<ResponseTemplate> add(@Valid @RequestBody AddUserDto request) throws JsonProcessingException {
+    public ResponseEntity<ResponseTemplate> add(@Validated @RequestBody AddUserDto request) {
         User user = this.userBL.add(request);
+        return ResponseEntity.ok(new ResponseTemplate<>(ErrorCode.NO_ERROR, user));
+    }
+
+    @PostMapping("/update")
+    public ResponseEntity<ResponseTemplate> update(@Validated(UpdateGroup.class) @RequestBody AddUserDto request) {
+        User user = this.userBL.update(request);
         return ResponseEntity.ok(new ResponseTemplate<>(ErrorCode.NO_ERROR, user));
     }
 
