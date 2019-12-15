@@ -4,6 +4,6 @@ import javax.validation.groups.Default;
 
 public interface ValidationGroups {
 
-    interface InsertGroup extends Default {}
-    interface UpdateGroup extends Default{}
+    interface InsertValidationGroup extends Default {}
+    interface UpdateValidationGroup extends Default{}
 }

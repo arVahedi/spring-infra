@@ -1,15 +1,15 @@
 package personal.project.springinfra.dto;
 
 import personal.project.springinfra.assets.Regex;
-import personal.project.springinfra.assets.ValidationGroups.UpdateGroup;
+import personal.project.springinfra.assets.ValidationGroups.UpdateValidationGroup;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
-public class AddUserDto extends BaseDto {
-    @Min(value = 1, message = "Minimum acceptable value for id is 1", groups = UpdateGroup.class)
+public class UserDto extends BaseDto {
+    @Min(value = 1, message = "Minimum acceptable value for id is 1", groups = UpdateValidationGroup.class)
     private long id;
     @NotBlank(message = "First-Name is required")
     private String firstName;
@@ -21,7 +21,7 @@ public class AddUserDto extends BaseDto {
     @NotBlank(message = "Phone number is required")
     @Pattern(regexp = Regex.PHONE_NUMBER, message = "Phone number format is wrong")
     private String phoneNumber;
-    @NotNull(message = "version is required", groups = UpdateGroup.class)
+    @NotNull(message = "version is required", groups = UpdateValidationGroup.class)
     private Long version;
 
     //region Getter and Setter

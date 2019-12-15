@@ -6,14 +6,13 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import personal.project.springinfra.assets.ErrorCode;
 import personal.project.springinfra.assets.ResponseTemplate;
-import personal.project.springinfra.assets.ValidationGroups.*;
-import personal.project.springinfra.dto.AddUserDto;
+import personal.project.springinfra.assets.ValidationGroups.InsertValidationGroup;
+import personal.project.springinfra.assets.ValidationGroups.UpdateValidationGroup;
+import personal.project.springinfra.dto.UserDto;
 import personal.project.springinfra.logic.UserBL;
 import personal.project.springinfra.model.domain.User;
 
 import javax.validation.constraints.Min;
-import java.util.ArrayList;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/user")
@@ -23,14 +22,14 @@ public class UserApi extends BaseApi {
     private UserBL userBL;
 
     @PostMapping("/add")
-    public ResponseEntity<ResponseTemplate> add(@Validated @RequestBody AddUserDto request) {
-        User user = this.userBL.add(request);
+    public ResponseEntity<ResponseTemplate> add(@Validated(InsertValidationGroup.class) @RequestBody UserDto request) {
+        User user = this.userBL.saveOrUpdate(request);
         return ResponseEntity.ok(new ResponseTemplate<>(ErrorCode.NO_ERROR, user));
     }
 
     @PostMapping("/update")
-    public ResponseEntity<ResponseTemplate> update(@Validated(UpdateGroup.class) @RequestBody AddUserDto request) {
-        User user = this.userBL.update(request);
+    public ResponseEntity<ResponseTemplate> update(@Validated(UpdateValidationGroup.class) @RequestBody UserDto request) {
+        User user = this.userBL.saveOrUpdate(request);
         return ResponseEntity.ok(new ResponseTemplate<>(ErrorCode.NO_ERROR, user));
     }
 
@@ -40,8 +39,14 @@ public class UserApi extends BaseApi {
         return ResponseEntity.ok(new ResponseTemplate<>(ErrorCode.NO_ERROR, user));
     }
 
+    @PostMapping("/delete/{id}")
+    public ResponseEntity<ResponseTemplate> delete(@Min(1) @PathVariable long id) {
+        this.userBL.delete(id);
+        return ResponseEntity.ok(new ResponseTemplate<>(ErrorCode.NO_ERROR, id));
+    }
+
     @GetMapping("list")
-    public List<String> list() {
-        return new ArrayList<>();
+    public ResponseEntity<ResponseTemplate> list() {
+        return ResponseEntity.ok(new ResponseTemplate<>(ErrorCode.NO_ERROR, this.userBL.findAll()));
     }
 }
