@@ -8,6 +8,7 @@ import personal.project.springinfra.assets.ErrorCode;
 import personal.project.springinfra.assets.ResponseTemplate;
 import personal.project.springinfra.assets.ValidationGroups.InsertValidationGroup;
 import personal.project.springinfra.assets.ValidationGroups.UpdateValidationGroup;
+import personal.project.springinfra.dto.GenericDto;
 import personal.project.springinfra.dto.UserDto;
 import personal.project.springinfra.logic.UserBL;
 import personal.project.springinfra.model.domain.User;
@@ -36,6 +37,9 @@ public class UserApi extends BaseApi {
     @GetMapping("/find/{id}")
     public ResponseEntity<ResponseTemplate> find(@Min(1) @PathVariable long id) {
         User user = this.userBL.find(id);
+        GenericDto genericDto = new GenericDto();
+        genericDto.setProperty("FullName", user.getFirstName() + " " + user.getLastName());
+        genericDto.setProperty("email", user.getEmail());
         return ResponseEntity.ok(new ResponseTemplate<>(ErrorCode.NO_ERROR, user));
     }
 

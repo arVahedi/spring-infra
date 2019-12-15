@@ -1,13 +1,23 @@
 package personal.project.springinfra.model.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.data.domain.Persistable;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
 @MappedSuperclass
-public abstract class BaseDomain<I extends Serializable> {
+public abstract class BaseDomain<I extends Serializable> implements Persistable<I> {
 
     private I id;
     private Long version;
+
+    @Override
+    @Transient
+    @JsonIgnore
+    public boolean isNew() {
+        return null == this.id;
+    }
 
     //region Getter and Setter
     @Id
@@ -27,7 +37,7 @@ public abstract class BaseDomain<I extends Serializable> {
         return version;
     }
 
-    private void setVersion(Long version) {
+    public void setVersion(Long version) {
         this.version = version;
     }
     //endregion

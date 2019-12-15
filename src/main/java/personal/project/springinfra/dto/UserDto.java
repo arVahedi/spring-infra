@@ -9,8 +9,9 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 public class UserDto extends BaseDto {
+    @NotNull(message = "id is required", groups = UpdateValidationGroup.class)
     @Min(value = 1, message = "Minimum acceptable value for id is 1", groups = UpdateValidationGroup.class)
-    private long id;
+    private Long id;
     @NotBlank(message = "First-Name is required")
     private String firstName;
     @NotBlank(message = "Last-Name is required")
@@ -57,7 +58,7 @@ public class UserDto extends BaseDto {
         this.phoneNumber = phoneNumber;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
@@ -65,7 +66,7 @@ public class UserDto extends BaseDto {
         this.id = id;
     }
 
-    public long getVersion() {
+    public Long getVersion() {
         return version;
     }
 

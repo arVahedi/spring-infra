@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import personal.project.springinfra.database.dao.BaseUserDao;
 import personal.project.springinfra.dto.UserDto;
-import personal.project.springinfra.exception.UserNotExistException;
+import personal.project.springinfra.exception.NoSuchRecordException;
 import personal.project.springinfra.model.domain.User;
 
 import java.util.List;
@@ -18,8 +18,9 @@ public class UserBL extends BaseBL {
 
     public User saveOrUpdate(UserDto request) {
         User user = new User();
-        if (request.getId() > 0) { //Update
-            user = this.userDao.findById(request.getId()).orElseThrow(() -> new UserNotExistException("User doesn't exist"));
+        if (request.getId() != null && request.getId() > 0) { //This is update operation
+            user = this.userDao.findById(request.getId()).orElseThrow(() -> new NoSuchRecordException(String.format("User with id [%d] doesn't exist", request.getId())));
+            user.setVersion(request.getVersion());
         }
 
         user.setEmail(request.getEmail());
@@ -31,11 +32,11 @@ public class UserBL extends BaseBL {
 
     public User find(long id) {
         Optional<User> optional = this.userDao.findById(id);
-        return optional.orElseThrow(() -> new UserNotExistException("User doesn't exist"));
+        return optional.orElseThrow(() -> new NoSuchRecordException(String.format("User with id [%d] doesn't exist", id)));
     }
 
     public void delete(long id) {
-        User user = this.userDao.findById(id).orElseThrow(() -> new UserNotExistException("User doesn't exist"));
+        User user = this.userDao.findById(id).orElseThrow(() -> new NoSuchRecordException(String.format("User with id [%d] doesn't exist", id)));
         this.userDao.delete(user);
     }
 

@@ -1,4 +1,4 @@
-package personal.project.springinfra.assets;
+package personal.project.springinfra.dto;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
@@ -16,7 +16,7 @@ import java.util.Map;
 @JsonIdentityInfo(generator = JSOGGenerator.class)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 //@JsonSerialize(using = DTOSerializer.class)
-public class GenericDTO {
+public class GenericDto {
 
     private Map<String, Object> properties = new HashMap<>();
 
