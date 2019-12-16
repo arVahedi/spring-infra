@@ -54,6 +54,5 @@ public class User extends BaseDomain<Long> {
     public void setEmail(String email) {
         this.email = email;
     }
-
     //endregion
 }

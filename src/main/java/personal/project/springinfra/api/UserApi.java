@@ -40,7 +40,7 @@ public class UserApi extends BaseApi {
         GenericDto genericDto = new GenericDto();
         genericDto.setProperty("FullName", user.getFirstName() + " " + user.getLastName());
         genericDto.setProperty("email", user.getEmail());
-        return ResponseEntity.ok(new ResponseTemplate<>(ErrorCode.NO_ERROR, user));
+        return ResponseEntity.ok(new ResponseTemplate<>(ErrorCode.NO_ERROR, genericDto));
     }
 
     @PostMapping("/delete/{id}")
@@ -49,7 +49,7 @@ public class UserApi extends BaseApi {
         return ResponseEntity.ok(new ResponseTemplate<>(ErrorCode.NO_ERROR, id));
     }
 
-    @GetMapping("list")
+    @GetMapping("/list")
     public ResponseEntity<ResponseTemplate> list() {
         return ResponseEntity.ok(new ResponseTemplate<>(ErrorCode.NO_ERROR, this.userBL.findAll()));
     }

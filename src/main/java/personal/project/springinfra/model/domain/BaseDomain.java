@@ -7,9 +7,9 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @MappedSuperclass
-public abstract class BaseDomain<I extends Serializable> implements Persistable<I> {
+public abstract class BaseDomain<ID extends Serializable> implements Persistable<ID> {
 
-    private I id;
+    private ID id;
     private Long version;
 
     @Override
@@ -23,11 +23,11 @@ public abstract class BaseDomain<I extends Serializable> implements Persistable<
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    public I getId() {
+    public ID getId() {
         return id;
     }
 
-    public void setId(I id) {
+    public void setId(ID id) {
         this.id = id;
     }
 
