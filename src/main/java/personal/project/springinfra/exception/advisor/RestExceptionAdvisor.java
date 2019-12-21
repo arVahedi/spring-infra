@@ -29,8 +29,7 @@ public class RestExceptionAdvisor extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ResponseTemplate> handleGeneralException(Exception ex) {
-        ResponseTemplate<String> responseTemplate = new ResponseTemplate<>(ErrorCode.GENERAL_ERROR, ex.getMessage() != null ? ex.getMessage() : ErrorCode.GENERAL_ERROR.getDescription());
-        return new ResponseEntity<>(responseTemplate, HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(new ResponseTemplate<>(ErrorCode.GENERAL_ERROR), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @Override

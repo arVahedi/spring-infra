@@ -1,5 +1,8 @@
 package personal.project.springinfra.api;
 
+import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -16,7 +19,9 @@ import personal.project.springinfra.model.domain.User;
 import javax.validation.constraints.Min;
 
 @RestController
-@RequestMapping("/api/v1/user")
+@RequestMapping(BaseApi.API_PATH_PREFIX_V1 + "/user")
+//@Slf4j
+@Log4j2
 public class UserApi extends BaseApi {
 
     @Autowired
@@ -36,6 +41,14 @@ public class UserApi extends BaseApi {
 
     @GetMapping("/find/{id}")
     public ResponseEntity<ResponseTemplate> find(@Min(1) @PathVariable long id) {
+
+        log.fatal(String.format("/find api called [ID: %d]", id));
+        log.error(String.format("/find api called [ID: %d]", id));
+        log.warn(String.format("/find api called [ID: %d]", id));
+        log.info(String.format("/find api called [ID: %d]", id));
+        log.debug(String.format("/find api called [ID: %d]", id));
+        log.trace(String.format("/find api called [ID: %d]", id));
+
         User user = this.userBL.find(id);
         GenericDto genericDto = new GenericDto();
         genericDto.setProperty("FullName", user.getFirstName() + " " + user.getLastName());
