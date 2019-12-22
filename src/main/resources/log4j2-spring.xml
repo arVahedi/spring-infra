@@ -1,36 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration status="debug">
+<Configuration status="info" monitorInterval="30">
 
     <Properties>
         <Property name="basePath">/tmp</Property>
+        <Property name="logPattern">%d{yyyy-MM-dd HH:mm:ss} - %highlight{[%-5p]}{STYLE=Log4j} %c{1}:%M():%L (%t) - %m%n</Property>
     </Properties>
 
     <Appenders>
         <Console name="Console-Appender" target="SYSTEM_OUT">
             <PatternLayout>
                 <pattern>
-                    [%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n
-                </pattern>>
+                    ${logPattern}
+                </pattern>
             </PatternLayout>
         </Console>
 
         <RollingRandomAccessFile name="Rolling-Random-Access-File-Appender"
-                                 fileName="${basePath}/rollingrandomaccessfile.log"
-                                 filePattern="${basePath}/rollingrandomaccessfile.log.%d{yyyy-MM-dd-hh-mm}.gz">
-            <PatternLayout pattern="[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n"/>
+                                 fileName="${basePath}/spring-infra.log"
+                                 filePattern="${basePath}/spring-infra.log.%d{yyyy-MM-dd-hh-mm}.gz">
+            <PatternLayout pattern="${logPattern}" disableAnsi="false"/>
             <Policies>
-                <SizeBasedTriggeringPolicy size="1 KB"/>
+                <SizeBasedTriggeringPolicy size="100 MB"/>
             </Policies>
-            <DefaultRolloverStrategy max="30"/>
+            <DefaultRolloverStrategy max="5"/>
         </RollingRandomAccessFile>
     </Appenders>
 
     <Loggers>
-        <AsyncLogger  name="personal.project.springinfra" level="debug">
+        <AsyncLogger name="personal.project.springinfra" level="info" additivity="false" includeLocation="true">
             <AppenderRef ref="Rolling-Random-Access-File-Appender"/>
+            <AppenderRef ref="Console-Appender"/>
         </AsyncLogger>
 
         <Root level="info">
+            <AppenderRef ref="Rolling-Random-Access-File-Appender"/>
             <AppenderRef ref="Console-Appender"/>
         </Root>
     </Loggers>

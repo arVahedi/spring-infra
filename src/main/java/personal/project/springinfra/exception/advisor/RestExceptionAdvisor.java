@@ -1,6 +1,7 @@
 package personal.project.springinfra.exception.advisor;
 
 
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.StaleObjectStateException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -19,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestControllerAdvice
+@Slf4j
 public class RestExceptionAdvisor extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler({NoSuchRecordException.class, StaleObjectStateException.class, ObjectOptimisticLockingFailureException.class})
@@ -29,6 +31,7 @@ public class RestExceptionAdvisor extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ResponseTemplate> handleGeneralException(Exception ex) {
+        log.error(ex.getMessage(), ex);
         return new ResponseEntity<>(new ResponseTemplate<>(ErrorCode.GENERAL_ERROR), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
