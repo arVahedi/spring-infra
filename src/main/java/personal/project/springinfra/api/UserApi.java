@@ -21,7 +21,7 @@ import javax.validation.constraints.Min;
 @RestController
 @RequestMapping(BaseApi.API_PATH_PREFIX_V1 + "/user")
 @Slf4j
-@Api(value = "User rest api", description = "All operation about user supported by this api")
+@Api(value = "User rest api", description = "All operations about user is supported by this api")
 public class UserApi extends BaseApi {
 
     @Autowired
