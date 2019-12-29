@@ -1,7 +1,6 @@
 package personal.project.springinfra.api;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,28 +20,25 @@ import javax.validation.constraints.Min;
 @RestController
 @RequestMapping(BaseApi.API_PATH_PREFIX_V1 + "/user")
 @Slf4j
-@Api(tags = "User API", value = "UserRestApi", description = "All operations about user is supported by this api")
+@Tag(name="User API", description = "User management API")
 public class UserApi extends BaseApi {
 
     @Autowired
     private UserBL userBL;
 
     @PostMapping("/add")
-    @ApiOperation(value = "Add new user", response = ResponseEntity.class)
     public ResponseEntity<ResponseTemplate> add(@RequestBody @Validated(InsertValidationGroup.class) UserDto request) {
         User user = this.userBL.saveOrUpdate(request);
         return ResponseEntity.ok(new ResponseTemplate<>(ErrorCode.NO_ERROR, user));
     }
 
     @PostMapping("/update")
-    @ApiOperation(value = "Update an existing user", response = ResponseEntity.class)
     public ResponseEntity<ResponseTemplate> update(@RequestBody @Validated(UpdateValidationGroup.class) UserDto request) {
         User user = this.userBL.saveOrUpdate(request);
         return ResponseEntity.ok(new ResponseTemplate<>(ErrorCode.NO_ERROR, user));
     }
 
     @GetMapping("/find/{id}")
-    @ApiOperation(value = "Find an existing user", response = ResponseEntity.class)
     public ResponseEntity<ResponseTemplate> find(@PathVariable @Min(value = 1, message = "Minimum acceptable value for id is 1") long id) {
         User user = this.userBL.find(id);
         GenericDto genericDto = new GenericDto();
@@ -52,14 +48,12 @@ public class UserApi extends BaseApi {
     }
 
     @PostMapping("/delete/{id}")
-    @ApiOperation(value = "Delete an existing user", response = ResponseEntity.class)
     public ResponseEntity<ResponseTemplate> delete(@PathVariable @Min(value = 1, message = "Minimum acceptable value for id is 1") long id) {
         this.userBL.delete(id);
         return ResponseEntity.ok(new ResponseTemplate<>(ErrorCode.NO_ERROR, id));
     }
 
     @GetMapping("/list")
-    @ApiOperation(value = "Get all users as list", response = ResponseEntity.class)
     public ResponseEntity<ResponseTemplate> list() {
         return ResponseEntity.ok(new ResponseTemplate<>(ErrorCode.NO_ERROR, this.userBL.findAll()));
     }
