@@ -16,8 +16,11 @@ import personal.project.springinfra.assets.ErrorCode;
 import personal.project.springinfra.assets.ResponseTemplate;
 import personal.project.springinfra.exception.NoSuchRecordException;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestControllerAdvice
 @Slf4j
@@ -25,7 +28,16 @@ public class RestExceptionAdvisor extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler({NoSuchRecordException.class, StaleObjectStateException.class, ObjectOptimisticLockingFailureException.class})
     public ResponseEntity<ResponseTemplate> handleExpiredDataException(Exception ex) {
+        log.error(ex.getMessage(), ex);
         ResponseTemplate<String> responseTemplate = new ResponseTemplate<>(ErrorCode.EXPIRED_DATA, "Row was updated or deleted by another transaction");
+        return new ResponseEntity<>(responseTemplate, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<ResponseTemplate> handleConstraintViolationException(ConstraintViolationException ex) {
+        log.error(ex.getMessage(), ex);
+        List<String> messages = ex.getConstraintViolations().stream().map(ConstraintViolation::getMessage).collect(Collectors.toList());
+        ResponseTemplate responseTemplate = new ResponseTemplate<>(HttpStatus.BAD_REQUEST, messages);
         return new ResponseEntity<>(responseTemplate, HttpStatus.BAD_REQUEST);
     }
 
@@ -37,6 +49,7 @@ public class RestExceptionAdvisor extends ResponseEntityExceptionHandler {
 
     @Override
     public ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+        log.error(ex.getMessage(), ex);
         List<String> messages = new ArrayList<>();
         ex.getBindingResult().getFieldErrors().forEach(fieldError -> messages.add(fieldError.getDefaultMessage()));
         ResponseTemplate<List> responseTemplate = new ResponseTemplate<>(HttpStatus.BAD_REQUEST, messages);

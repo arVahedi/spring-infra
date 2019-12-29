@@ -1,5 +1,6 @@
 package personal.project.springinfra.Configuration;
 
+import com.google.common.base.Predicates;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -18,14 +19,17 @@ public class SwaggerConfig {
     @Bean
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
-                .apiInfo(this.apiInfo())
+                .apiInfo(this.getApiInfo())
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("personal.project.springinfra.api"))
+                .apis(Predicates.not(RequestHandlerSelectors.basePackage("org.springframework.boot")))
+//                .apis(RequestHandlerSelectors.withClassAnnotation(RestController.class))
                 .paths(PathSelectors.any())
-                .build();
+                .build()
+                .useDefaultResponseMessages(false);
     }
 
-    private ApiInfo apiInfo() {
+    private ApiInfo getApiInfo() {
         return new ApiInfoBuilder()
                 .title("Spring Infra API documentation")
                 .description("An infrastructure for any java project based on spring framework")
