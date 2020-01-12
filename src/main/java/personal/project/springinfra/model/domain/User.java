@@ -1,9 +1,8 @@
 package personal.project.springinfra.model.domain;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import personal.project.springinfra.assets.status.UserStatus;
+
+import javax.persistence.*;
 
 @Entity
 @Table(name = "user")
@@ -13,6 +12,7 @@ public class User extends BaseDomain<Long> {
     private String lastName;
     private String phone;
     private String email;
+    private UserStatus status;
 
     //region Getter and Setter
     @Basic
@@ -53,6 +53,16 @@ public class User extends BaseDomain<Long> {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    @Column(name = "status")
+    @Convert(converter = UserStatus.Converter.class)
+    public UserStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(UserStatus status) {
+        this.status = status;
     }
     //endregion
 }

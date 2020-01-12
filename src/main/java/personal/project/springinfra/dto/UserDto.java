@@ -2,6 +2,7 @@ package personal.project.springinfra.dto;
 
 import personal.project.springinfra.assets.Regex;
 import personal.project.springinfra.assets.ValidationGroups.UpdateValidationGroup;
+import personal.project.springinfra.assets.status.UserStatus;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
@@ -22,6 +23,8 @@ public class UserDto extends BaseDto {
     @NotBlank(message = "Phone number is required")
     @Pattern(regexp = Regex.PHONE_NUMBER, message = "Phone number format is wrong")
     private String phoneNumber;
+    @NotNull(message = "status is required")
+    private UserStatus status;
     @NotNull(message = "version is required", groups = UpdateValidationGroup.class)
     private Long version;
 
@@ -72,6 +75,14 @@ public class UserDto extends BaseDto {
 
     public void setVersion(long version) {
         this.version = version;
+    }
+
+    public UserStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(UserStatus status) {
+        this.status = status;
     }
     //endregion
 }

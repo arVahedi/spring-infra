@@ -2,6 +2,7 @@ package personal.project.springinfra.api.support;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,7 +30,7 @@ public class LogManagementApi extends BaseApi {
         return ResponseEntity.ok(new ResponseTemplate<>(ErrorCode.NO_ERROR, this.logManagementBL.getLoggerLevel(name).name()));
     }
 
-    @GetMapping("/level/set/{name}/{level}")
+    @GetMapping(value = "/level/set/{name}/{level}")
     public ResponseEntity<ResponseTemplate> setLoggerLevel(
             @PathVariable @NotBlank(message = "logger name is required") String name,
             @PathVariable @NotBlank(message = "logger level is required") @Pattern(regexp = "OFF|ERROR|WARN|INFO|DEBUG|TRACE", flags = Pattern.Flag.CASE_INSENSITIVE, message = "Illegal value for level of logger") String level) {
