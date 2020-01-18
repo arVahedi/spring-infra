@@ -1,4 +1,4 @@
-package personal.project.springinfra.database.repository;
+package personal.project.springinfra.database.repository.custom;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;

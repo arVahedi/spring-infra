@@ -1,4 +1,4 @@
-package personal.project.springinfra.database.repository;
+package personal.project.springinfra.database.repository.custom;
 
 import personal.project.springinfra.assets.status.UserStatus;
 

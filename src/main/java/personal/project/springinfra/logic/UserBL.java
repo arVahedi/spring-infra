@@ -2,6 +2,7 @@ package personal.project.springinfra.logic;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import personal.project.springinfra.assets.status.UserStatus;
 import personal.project.springinfra.database.repository.UserRepository;
 import personal.project.springinfra.dto.UserDto;
 import personal.project.springinfra.exception.NoSuchRecordException;
@@ -37,8 +38,9 @@ public class UserBL extends BaseBL {
     }
 
     public void delete(long id) {
-        User user = this.userRepository.findById(id).orElseThrow(() -> new NoSuchRecordException(String.format("User with id [%d] doesn't exist", id)));
-        this.userRepository.delete(user);
+//        User user = this.userRepository.findById(id).orElseThrow(() -> new NoSuchRecordException(String.format("User with id [%d] doesn't exist", id)));
+//        this.userRepository.delete(user);
+        this.userRepository.updateAllUsersStatus(UserStatus.SUSPEND);
     }
 
     public List<User> findAll() {
