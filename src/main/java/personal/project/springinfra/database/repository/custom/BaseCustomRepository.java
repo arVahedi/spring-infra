@@ -1,9 +1,12 @@
 package personal.project.springinfra.database.repository.custom;
 
+import personal.project.springinfra.model.domain.BaseDomain;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.io.Serializable;
 
-public abstract class BaseCustomRepository {
+public abstract class BaseCustomRepository<T extends BaseDomain, ID extends Serializable> {
 
     @PersistenceContext
     private EntityManager entityManager;
