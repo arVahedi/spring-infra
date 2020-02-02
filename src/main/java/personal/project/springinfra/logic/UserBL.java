@@ -18,6 +18,7 @@ public class UserBL extends BaseBL {
     @Autowired
     private UserRepository userRepository;
 
+    @Transactional(rollbackFor = Exception.class)
     public User saveOrUpdate(UserDto request) {
         User user = new User();
         if (request.getId() != null && request.getId() > 0) { //This is update operation
@@ -38,11 +39,10 @@ public class UserBL extends BaseBL {
         return optional.orElseThrow(() -> new NoSuchRecordException(String.format("User with id [%d] doesn't exist", id)));
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public void delete(long id) {
-//        User user = this.userRepository.findById(id).orElseThrow(() -> new NoSuchRecordException(String.format("User with id [%d] doesn't exist", id)));
-//        this.userRepository.delete(user);
-        this.userRepository.updateAllUsersStatus(UserStatus.ACTIVE);
+        User user = this.userRepository.findById(id).orElseThrow(() -> new NoSuchRecordException(String.format("User with id [%d] doesn't exist", id)));
+        this.userRepository.delete(user);
     }
 
     public List<User> findAll() {
