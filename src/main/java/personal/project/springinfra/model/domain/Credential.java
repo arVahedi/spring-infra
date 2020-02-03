@@ -42,7 +42,7 @@ public class Credential extends BaseDomain<Long> {
         this.salt = salt;
     }
 
-    @ManyToOne(targetEntity = User.class, fetch = FetchType.EAGER, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @ManyToOne(targetEntity = User.class, fetch = FetchType.LAZY, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     public User getUser() {
         return user;

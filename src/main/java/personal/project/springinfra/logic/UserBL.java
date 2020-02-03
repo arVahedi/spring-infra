@@ -3,7 +3,6 @@ package personal.project.springinfra.logic;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import personal.project.springinfra.assets.status.UserStatus;
 import personal.project.springinfra.database.repository.UserRepository;
 import personal.project.springinfra.dto.UserDto;
 import personal.project.springinfra.exception.NoSuchRecordException;
