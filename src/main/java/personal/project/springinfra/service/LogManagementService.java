@@ -1,4 +1,4 @@
-package personal.project.springinfra.logic;
+package personal.project.springinfra.service;
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -6,7 +6,7 @@ import org.apache.logging.log4j.core.config.Configurator;
 import org.springframework.stereotype.Service;
 
 @Service
-public class LogManagementBL extends BaseBL {
+public class LogManagementService extends BaseService {
 
     public void setLoggerLevel(String name, String level) {
         Level log4jLevel = Level.valueOf(level);

@@ -1,9 +1,8 @@
-package personal.project.springinfra.logic;
+package personal.project.springinfra.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import personal.project.springinfra.assets.status.UserStatus;
 import personal.project.springinfra.database.repository.UserRepository;
 import personal.project.springinfra.dto.UserDto;
 import personal.project.springinfra.exception.NoSuchRecordException;
@@ -13,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class UserBL extends BaseBL {
+public class UserService extends BaseService {
 
     @Autowired
     private UserRepository userRepository;

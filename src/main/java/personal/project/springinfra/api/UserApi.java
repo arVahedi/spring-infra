@@ -12,7 +12,7 @@ import personal.project.springinfra.assets.ValidationGroups.InsertValidationGrou
 import personal.project.springinfra.assets.ValidationGroups.UpdateValidationGroup;
 import personal.project.springinfra.dto.GenericDto;
 import personal.project.springinfra.dto.UserDto;
-import personal.project.springinfra.logic.UserBL;
+import personal.project.springinfra.service.UserService;
 import personal.project.springinfra.model.domain.User;
 
 import javax.validation.constraints.Min;
@@ -24,23 +24,23 @@ import javax.validation.constraints.Min;
 public class UserApi extends BaseApi {
 
     @Autowired
-    private UserBL userBL;
+    private UserService userService;
 
     @PostMapping("/add")
     public ResponseEntity<ResponseTemplate> add(@RequestBody @Validated(InsertValidationGroup.class) UserDto request) {
-        User user = this.userBL.saveOrUpdate(request);
+        User user = this.userService.saveOrUpdate(request);
         return ResponseEntity.ok(new ResponseTemplate<>(ErrorCode.NO_ERROR, user));
     }
 
     @PostMapping("/update")
     public ResponseEntity<ResponseTemplate> update(@RequestBody @Validated(UpdateValidationGroup.class) UserDto request) {
-        User user = this.userBL.saveOrUpdate(request);
+        User user = this.userService.saveOrUpdate(request);
         return ResponseEntity.ok(new ResponseTemplate<>(ErrorCode.NO_ERROR, user));
     }
 
     @GetMapping("/find/{id}")
     public ResponseEntity<ResponseTemplate> find(@PathVariable @Min(value = 1, message = "Minimum acceptable value for id is 1") long id) {
-        User user = this.userBL.find(id);
+        User user = this.userService.find(id);
         GenericDto genericDto = new GenericDto();
         genericDto.setProperty("FullName", user.getFirstName() + " " + user.getLastName());
         genericDto.setProperty("email", user.getEmail());
@@ -49,12 +49,12 @@ public class UserApi extends BaseApi {
 
     @PostMapping("/delete/{id}")
     public ResponseEntity<ResponseTemplate> delete(@PathVariable @Min(value = 1, message = "Minimum acceptable value for id is 1") long id) {
-        this.userBL.delete(id);
+        this.userService.delete(id);
         return ResponseEntity.ok(new ResponseTemplate<>(ErrorCode.NO_ERROR, id));
     }
 
     @GetMapping("/list")
     public ResponseEntity<ResponseTemplate> list() {
-        return ResponseEntity.ok(new ResponseTemplate<>(ErrorCode.NO_ERROR, this.userBL.findAll()));
+        return ResponseEntity.ok(new ResponseTemplate<>(ErrorCode.NO_ERROR, this.userService.findAll()));
     }
 }
