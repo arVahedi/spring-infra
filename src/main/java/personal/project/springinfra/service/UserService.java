@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import personal.project.springinfra.database.repository.UserRepository;
-import personal.project.springinfra.dto.UserDto;
+import personal.project.springinfra.dto.crud.UserDto;
 import personal.project.springinfra.exception.NoSuchRecordException;
 import personal.project.springinfra.model.domain.User;
 
@@ -33,15 +33,15 @@ public class UserService extends BaseService {
         return this.userRepository.save(user);
     }
 
-    public User find(long id) {
-        Optional<User> optional = this.userRepository.findById(id);
-        return optional.orElseThrow(() -> new NoSuchRecordException(String.format("User with id [%d] doesn't exist", id)));
-    }
-
     @Transactional(rollbackFor = Exception.class)
     public void delete(long id) {
         User user = this.userRepository.findById(id).orElseThrow(() -> new NoSuchRecordException(String.format("User with id [%d] doesn't exist", id)));
         this.userRepository.delete(user);
+    }
+
+    public User find(long id) {
+        Optional<User> optional = this.userRepository.findById(id);
+        return optional.orElseThrow(() -> new NoSuchRecordException(String.format("User with id [%d] doesn't exist", id)));
     }
 
     public List<User> findAll() {

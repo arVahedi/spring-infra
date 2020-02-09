@@ -1,15 +1,18 @@
-package personal.project.springinfra.dto;
+package personal.project.springinfra.dto.crud;
 
 import personal.project.springinfra.assets.Regex;
 import personal.project.springinfra.assets.ValidationGroups.UpdateValidationGroup;
 import personal.project.springinfra.assets.status.UserStatus;
+import personal.project.springinfra.dto.BaseDto;
+import personal.project.springinfra.model.domain.BaseDomain;
+import personal.project.springinfra.model.domain.User;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
-public class UserDto extends BaseDto {
+public class UserDto extends BaseCrudRequest<User> {
     @NotNull(message = "id is required", groups = UpdateValidationGroup.class)
     @Min(value = 1, message = "Minimum acceptable value for id is 1", groups = UpdateValidationGroup.class)
     private Long id;
@@ -27,6 +30,11 @@ public class UserDto extends BaseDto {
     private UserStatus status;
     @NotNull(message = "version is required", groups = UpdateValidationGroup.class)
     private Long version;
+
+    @Override
+    public User toEntity() {
+        return null;
+    }
 
     //region Getter and Setter
     public String getFirstName() {

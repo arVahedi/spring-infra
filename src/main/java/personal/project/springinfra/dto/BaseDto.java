@@ -1,4 +1,10 @@
 package personal.project.springinfra.dto;
 
-public abstract class BaseDto {
+import lombok.Data;
+
+import java.io.Serializable;
+
+@Data
+public abstract class BaseDto implements Serializable {
+
 }
