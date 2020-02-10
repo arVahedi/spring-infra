@@ -1,6 +1,7 @@
 package personal.project.springinfra.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import personal.project.springinfra.database.repository.UserRepository;
@@ -12,26 +13,24 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class UserService extends BaseService {
+public class UserService extends BaseService implements CrudService<User>{
 
     @Autowired
     private UserRepository userRepository;
 
-    @Transactional(rollbackFor = Exception.class)
+    /*@Transactional(rollbackFor = Exception.class)
     public User saveOrUpdate(UserDto request) {
-        User user = new User();
+        User user;
         if (request.getId() != null && request.getId() > 0) { //This is update operation
             user = this.userRepository.findById(request.getId()).orElseThrow(() -> new NoSuchRecordException(String.format("User with id [%d] doesn't exist", request.getId())));
-            user.setVersion(request.getVersion());
+            request.toEntity(user);
+        } else {    //This is insert operation
+            user = request.toEntity();
+            user.setVersion(0L);
         }
 
-        user.setEmail(request.getEmail());
-        user.setFirstName(request.getFirstName());
-        user.setLastName(request.getLastName());
-        user.setPhone(request.getPhoneNumber());
-        user.setStatus(request.getStatus());
         return this.userRepository.save(user);
-    }
+    }*/
 
     @Transactional(rollbackFor = Exception.class)
     public void delete(long id) {
@@ -46,5 +45,10 @@ public class UserService extends BaseService {
 
     public List<User> findAll() {
         return this.userRepository.findAll();
+    }
+
+    @Override
+    public CrudRepository getRepository() {
+        return this.userRepository;
     }
 }

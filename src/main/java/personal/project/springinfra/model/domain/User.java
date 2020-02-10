@@ -1,11 +1,13 @@
 package personal.project.springinfra.model.domain;
 
+import lombok.NoArgsConstructor;
 import personal.project.springinfra.assets.status.UserStatus;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "user")
+@NoArgsConstructor
 public class User extends BaseDomain<Long> {
 
     private String firstName;

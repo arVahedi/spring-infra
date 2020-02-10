@@ -1,5 +1,6 @@
 package personal.project.springinfra.dto.crud;
 
+import lombok.Data;
 import personal.project.springinfra.assets.Regex;
 import personal.project.springinfra.assets.ValidationGroups.UpdateValidationGroup;
 import personal.project.springinfra.assets.status.UserStatus;
@@ -12,10 +13,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
+@Data
 public class UserDto extends BaseCrudRequest<User> {
-    @NotNull(message = "id is required", groups = UpdateValidationGroup.class)
-    @Min(value = 1, message = "Minimum acceptable value for id is 1", groups = UpdateValidationGroup.class)
-    private Long id;
     @NotBlank(message = "First-Name is required")
     private String firstName;
     @NotBlank(message = "Last-Name is required")
@@ -28,69 +27,16 @@ public class UserDto extends BaseCrudRequest<User> {
     private String phoneNumber;
     @NotNull(message = "status is required")
     private UserStatus status;
-    @NotNull(message = "version is required", groups = UpdateValidationGroup.class)
-    private Long version;
 
     @Override
-    public User toEntity() {
-        return null;
+    public User toEntity(User user) {
+        user.setId(getId());
+        user.setVersion(getVersion());
+        user.setFirstName(this.firstName);
+        user.setLastName(this.lastName);
+        user.setEmail(this.email);
+        user.setPhone(this.phoneNumber);
+        user.setStatus(this.status);
+        return user;
     }
-
-    //region Getter and Setter
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public Long getVersion() {
-        return version;
-    }
-
-    public void setVersion(long version) {
-        this.version = version;
-    }
-
-    public UserStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(UserStatus status) {
-        this.status = status;
-    }
-    //endregion
 }
