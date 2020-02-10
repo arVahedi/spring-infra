@@ -11,7 +11,7 @@ import personal.project.springinfra.assets.ResponseTemplate;
 import personal.project.springinfra.assets.ValidationGroups.InsertValidationGroup;
 import personal.project.springinfra.assets.ValidationGroups.UpdateValidationGroup;
 import personal.project.springinfra.dto.GenericDto;
-import personal.project.springinfra.dto.UserDto;
+import personal.project.springinfra.dto.crud.UserDto;
 import personal.project.springinfra.service.UserService;
 import personal.project.springinfra.model.domain.User;
 
