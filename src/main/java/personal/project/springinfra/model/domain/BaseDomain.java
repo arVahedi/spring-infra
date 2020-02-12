@@ -4,10 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.domain.Persistable;
 
 import javax.persistence.*;
-import java.io.Serializable;
 
 @MappedSuperclass
-public abstract class BaseDomain<ID extends Serializable> implements Persistable<ID> {
+public abstract class BaseDomain<ID extends Number> implements Persistable<ID> {
 
     private ID id;
     private Long version;

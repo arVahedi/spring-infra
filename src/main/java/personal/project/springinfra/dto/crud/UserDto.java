@@ -12,9 +12,10 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import java.math.BigInteger;
 
 @Data
-public class UserDto extends BaseCrudRequest<User> {
+public class UserDto extends BaseCrudRequest<User, Long> {
     @NotBlank(message = "First-Name is required")
     private String firstName;
     @NotBlank(message = "Last-Name is required")

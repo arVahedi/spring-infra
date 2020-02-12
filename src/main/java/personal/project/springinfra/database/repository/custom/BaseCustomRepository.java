@@ -6,7 +6,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.io.Serializable;
 
-public abstract class BaseCustomRepository<T extends BaseDomain, ID extends Serializable> {
+public abstract class BaseCustomRepository<T extends BaseDomain> {
 
     @PersistenceContext
     private EntityManager entityManager;

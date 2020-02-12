@@ -12,10 +12,10 @@ import javax.validation.constraints.NotNull;
 import java.lang.reflect.ParameterizedType;
 
 @Data
-public abstract class BaseCrudRequest<E extends BaseDomain> extends BaseDto {
+public abstract class BaseCrudRequest<E extends BaseDomain, ID extends Number> extends BaseDto {
     @NotNull(message = "id is required", groups = ValidationGroups.UpdateValidationGroup.class)
     @Min(value = 1, message = "Minimum acceptable value for id is 1", groups = ValidationGroups.UpdateValidationGroup.class)
-    private Long id;
+    private ID id;
     @NotNull(message = "version is required", groups = ValidationGroups.UpdateValidationGroup.class)
     private Long version;
 
