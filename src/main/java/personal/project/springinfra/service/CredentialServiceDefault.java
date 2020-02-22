@@ -4,13 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import personal.project.springinfra.database.repository.CredentialRepository;
-import personal.project.springinfra.exception.NoSuchRecordException;
 import personal.project.springinfra.model.domain.Credential;
 
-import java.util.Optional;
-
 @Service
-public class CredentialService extends BaseService implements CrudService<Credential>{
+public class CredentialServiceDefault extends BaseService implements DefaultCrudService<Credential> {
 
     @Autowired
     private CredentialRepository credentialRepository;

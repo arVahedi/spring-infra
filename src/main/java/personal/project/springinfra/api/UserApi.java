@@ -3,58 +3,23 @@ package personal.project.springinfra.api;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
-import personal.project.springinfra.assets.ErrorCode;
-import personal.project.springinfra.assets.ResponseTemplate;
-import personal.project.springinfra.assets.ValidationGroups.InsertValidationGroup;
-import personal.project.springinfra.assets.ValidationGroups.UpdateValidationGroup;
-import personal.project.springinfra.dto.GenericDto;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import personal.project.springinfra.dto.crud.UserDto;
-import personal.project.springinfra.service.UserService;
-import personal.project.springinfra.model.domain.User;
-
-import javax.validation.constraints.Min;
+import personal.project.springinfra.service.DefaultCrudService;
+import personal.project.springinfra.service.UserServiceDefault;
 
 @RestController
 @RequestMapping(BaseApi.API_PATH_PREFIX_V1 + "/user")
 @Slf4j
-@Tag(name="User API", description = "User management API")
-public class UserApi extends BaseApi {
+@Tag(name = "User API", description = "User management API")
+public class UserApi extends BaseApi implements DefaultCrudRestApi<UserDto> {
 
     @Autowired
-    private UserService userService;
+    private UserServiceDefault userService;
 
-    @PostMapping("/save")
-    public ResponseEntity<ResponseTemplate> save(@RequestBody @Validated(InsertValidationGroup.class) UserDto request) {
-        User user = this.userService.saveOrUpdate(request);
-        return ResponseEntity.ok(new ResponseTemplate<>(ErrorCode.NO_ERROR, user));
-    }
-
-    @PostMapping("/update")
-    public ResponseEntity<ResponseTemplate> update(@RequestBody @Validated(UpdateValidationGroup.class) UserDto request) {
-        User user = this.userService.saveOrUpdate(request);
-        return ResponseEntity.ok(new ResponseTemplate<>(ErrorCode.NO_ERROR, user));
-    }
-
-    @GetMapping("/find/{id}")
-    public ResponseEntity<ResponseTemplate> find(@PathVariable @Min(value = 1, message = "Minimum acceptable value for id is 1") long id) {
-        User user = this.userService.find(id);
-        GenericDto genericDto = new GenericDto();
-        genericDto.setProperty("FullName", user.getFirstName() + " " + user.getLastName());
-        genericDto.setProperty("email", user.getEmail());
-        return ResponseEntity.ok(new ResponseTemplate<>(ErrorCode.NO_ERROR, genericDto));
-    }
-
-    @PostMapping("/delete/{id}")
-    public ResponseEntity<ResponseTemplate> delete(@PathVariable @Min(value = 1, message = "Minimum acceptable value for id is 1") long id) {
-        this.userService.delete(id);
-        return ResponseEntity.ok(new ResponseTemplate<>(ErrorCode.NO_ERROR, id));
-    }
-
-    @GetMapping("/list")
-    public ResponseEntity<ResponseTemplate> list() {
-        return ResponseEntity.ok(new ResponseTemplate<>(ErrorCode.NO_ERROR, this.userService.findAll()));
+    @Override
+    public DefaultCrudService getService() {
+        return this.userService;
     }
 }

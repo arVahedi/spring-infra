@@ -12,7 +12,7 @@ import personal.project.springinfra.assets.ErrorCode;
 import personal.project.springinfra.assets.ResponseTemplate;
 import personal.project.springinfra.dto.GenericDto;
 import personal.project.springinfra.model.domain.Credential;
-import personal.project.springinfra.service.CredentialService;
+import personal.project.springinfra.service.CredentialServiceDefault;
 
 import javax.validation.constraints.Min;
 
@@ -23,7 +23,7 @@ import javax.validation.constraints.Min;
 public class CredentialApi extends BaseApi {
 
     @Autowired
-    private CredentialService credentialService;
+    private CredentialServiceDefault credentialService;
 
     @GetMapping("/find/{id}")
     public ResponseEntity<ResponseTemplate> find(@PathVariable @Min(value = 1, message = "Minimum acceptable value for id is 1") long id) {

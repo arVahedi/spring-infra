@@ -1,54 +1,22 @@
 package personal.project.springinfra.service;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.transaction.annotation.Transactional;
 import personal.project.springinfra.dto.crud.BaseCrudRequest;
-import personal.project.springinfra.exception.NoSuchRecordException;
 import personal.project.springinfra.model.domain.BaseDomain;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface CrudService<E extends BaseDomain> {
 
-    @Transactional(rollbackFor = Exception.class)
-    default E saveOrUpdate(BaseCrudRequest request) {
-        E entity;
-        if (request.getId() != null && request.getId().longValue() > 0) { //This is update operation
-            Optional<E> optional = getRepository().findById(request.getId());
-            entity = optional.orElseThrow(() -> new NoSuchRecordException(String.format("%s with id [%d] doesn't exist",
-                    getGenericDomainClass().getSimpleName(), request.getId().longValue())));
-            request.toEntity(entity);
-        } else {    //This is insert operation
-            entity = (E) request.toEntity(getGenericDomainClass());
-            entity.setVersion(0L);
-        }
+    E saveOrUpdate(BaseCrudRequest request);
 
-        return (E) getRepository().save(entity);
-    }
+    void delete(long id);
 
-    @Transactional(rollbackFor = Exception.class)
-    default void delete(long id) {
-        Optional<E> optional = getRepository().findById(id);
-        E user = optional.orElseThrow(() -> new NoSuchRecordException(String.format("%s with id [%d] doesn't exist", getGenericDomainClass().getSimpleName(), id)));
-        getRepository().delete(user);
-    }
+    E find(long id);
 
-    default E find(long id) {
-        Optional<E> optional = getRepository().findById(id);
-        return optional.orElseThrow(() -> new NoSuchRecordException(String.format("%s with id [%d] doesn't exist", getGenericDomainClass().getSimpleName(), id)));
-    }
-
-    default List<E> findAll() {
-        return getRepository().findAll();
-    }
+    List<E> findAll();
 
     JpaRepository getRepository();
 
     Class<E> getGenericDomainClass();
-
-    @Slf4j
-    class Logger {
-    }
 }
