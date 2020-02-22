@@ -19,10 +19,14 @@ public abstract class BaseCrudRequest<E extends BaseDomain, ID extends Number> e
     @NotNull(message = "version is required", groups = ValidationGroups.UpdateValidationGroup.class)
     private Long version;
 
+    private Class<E> getGenericDomainClassType() {
+        return (Class<E>) ((ParameterizedType) getClass()
+                .getGenericSuperclass()).getActualTypeArguments()[0];
+    }
+
     @SneakyThrows
-    public final E toEntity() {
-        E entity = ((Class<E>) ((ParameterizedType) getClass()
-                .getGenericSuperclass()).getActualTypeArguments()[0]).getConstructor().newInstance();
+    public final E toEntity(Class<E> domainClass) {
+        E entity = domainClass.getConstructor().newInstance();
         return this.toEntity(entity);
     }
 

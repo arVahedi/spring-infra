@@ -26,8 +26,8 @@ public class UserApi extends BaseApi {
     @Autowired
     private UserService userService;
 
-    @PostMapping("/add")
-    public ResponseEntity<ResponseTemplate> add(@RequestBody @Validated(InsertValidationGroup.class) UserDto request) {
+    @PostMapping("/save")
+    public ResponseEntity<ResponseTemplate> save(@RequestBody @Validated(InsertValidationGroup.class) UserDto request) {
         User user = this.userService.saveOrUpdate(request);
         return ResponseEntity.ok(new ResponseTemplate<>(ErrorCode.NO_ERROR, user));
     }
