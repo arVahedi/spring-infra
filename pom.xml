@@ -62,17 +62,17 @@
             <version>3.4.2</version>
         </dependency>
 
-        <!--Swagger-->
-        <!--<dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger2</artifactId>
-            <version>2.9.2</version>
+        <!--Bouncy Castle-->
+        <dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcprov-jdk15on</artifactId>
+            <version>1.64</version>
         </dependency>
         <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger-ui</artifactId>
-            <version>2.9.2</version>
-        </dependency>-->
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcpkix-jdk15on</artifactId>
+            <version>1.64</version>
+        </dependency>
 
         <!--Spring Doc-->
         <dependency>
@@ -80,7 +80,6 @@
             <artifactId>springdoc-openapi-ui</artifactId>
             <version>1.2.21</version>
         </dependency>
-
 
         <!--Lombok-->
         <dependency>
@@ -103,6 +102,14 @@
             <artifactId>mysql-connector-java</artifactId>
             <version>8.0.18</version>
         </dependency>
+
+        <!--Apache Commons Codec-->
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+            <version>1.14</version>
+        </dependency>
+
     </dependencies>
 
     <build>

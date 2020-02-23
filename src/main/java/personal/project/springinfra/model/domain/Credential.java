@@ -1,5 +1,8 @@
 package personal.project.springinfra.model.domain;
 
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang3.RandomStringUtils;
+
 import javax.persistence.*;
 
 @Entity
@@ -10,6 +13,16 @@ public class Credential extends BaseDomain<Long> {
     private String password;
     private String salt;
     private User user;
+
+    public void changePassword(String password) {
+        this.salt = RandomStringUtils.randomAlphanumeric(10);
+        String clearPassword = makeSaltDirtyPassword(password);
+        this.password = DigestUtils.sha256Hex(clearPassword);
+    }
+
+    private String makeSaltDirtyPassword(String clearPassword) {
+        return this.salt + clearPassword;
+    }
 
     //region Getter and Setter
     @Basic

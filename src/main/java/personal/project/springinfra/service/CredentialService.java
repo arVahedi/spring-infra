@@ -7,7 +7,7 @@ import personal.project.springinfra.database.repository.CredentialRepository;
 import personal.project.springinfra.model.domain.Credential;
 
 @Service
-public class CredentialServiceDefault extends BaseService implements DefaultCrudService<Credential> {
+public class CredentialService extends BaseService implements DefaultCrudService<Credential> {
 
     @Autowired
     private CredentialRepository credentialRepository;

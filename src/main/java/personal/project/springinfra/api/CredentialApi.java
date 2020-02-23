@@ -11,8 +11,10 @@ import org.springframework.web.bind.annotation.RestController;
 import personal.project.springinfra.assets.ErrorCode;
 import personal.project.springinfra.assets.ResponseTemplate;
 import personal.project.springinfra.dto.GenericDto;
+import personal.project.springinfra.dto.crud.CredentialDto;
 import personal.project.springinfra.model.domain.Credential;
-import personal.project.springinfra.service.CredentialServiceDefault;
+import personal.project.springinfra.service.CredentialService;
+import personal.project.springinfra.service.DefaultCrudService;
 
 import javax.validation.constraints.Min;
 
@@ -20,20 +22,13 @@ import javax.validation.constraints.Min;
 @RequestMapping(BaseApi.API_PATH_PREFIX_V1 + "/credential")
 @Slf4j
 @Tag(name="Credential API", description = "Credential management API")
-public class CredentialApi extends BaseApi {
+public class CredentialApi extends BaseApi implements DefaultCrudRestApi<CredentialDto>{
 
     @Autowired
-    private CredentialServiceDefault credentialService;
+    private CredentialService credentialService;
 
-    @GetMapping("/find/{id}")
-    public ResponseEntity<ResponseTemplate> find(@PathVariable @Min(value = 1, message = "Minimum acceptable value for id is 1") long id) {
-        Credential credential = this.credentialService.find(id);
-        GenericDto genericDto = new GenericDto();
-        genericDto.setProperty("username", credential.getUsername());
-        genericDto.setProperty("password", "*******");
-        genericDto.setProperty("fullName", credential.getUser().getFirstName() + " " + credential.getUser().getLastName());
-        return ResponseEntity.ok(new ResponseTemplate<>(ErrorCode.NO_ERROR, genericDto));
+    @Override
+    public DefaultCrudService getService() {
+        return this.credentialService;
     }
-
-
 }
