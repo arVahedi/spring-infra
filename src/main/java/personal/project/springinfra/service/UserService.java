@@ -7,7 +7,7 @@ import personal.project.springinfra.database.repository.UserRepository;
 import personal.project.springinfra.model.domain.User;
 
 @Service
-public class UserServiceDefault extends BaseService implements DefaultCrudService<User> {
+public class UserService extends BaseService implements DefaultCrudService<User> {
 
     @Autowired
     private UserRepository userRepository;

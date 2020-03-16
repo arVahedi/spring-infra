@@ -10,7 +10,7 @@ public interface CrudService<E extends BaseDomain> {
 
     E saveOrUpdate(BaseCrudRequest request);
 
-    void delete(long id);
+    E delete(long id);
 
     E find(long id);
 

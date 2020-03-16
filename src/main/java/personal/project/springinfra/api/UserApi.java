@@ -6,8 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import personal.project.springinfra.dto.crud.UserDto;
-import personal.project.springinfra.service.DefaultCrudService;
-import personal.project.springinfra.service.UserServiceDefault;
+import personal.project.springinfra.dto.generator.CrudApiResponseGenerator;
+import personal.project.springinfra.dto.generator.UserCrudApiResponseGenerator;
+import personal.project.springinfra.model.domain.User;
+import personal.project.springinfra.service.CrudService;
+import personal.project.springinfra.service.UserService;
 
 @RestController
 @RequestMapping(BaseApi.API_PATH_PREFIX_V1 + "/user")
@@ -16,10 +19,16 @@ import personal.project.springinfra.service.UserServiceDefault;
 public class UserApi extends BaseApi implements DefaultCrudRestApi<UserDto> {
 
     @Autowired
-    private UserServiceDefault userService;
+    private UserService userService;
+    private CrudApiResponseGenerator<User> crudApiResponseGenerator = new UserCrudApiResponseGenerator();
 
     @Override
-    public DefaultCrudService getService() {
+    public CrudService getService() {
         return this.userService;
+    }
+
+    @Override
+    public CrudApiResponseGenerator<User> getCrudApiResponseGenerator() {
+        return this.crudApiResponseGenerator;
     }
 }

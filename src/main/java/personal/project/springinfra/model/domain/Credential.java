@@ -8,7 +8,6 @@ import javax.persistence.*;
 @Entity
 @Table(name = "credential")
 public class Credential extends BaseDomain<Long> {
-
     private String username;
     private String password;
     private String salt;

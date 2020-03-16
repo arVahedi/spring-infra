@@ -2,17 +2,12 @@ package personal.project.springinfra.dto.crud;
 
 import lombok.Data;
 import personal.project.springinfra.assets.Regex;
-import personal.project.springinfra.assets.ValidationGroups.UpdateValidationGroup;
 import personal.project.springinfra.assets.status.UserStatus;
-import personal.project.springinfra.dto.BaseDto;
-import personal.project.springinfra.model.domain.BaseDomain;
 import personal.project.springinfra.model.domain.User;
 
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-import java.math.BigInteger;
 
 @Data
 public class UserDto extends BaseCrudRequest<User, Long> {

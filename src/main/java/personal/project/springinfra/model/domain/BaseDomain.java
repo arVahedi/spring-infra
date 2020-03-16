@@ -1,21 +1,32 @@
 package personal.project.springinfra.model.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.data.domain.Persistable;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @MappedSuperclass
+@JsonIgnoreProperties({"hibernateLazyInitializer"})
 public abstract class BaseDomain<ID extends Number> implements Persistable<ID> {
 
     private ID id;
     private Long version;
+    private Date insertDate;
 
     @Override
     @Transient
     @JsonIgnore
     public boolean isNew() {
-        return null == this.id;
+        return this.id == null;
+    }
+
+    @PrePersist
+    public void fillInsertDate() {
+        if (this.insertDate == null) {
+            this.insertDate = new Date();
+        }
     }
 
     //region Getter and Setter
@@ -38,6 +49,17 @@ public abstract class BaseDomain<ID extends Number> implements Persistable<ID> {
 
     public void setVersion(Long version) {
         this.version = version;
+    }
+
+    @Basic
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "insert_date", columnDefinition = "TIMESTAMP")
+    public Date getInsertDate() {
+        return insertDate;
+    }
+
+    public void setInsertDate(Date insertDate) {
+        this.insertDate = insertDate;
     }
     //endregion
 

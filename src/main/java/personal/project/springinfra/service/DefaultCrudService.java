@@ -15,7 +15,7 @@ public interface DefaultCrudService<E extends BaseDomain> extends CrudService<E>
     @Transactional(rollbackFor = Exception.class)
     default E saveOrUpdate(BaseCrudRequest request) {
         E entity;
-        if (request.getId() != null && request.getId().longValue() > 0) { //This is update operation
+        if (request.getId() != null && request.getId().longValue() > 0) {    //This is update operation
             Optional<E> optional = getRepository().findById(request.getId());
             entity = optional.orElseThrow(() -> new NoSuchRecordException(String.format("%s with id [%d] doesn't exist",
                     getGenericDomainClass().getSimpleName(), request.getId().longValue())));
@@ -29,10 +29,11 @@ public interface DefaultCrudService<E extends BaseDomain> extends CrudService<E>
     }
 
     @Transactional(rollbackFor = Exception.class)
-    default void delete(long id) {
+    default E delete(long id) {
         Optional<E> optional = getRepository().findById(id);
-        E user = optional.orElseThrow(() -> new NoSuchRecordException(String.format("%s with id [%d] doesn't exist", getGenericDomainClass().getSimpleName(), id)));
-        getRepository().delete(user);
+        E entity = optional.orElseThrow(() -> new NoSuchRecordException(String.format("%s with id [%d] doesn't exist", getGenericDomainClass().getSimpleName(), id)));
+        getRepository().delete(entity);
+        return entity;
     }
 
     default E find(long id) {
