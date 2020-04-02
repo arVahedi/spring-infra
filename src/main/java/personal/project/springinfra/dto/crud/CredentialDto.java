@@ -1,25 +1,28 @@
 package personal.project.springinfra.dto.crud;
 
 import lombok.Data;
+import personal.project.springinfra.annotation.validation.CascadeValidate;
+import personal.project.springinfra.assets.ValidationGroups;
 import personal.project.springinfra.model.domain.Credential;
 import personal.project.springinfra.model.domain.User;
 
-import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Data
 public class CredentialDto extends BaseCrudRequest<Credential, Long> {
-    @NotBlank(message = "Username is required")
+    @NotBlank(message = "username is required")
     private String username;
-    @NotBlank(message = "Password is required")
+    @NotBlank(message = "password is required")
     private String password;
-    @Valid
-    @NotNull(message = "User property is required")
+    @CascadeValidate(cascadeGroups = ValidationGroups.DynamicCrudValidationGroup.class)
+    @NotNull(message = "user property is required")
     private UserDto user;
 
     @Override
     public Credential toEntity(Credential credential) {
+        credential.setId(getId());
+        credential.setVersion(getVersion());
         credential.setUsername(this.username);
         credential.changePassword(this.password);
         if (credential.getUser() == null) {

@@ -1,9 +1,28 @@
 package personal.project.springinfra.assets;
 
+import personal.project.springinfra.dto.crud.BaseCrudRequest;
+
 import javax.validation.groups.Default;
 
 public interface ValidationGroups {
 
-    interface InsertValidationGroup extends Default {}
-    interface UpdateValidationGroup extends Default{}
+    class DynamicCrudValidationGroup extends VirtualValidationGroups {
+        @Override
+        public Class<?>[] actualGroups(Object object) {
+            if (object instanceof BaseCrudRequest) {
+                if (((BaseCrudRequest) object).getId() == null) {
+                    return new Class[]{InsertValidationGroup.class};
+                } else {
+                    return new Class[]{UpdateValidationGroup.class};
+                }
+            }
+            return new Class[0];
+        }
+    }
+
+    interface InsertValidationGroup extends Default {
+    }
+
+    interface UpdateValidationGroup extends Default {
+    }
 }

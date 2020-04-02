@@ -19,7 +19,7 @@ public abstract class BaseDomain<ID extends Number> implements Persistable<ID> {
     @Transient
     @JsonIgnore
     public boolean isNew() {
-        return this.id == null;
+        return this.id == null || this.id.longValue() == 0;
     }
 
     @PrePersist

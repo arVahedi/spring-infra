@@ -10,6 +10,7 @@ import personal.project.springinfra.dto.crud.BaseCrudRequest;
 import personal.project.springinfra.dto.generator.CrudApiResponseGenerator;
 import personal.project.springinfra.dto.generator.DefaultCrudApiResponseGenerator;
 import personal.project.springinfra.model.domain.BaseDomain;
+import personal.project.springinfra.model.domain.User;
 import personal.project.springinfra.service.CrudService;
 
 import javax.validation.constraints.Min;

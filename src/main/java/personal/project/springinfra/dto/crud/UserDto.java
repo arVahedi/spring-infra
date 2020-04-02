@@ -1,6 +1,7 @@
 package personal.project.springinfra.dto.crud;
 
 import lombok.Data;
+import personal.project.springinfra.annotation.validation.CascadeValidate;
 import personal.project.springinfra.assets.Regex;
 import personal.project.springinfra.assets.status.UserStatus;
 import personal.project.springinfra.model.domain.User;

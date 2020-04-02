@@ -3,7 +3,7 @@ package personal.project.springinfra.database.repository.custom;
 import personal.project.springinfra.assets.status.UserStatus;
 import personal.project.springinfra.model.domain.User;
 
-public class CustomUserRepositoryImpl extends BaseCustomRepository<User> implements CustomUserRepository {
+public class UserCustomRepositoryImpl extends BaseCustomRepository<User> implements UserCustomRepository {
 
     @Override
     public void suspendUser(long id) {

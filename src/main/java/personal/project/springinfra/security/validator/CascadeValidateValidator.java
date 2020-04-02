@@ -1,0 +1,55 @@
+package personal.project.springinfra.security.validator;
+
+import lombok.SneakyThrows;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
+import personal.project.springinfra.annotation.validation.CascadeValidate;
+import personal.project.springinfra.assets.VirtualValidationGroups;
+
+import javax.validation.ConstraintValidatorContext;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validator;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
+
+public class CascadeValidateValidator extends BaseValidator<CascadeValidate, Object> {
+
+    @Autowired
+    private Validator validator;
+
+    private CascadeValidate constraintAnnotation;
+
+    @Override
+    public void initialize(CascadeValidate constraintAnnotation) {
+        this.constraintAnnotation = constraintAnnotation;
+    }
+
+    @SneakyThrows
+    @Override
+    public boolean isValid(Object object, ConstraintValidatorContext constraintValidatorContext) {
+
+        List<Class> validationGroups = new ArrayList<>();
+        for (Class<?> group : this.constraintAnnotation.cascadeGroups()) {
+            if (VirtualValidationGroups.class.isAssignableFrom(group)) {
+                validationGroups.addAll(Arrays.asList(((VirtualValidationGroups) group.getConstructor().newInstance()).actualGroups(object)));
+            } else {
+                validationGroups.add(group);
+            }
+        }
+
+        Set<ConstraintViolation<Object>> constraintViolations = this.validator.validate(object, validationGroups.toArray(new Class[validationGroups.size()]));
+
+        if (!CollectionUtils.isEmpty(constraintViolations)) {
+            constraintValidatorContext.disableDefaultConstraintViolation();
+            for (ConstraintViolation<Object> violation : constraintViolations) {
+                constraintValidatorContext
+                        .buildConstraintViolationWithTemplate(violation.getMessageTemplate())
+                        .addConstraintViolation();
+            }
+        }
+
+        return CollectionUtils.isEmpty(constraintViolations);
+    }
+}

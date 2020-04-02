@@ -5,8 +5,10 @@ import personal.project.springinfra.model.domain.User;
 
 public class UserCrudApiResponseGenerator extends DefaultCrudApiResponseGenerator<User> {
 
+    @Override
     public Object onFind(User entity) {
         GenericDto dto = new GenericDto();
+        dto.setProperty("id", entity.getId());
         dto.setProperty("fullName", entity.getFirstName() + " " + entity.getLastName());
         dto.setProperty("email", entity.getEmail());
         dto.setProperty("status", entity.getStatus());

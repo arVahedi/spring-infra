@@ -4,9 +4,8 @@ import personal.project.springinfra.model.domain.BaseDomain;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.io.Serializable;
 
-public abstract class BaseCustomRepository<T extends BaseDomain> {
+public abstract class BaseCustomRepository<E extends BaseDomain> {
 
     @PersistenceContext
     private EntityManager entityManager;

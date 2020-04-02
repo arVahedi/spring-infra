@@ -1,7 +1,6 @@
 package personal.project.springinfra.model.domain;
 
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 import personal.project.springinfra.assets.status.UserStatus;
 
@@ -9,9 +8,8 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "user")
+@Where(clause = "deleted=false")
 @NoArgsConstructor
-//@SQLDelete(sql = "UPDATE user SET deleted = true WHERE id = ? and version = ?")
-//@Where(clause = "deleted=false")
 public class User extends LogicalDeletableDomain<Long> {
     private String firstName;
     private String lastName;

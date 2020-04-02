@@ -1,6 +1,6 @@
 package personal.project.springinfra.service;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import personal.project.springinfra.database.repository.BaseRepository;
 import personal.project.springinfra.dto.crud.BaseCrudRequest;
 import personal.project.springinfra.model.domain.BaseDomain;
 
@@ -16,7 +16,7 @@ public interface CrudService<E extends BaseDomain> {
 
     List<E> findAll();
 
-    JpaRepository getRepository();
+    BaseRepository getRepository();
 
     Class<E> getGenericDomainClass();
 }
