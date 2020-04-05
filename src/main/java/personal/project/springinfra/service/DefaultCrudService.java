@@ -5,7 +5,6 @@ import org.springframework.transaction.annotation.Transactional;
 import personal.project.springinfra.dto.crud.BaseCrudRequest;
 import personal.project.springinfra.exception.NoSuchRecordException;
 import personal.project.springinfra.model.domain.BaseDomain;
-import personal.project.springinfra.model.domain.Credential;
 
 import java.util.List;
 import java.util.Optional;
