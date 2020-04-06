@@ -23,7 +23,7 @@ public interface DefaultCrudService<E extends BaseDomain> extends CrudService<E>
         }
 
         entity = (E) getRepository().save(entity);
-        getRepository().detach(entity);
+//        getRepository().detach(entity);
         return entity;
     }
 
@@ -31,20 +31,20 @@ public interface DefaultCrudService<E extends BaseDomain> extends CrudService<E>
     default E delete(long id) {
         E entity = find(id);
         getRepository().delete(entity);
-        getRepository().detach(entity);
+//        getRepository().detach(entity);
         return entity;
     }
 
     default E find(long id) {
         Optional<E> optional = getRepository().findById(id);
         E entity = optional.orElseThrow(() -> new NoSuchRecordException(String.format("%s with id [%d] doesn't exist", getGenericDomainClass().getSimpleName(), id)));
-        getRepository().detach(entity);
+//        getRepository().detach(entity);
         return entity;
     }
 
     default List<E> findAll() {
         List<E> result = getRepository().findAll();
-        result.forEach(item -> getRepository().detach(item));
+//        result.forEach(item -> getRepository().detach(item));
         return result;
     }
 

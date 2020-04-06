@@ -1,5 +1,6 @@
 package personal.project.springinfra.database.repository;
 
+import lombok.Getter;
 import org.springframework.data.jpa.repository.support.JpaEntityInformation;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.data.repository.NoRepositoryBean;
@@ -10,6 +11,7 @@ import javax.persistence.EntityManager;
 
 @NoRepositoryBean
 @Transactional
+@Getter
 public class BaseRepositoryImpl<E extends BaseDomain, ID> extends SimpleJpaRepository<E, ID> implements BaseRepository<E, ID> {
 
     private EntityManager entityManager;
