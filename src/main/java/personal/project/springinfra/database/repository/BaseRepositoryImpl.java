@@ -30,4 +30,11 @@ public class BaseRepositoryImpl<E extends BaseDomain, ID> extends SimpleJpaRepos
     public void detach(E entity) {
         this.entityManager.detach(entity);
     }
+
+    @Override
+    public <S extends E> S save(S entity) {
+        S result = super.save(entity);
+        this.entityManager.flush();
+        return result;
+    }
 }
