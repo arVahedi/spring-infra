@@ -1,7 +1,6 @@
 package personal.project.springinfra.dto.crud;
 
 import lombok.Data;
-import personal.project.springinfra.annotation.validation.CascadeValidate;
 import personal.project.springinfra.assets.Regex;
 import personal.project.springinfra.assets.status.UserStatus;
 import personal.project.springinfra.model.domain.User;
@@ -16,7 +15,6 @@ public class UserDto extends BaseCrudRequest<User, Long> {
     private String firstName;
     @NotBlank(message = "Last-Name is required")
     private String lastName;
-    @NotBlank(message = "Email is required")
     @Pattern(regexp = Regex.EMAIL, message = "Email format is wrong")
     private String email;
     @NotBlank(message = "Phone number is required")

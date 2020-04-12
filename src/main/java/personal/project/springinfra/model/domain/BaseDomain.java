@@ -2,6 +2,7 @@ package personal.project.springinfra.model.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.hibernate.envers.Audited;
 import org.springframework.data.domain.Persistable;
 
 import javax.persistence.*;
@@ -14,6 +15,7 @@ public abstract class BaseDomain<ID extends Number> implements Persistable<ID> {
     private ID id;
     private Long version;
     private Date insertDate;
+    private Date lastModifiedDate;
 
     @Override
     @Transient
@@ -27,6 +29,11 @@ public abstract class BaseDomain<ID extends Number> implements Persistable<ID> {
         if (this.insertDate == null) {
             this.insertDate = new Date();
         }
+    }
+
+    @PreUpdate
+    public void fillLastModifiedDate() {
+        this.lastModifiedDate = new Date();
     }
 
     //region Getter and Setter
@@ -53,13 +60,24 @@ public abstract class BaseDomain<ID extends Number> implements Persistable<ID> {
 
     @Basic
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "insert_date", columnDefinition = "TIMESTAMP")
+    @Column(name = "insert_date")
     public Date getInsertDate() {
         return insertDate;
     }
 
     public void setInsertDate(Date insertDate) {
         this.insertDate = insertDate;
+    }
+
+    @Basic
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "last_modified_date")
+    public Date getLastModifiedDate() {
+        return lastModifiedDate;
+    }
+
+    public void setLastModifiedDate(Date lastModifiedDate) {
+        this.lastModifiedDate = lastModifiedDate;
     }
     //endregion
 

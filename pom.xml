@@ -62,6 +62,13 @@
             <version>3.4.2</version>
         </dependency>
 
+        <!--Auditing-->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-envers</artifactId>
+            <version>5.4.14.Final</version>
+        </dependency>
+
         <!--Bouncy Castle-->
         <dependency>
             <groupId>org.bouncycastle</groupId>
