@@ -33,8 +33,11 @@ public class BaseRepositoryImpl<E extends BaseDomain, ID> extends SimpleJpaRepos
 
     @Override
     public <S extends E> S save(S entity) {
-        S result = super.save(entity);
-        this.entityManager.flush();
-        return result;
+        S attachedEntity = this.entityManager.merge(entity);
+        entity.setId(attachedEntity.getId());
+        entity.setVersion(attachedEntity.getVersion());
+        entity.setInsertDate(attachedEntity.getInsertDate());
+        entity.setLastModifiedDate(attachedEntity.getLastModifiedDate());
+        return entity;
     }
 }

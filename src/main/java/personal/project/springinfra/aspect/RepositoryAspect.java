@@ -46,7 +46,7 @@ public class RepositoryAspect {
         } else if (returnValue instanceof List) {
             for (Object item : (List) returnValue) {
                 if (item instanceof BaseDomain) {
-                    baseRepository.detach((BaseDomain) returnValue);
+                    baseRepository.detach((BaseDomain) item);
                 }
             }
 
@@ -60,7 +60,7 @@ public class RepositoryAspect {
         } else if (returnValue instanceof Page) {
             ((Page) returnValue).getContent().forEach(item -> {
                 if (item instanceof BaseDomain) {
-                    baseRepository.detach((BaseDomain) returnValue);
+                    baseRepository.detach((BaseDomain) item);
                 }
             });
         }
