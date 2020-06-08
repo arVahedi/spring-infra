@@ -1,4 +1,4 @@
-package personal.project.springinfra.api;
+package personal.project.springinfra.ws.api;
 
 import org.springframework.validation.annotation.Validated;
 

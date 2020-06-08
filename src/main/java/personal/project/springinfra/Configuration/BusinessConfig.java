@@ -3,5 +3,5 @@ package personal.project.springinfra.Configuration;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class ApplicationConfig extends BaseConfig {
+public class BusinessConfig extends BaseConfig {
 }

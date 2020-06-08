@@ -1,4 +1,4 @@
-package personal.project.springinfra.api;
+package personal.project.springinfra.ws.api;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -10,7 +10,6 @@ import personal.project.springinfra.dto.crud.BaseCrudRequest;
 import personal.project.springinfra.dto.generator.CrudApiResponseGenerator;
 import personal.project.springinfra.dto.generator.DefaultCrudApiResponseGenerator;
 import personal.project.springinfra.model.domain.BaseDomain;
-import personal.project.springinfra.model.domain.User;
 import personal.project.springinfra.service.CrudService;
 
 import javax.validation.constraints.Min;

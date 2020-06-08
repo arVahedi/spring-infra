@@ -1,4 +1,4 @@
-package personal.project.springinfra.api;
+package personal.project.springinfra.ws.api;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;

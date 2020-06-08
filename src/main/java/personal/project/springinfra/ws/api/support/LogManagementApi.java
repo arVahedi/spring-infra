@@ -1,4 +1,4 @@
-package personal.project.springinfra.api.support;
+package personal.project.springinfra.ws.api.support;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import personal.project.springinfra.api.BaseApi;
+import personal.project.springinfra.ws.api.BaseApi;
 import personal.project.springinfra.assets.ErrorCode;
 import personal.project.springinfra.assets.ResponseTemplate;
 import personal.project.springinfra.service.LogManagementService;
