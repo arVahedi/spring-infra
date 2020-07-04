@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 import personal.project.springinfra.database.repository.BaseRepositoryImpl;
 import personal.project.springinfra.model.domain.BaseDomain;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
