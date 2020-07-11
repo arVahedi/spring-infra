@@ -1,4 +1,4 @@
-package personal.project.springinfra.Configuration;
+package personal.project.springinfra.configuration;
 
 import org.springframework.context.annotation.Configuration;
 
