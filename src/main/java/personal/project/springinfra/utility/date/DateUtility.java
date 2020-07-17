@@ -1,5 +1,6 @@
 package personal.project.springinfra.utility.date;
 
+import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.ULocale;
@@ -7,6 +8,7 @@ import lombok.experimental.UtilityClass;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
@@ -14,24 +16,65 @@ import java.util.Date;
 @UtilityClass
 public class DateUtility {
 
+    private final String JALALI_DATE_FORMAT_STRING = "yyyy/MM/dd";
+    private final String JALALI_DATE_TIME_FORMAT_STRING = "yyyy/MM/dd - HH:mm:ss";
+    private final String GREGORIAN_DATE_FORMAT_STRING = "yyyy-MM-dd";
+    private final String GREGORIAN_DATE_TIME_FORMAT_STRING = "yyyy-MM-dd HH:mm:ss";
     private final ULocale US_LOCALE = new ULocale("en_US@calender=gregorian");
     private final ULocale JALALI_LOCALE = new ULocale("fa_IR@calendar=persian");
-    private final SimpleDateFormat JALALI_DATE_TIME_FORMATTER = new SimpleDateFormat("yyyy/MM/dd - HH:mm:ss", JALALI_LOCALE);
-    private final SimpleDateFormat JALALI_DATE_FORMATTER = new SimpleDateFormat("yyyy/MM/dd", JALALI_LOCALE);
+    private final SimpleDateFormat JALALI_DATE_TIME_FORMATTER = new SimpleDateFormat(JALALI_DATE_TIME_FORMAT_STRING, JALALI_LOCALE);
+    private final SimpleDateFormat JALALI_DATE_FORMATTER = new SimpleDateFormat(JALALI_DATE_FORMAT_STRING, JALALI_LOCALE);
+    private final SimpleDateFormat GREGORIAN_DATE_TIME_FORMATTER = new SimpleDateFormat(GREGORIAN_DATE_TIME_FORMAT_STRING, US_LOCALE);
+    private final SimpleDateFormat GREGORIAN_DATE_FORMATTER = new SimpleDateFormat(GREGORIAN_DATE_FORMAT_STRING, US_LOCALE);
     private final ZoneId TEHRAN_TIME_ZONE = ZoneId.of("Asia/Tehran");
 
-    public String getCurrentJalaliDateTime() {
+    //region Jalali Date and Time
+    public String getCurrentJalaliDateTimeString() {
         return JALALI_DATE_TIME_FORMATTER.format(Calendar.getInstance(JALALI_LOCALE).getTime());
     }
 
-    public String convertToJalaliDate(Date date) {
+    public String convertToJalaliDateString(Date date) {
         return JALALI_DATE_FORMATTER.format(date);
     }
 
-    public String convertToJalaliDateTime(Date date) {
+    public String convertToJalaliDateString(LocalDate date) {
+        return convertToJalaliDateString(convertToJalaliDate(date));
+    }
+
+    public String convertToJalaliDateTimeString(Date date) {
         return JALALI_DATE_TIME_FORMATTER.format(date);
     }
 
+    public String convertToJalaliDateTimeString(LocalDateTime date) {
+        return JALALI_DATE_TIME_FORMATTER.format(date);
+    }
+
+    public Date convertToJalaliDate(LocalDateTime dateTime) {
+        return Date.from(dateTime.atZone(TEHRAN_TIME_ZONE).toInstant());
+    }
+
+    public Date convertToJalaliDate(LocalDate date) {
+        return Date.from(date.atStartOfDay().atZone(TEHRAN_TIME_ZONE).toInstant());
+    }
+
+    public Date convertToJalaliDate(LocalTime time) {
+        return Date.from(time.atDate(LocalDate.now()).atZone(TEHRAN_TIME_ZONE).toInstant());
+    }
+
+    public LocalDate convertToJalaliLocalDate(LocalDate date) {
+        JALALI_DATE_FORMATTER.setNumberFormat(NumberFormat.getNumberInstance());
+        String format = JALALI_DATE_FORMATTER.format(convertToJalaliDate(date));
+        return convertToLocalDate(format, JALALI_DATE_FORMAT_STRING);
+    }
+
+    public LocalDateTime convertToJalaliLocalDateTime(LocalDateTime date) {
+        JALALI_DATE_TIME_FORMATTER.setNumberFormat(NumberFormat.getNumberInstance());
+        String format = JALALI_DATE_TIME_FORMATTER.format(convertToJalaliDate(date));
+        return convertToLocalDateTime(format, JALALI_DATE_TIME_FORMAT_STRING);
+    }
+    //endregion
+
+    //region Gregorian Date and Time
     public Date convertToGregorian(String date, String format) {
         LocalDate jalaliDate = convertToLocalDate(date, format);
         Calendar calendar = Calendar.getInstance(JALALI_LOCALE);
@@ -42,18 +85,17 @@ public class DateUtility {
     public LocalDate convertToGregorian(LocalDate jalaliDate) {
         Calendar calendar = Calendar.getInstance(JALALI_LOCALE);
         calendar.set(jalaliDate.getYear(), jalaliDate.getMonthValue() - 1, jalaliDate.getDayOfMonth());
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd", US_LOCALE);
-        String gregorianDate = dateFormat.format(calendar.getTime());
-        return convertToLocalDate(gregorianDate, "yyyy/MM/dd");
+        String gregorianDate = GREGORIAN_DATE_FORMATTER.format(calendar.getTime());
+        return convertToLocalDate(gregorianDate, GREGORIAN_DATE_FORMAT_STRING);
     }
 
     public LocalDateTime convertToGregorian(LocalDateTime jalaliDateTime) {
         Calendar calendar = Calendar.getInstance(JALALI_LOCALE);
         calendar.set(jalaliDateTime.getYear(), jalaliDateTime.getMonthValue() - 1, jalaliDateTime.getDayOfMonth());
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", US_LOCALE);
-        String gregorianDate = dateFormat.format(calendar.getTime());
-        return convertToLocalDateTime(gregorianDate, "yyyy/MM/dd HH:mm:ss");
+        String gregorianDate = GREGORIAN_DATE_TIME_FORMATTER.format(calendar.getTime());
+        return convertToLocalDateTime(gregorianDate, GREGORIAN_DATE_TIME_FORMAT_STRING);
     }
+    //endregion
 
     public LocalDate convertToLocalDate(String date, String pattern) {
         return LocalDate.parse(date, DateTimeFormatter.ofPattern(pattern));
