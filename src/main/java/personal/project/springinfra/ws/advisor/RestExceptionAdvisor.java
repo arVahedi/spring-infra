@@ -1,4 +1,4 @@
-package personal.project.springinfra.exception.advisor;
+package personal.project.springinfra.ws.advisor;
 
 
 import lombok.extern.slf4j.Slf4j;

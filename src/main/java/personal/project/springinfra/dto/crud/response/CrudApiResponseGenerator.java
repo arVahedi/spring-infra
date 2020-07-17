@@ -1,4 +1,4 @@
-package personal.project.springinfra.dto.generator;
+package personal.project.springinfra.dto.crud.response;
 
 import personal.project.springinfra.model.domain.BaseDomain;
 

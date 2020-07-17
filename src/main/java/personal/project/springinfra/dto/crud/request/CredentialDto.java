@@ -1,4 +1,4 @@
-package personal.project.springinfra.dto.crud;
+package personal.project.springinfra.dto.crud.request;
 
 import lombok.Data;
 import personal.project.springinfra.annotation.validation.CascadeValidate;

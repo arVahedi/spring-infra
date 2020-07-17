@@ -5,7 +5,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import personal.project.springinfra.assets.ResponseTemplate;
 import personal.project.springinfra.assets.ValidationGroups;
-import personal.project.springinfra.dto.crud.BaseCrudRequest;
+import personal.project.springinfra.dto.crud.request.BaseCrudRequest;
 
 import javax.validation.constraints.Min;
 
