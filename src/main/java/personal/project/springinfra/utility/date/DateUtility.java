@@ -75,6 +75,22 @@ public class DateUtility {
     //endregion
 
     //region Gregorian Date and Time
+    public String convertToGregorianDateString(Date date) {
+        return GREGORIAN_DATE_FORMATTER.format(date);
+    }
+
+    public String convertToGregorianDateString(LocalDate date) {
+        return convertToGregorianDateString(convertToGregorian(date));
+    }
+
+    public String convertToGregorianDateTimeString(Date date) {
+        return GREGORIAN_DATE_TIME_FORMATTER.format(date);
+    }
+
+    public String convertToGregorianDateTimeString(LocalDateTime date) {
+        return GREGORIAN_DATE_TIME_FORMATTER.format(date);
+    }
+
     public Date convertToGregorian(String date, String format) {
         LocalDate jalaliDate = convertToLocalDate(date, format);
         Calendar calendar = Calendar.getInstance(JALALI_LOCALE);
