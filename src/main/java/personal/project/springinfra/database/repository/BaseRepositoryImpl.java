@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.data.repository.NoRepositoryBean;
 import org.springframework.transaction.annotation.Transactional;
 import personal.project.springinfra.model.domain.BaseDomain;
+import personal.project.springinfra.model.domain.OptimisticLockableDomain;
 
 import javax.persistence.EntityManager;
 
@@ -35,9 +36,13 @@ public class BaseRepositoryImpl<E extends BaseDomain, ID> extends SimpleJpaRepos
     public <S extends E> S save(S entity) {
         S attachedEntity = this.entityManager.merge(entity);
         entity.setId(attachedEntity.getId());
-        entity.setVersion(attachedEntity.getVersion());
         entity.setInsertDate(attachedEntity.getInsertDate());
         entity.setLastModifiedDate(attachedEntity.getLastModifiedDate());
+
+        if (entity instanceof OptimisticLockableDomain) {
+            ((OptimisticLockableDomain) entity).setVersion(((OptimisticLockableDomain) attachedEntity).getVersion());
+        }
+
         return entity;
     }
 }

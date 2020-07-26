@@ -5,6 +5,7 @@ import org.springframework.transaction.annotation.Transactional;
 import personal.project.springinfra.dto.crud.request.BaseCrudRequest;
 import personal.project.springinfra.exception.NoSuchRecordException;
 import personal.project.springinfra.model.domain.BaseDomain;
+import personal.project.springinfra.model.domain.OptimisticLockableDomain;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,7 +20,9 @@ public interface DefaultCrudService<E extends BaseDomain> extends CrudService<E>
             request.toEntity(entity);
         } else {    //This is insert operation
             entity = (E) request.toEntity(getGenericDomainClass());
-            entity.setVersion(0L);
+            if (entity instanceof OptimisticLockableDomain) {
+                ((OptimisticLockableDomain) entity).setVersion(0L);
+            }
         }
 
         return (E) getRepository().save(entity);

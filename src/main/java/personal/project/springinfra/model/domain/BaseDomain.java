@@ -13,7 +13,6 @@ import java.util.Date;
 public abstract class BaseDomain<ID extends Number> implements Persistable<ID> {
 
     private ID id;
-    private Long version;
     private Date insertDate;
     private Date lastModifiedDate;
 
@@ -46,16 +45,6 @@ public abstract class BaseDomain<ID extends Number> implements Persistable<ID> {
 
     public void setId(ID id) {
         this.id = id;
-    }
-
-    @Version
-    @Column(name = "version")
-    public Long getVersion() {
-        return version;
-    }
-
-    public void setVersion(Long version) {
-        this.version = version;
     }
 
     @Basic
