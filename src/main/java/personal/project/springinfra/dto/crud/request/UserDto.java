@@ -26,7 +26,9 @@ public class UserDto extends BaseCrudRequest<User, Long> {
     @Override
     public User toEntity(User user) {
         user.setId(getId());
-        user.setVersion(getVersion());
+        /*if (user instanceof OptimisticLockableDomain) {
+            ((OptimisticLockableDomain) user).setVersion(getVersion());
+        }*/
         user.setFirstName(this.firstName);
         user.setLastName(this.lastName);
         user.setEmail(this.email);

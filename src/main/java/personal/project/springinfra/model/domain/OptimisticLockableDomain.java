@@ -5,7 +5,7 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.Version;
 
 @MappedSuperclass
-public class OptimisticLockableDomain<ID extends Number> extends BaseDomain<ID> {
+public abstract class OptimisticLockableDomain<ID extends Number> extends BaseDomain<ID> {
 
     private Long version;
 

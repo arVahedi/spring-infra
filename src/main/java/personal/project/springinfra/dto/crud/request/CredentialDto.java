@@ -3,7 +3,9 @@ package personal.project.springinfra.dto.crud.request;
 import lombok.Data;
 import personal.project.springinfra.annotation.validation.CascadeValidate;
 import personal.project.springinfra.assets.ValidationGroups;
+import personal.project.springinfra.model.domain.BaseDomain;
 import personal.project.springinfra.model.domain.Credential;
+import personal.project.springinfra.model.domain.OptimisticLockableDomain;
 import personal.project.springinfra.model.domain.User;
 
 import javax.validation.constraints.NotBlank;
@@ -22,7 +24,6 @@ public class CredentialDto extends BaseCrudRequest<Credential, Long> {
     @Override
     public Credential toEntity(Credential credential) {
         credential.setId(getId());
-        credential.setVersion(getVersion());
         credential.setUsername(this.username);
         credential.changePassword(this.password);
         if (credential.getUser() == null) {

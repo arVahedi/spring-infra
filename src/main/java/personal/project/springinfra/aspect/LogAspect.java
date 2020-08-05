@@ -2,7 +2,6 @@ package personal.project.springinfra.aspect;
 
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -13,7 +12,7 @@ import java.util.Arrays;
 @Component
 @Aspect
 @Slf4j
-public class LogAspect {
+public class LogAspect extends BaseAspect {
 
     @Before("execution(* personal.project.springinfra..*.*(..))")
     public void logMethodCalled(JoinPoint joinPoint) {

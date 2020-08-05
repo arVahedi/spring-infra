@@ -1,23 +1,25 @@
 package personal.project.springinfra.ws.api.support;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import personal.project.springinfra.ws.api.BaseApi;
 import personal.project.springinfra.assets.ErrorCode;
 import personal.project.springinfra.assets.ResponseTemplate;
 import personal.project.springinfra.service.LogManagementService;
+import personal.project.springinfra.ws.api.BaseApi;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
+@Slf4j
 @RestController
 @RequestMapping(BaseApi.API_PATH_PREFIX_V1 + "/support/log")
-@Tag(name="Log Management API", description = "Management level of loggers in runtime")
+@Tag(name = "Log Management API", description = "Management level of loggers in runtime")
 public class LogManagementApi extends BaseApi {
 
     @Autowired

@@ -5,7 +5,7 @@
         <Property name="basePath">/tmp</Property>
         <Property name="fileName">spring-infra.log</Property>
         <Property name="archiveFilePattern">spring-infra.log.%d{yyyy-MM-dd-hh-mm}.gzz</Property>
-        <Property name="logPattern">%d{yyyy-MM-dd HH:mm:ss} - %highlight{[%-5p]}{STYLE=Log4j} %c{1}:%M():%L (%t) - %m%n</Property>
+        <Property name="logPattern">%d{yyyy-MM-dd HH:mm:ss} - %highlight{[%-5p]}{STYLE=DEFAULT} %c{1}:%M():%L (%t) - %m%n</Property>
         <Property name="loggerName">personal.project.springinfra</Property>
     </Properties>
 
