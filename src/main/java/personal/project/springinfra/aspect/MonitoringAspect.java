@@ -10,5 +10,8 @@ import org.springframework.stereotype.Component;
 public class MonitoringAspect extends BaseAspect {
 
 
+    public void beforeAnyApiCall() {
+
+    }
 }
 

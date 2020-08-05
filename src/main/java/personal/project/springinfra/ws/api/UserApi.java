@@ -1,6 +1,5 @@
 package personal.project.springinfra.ws.api;
 
-import io.micrometer.core.annotation.Timed;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +16,6 @@ import personal.project.springinfra.service.UserService;
 @RequestMapping(BaseApi.API_PATH_PREFIX_V1 + "/user")
 @Slf4j
 @Tag(name = "User API", description = "User management API")
-@Timed("user-api")
 public class UserApi extends BaseApi implements DefaultCrudRestApi<UserDto> {
 
     @Autowired
