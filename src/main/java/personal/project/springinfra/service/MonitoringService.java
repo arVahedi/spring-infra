@@ -1,11 +1,9 @@
-package personal.project.springinfra.ws.api.support;
+package personal.project.springinfra.service;
 
-import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import personal.project.springinfra.service.BaseService;
 
 @Slf4j
 @Getter

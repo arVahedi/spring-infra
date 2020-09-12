@@ -16,12 +16,12 @@ public class LogAspect extends BaseAspect {
 
     @Before("execution(* personal.project.springinfra..*.*(..))")
     public void logMethodCalled(JoinPoint joinPoint) {
-        log.debug(String.format("%s method called with args %s.", joinPoint.getSignature().toShortString(), Arrays.asList(joinPoint.getArgs())));
+        log.debug("{} method called with args {}.", joinPoint.getSignature().toShortString(), Arrays.asList(joinPoint.getArgs()));
     }
 
     @AfterReturning(value = "execution(* personal.project.springinfra..*.*(..))", returning = "returnValue")
     public void logMethodReturned(JoinPoint joinPoint, Object returnValue) {
-        log.debug(String.format("%s method returned. [%s]", joinPoint.getSignature().toShortString(), returnValue));
+        log.debug("{} method returned. [{}]", joinPoint.getSignature().toShortString(), returnValue);
     }
 }
 
