@@ -8,6 +8,8 @@ import org.aspectj.lang.annotation.Before;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Map;
 
 @Component
 @Aspect
@@ -21,7 +23,22 @@ public class LogAspect extends BaseAspect {
 
     @AfterReturning(value = "execution(* personal.project.springinfra..*.*(..))", returning = "returnValue")
     public void logMethodReturned(JoinPoint joinPoint, Object returnValue) {
-        log.debug("{} method returned. [{}]", joinPoint.getSignature().toShortString(), returnValue);
+        int returnValueSize = 1;
+        if (returnValue != null) {
+            if (returnValue instanceof Collection<?>) {
+                returnValueSize = ((Collection) returnValue).size();
+            } else if (returnValue instanceof Map<?, ?>) {
+                returnValueSize = ((Map) returnValue).size();
+            } else if (returnValue.getClass().isArray()) {
+                //
+            }
+        }
+
+        if (returnValueSize > 10000) {
+            log.debug("{} method returned. [{}]", joinPoint.getSignature().toShortString(), "A LARGE COLLECTION/MAP OBJECT");
+        } else {
+            log.debug("{} method returned. [{}]", joinPoint.getSignature().toShortString(), returnValue);
+        }
     }
 }
 
