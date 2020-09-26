@@ -2,19 +2,18 @@ package personal.project.springinfra.model.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.hibernate.envers.Audited;
 import org.springframework.data.domain.Persistable;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.Instant;
 
 @MappedSuperclass
 @JsonIgnoreProperties({"hibernateLazyInitializer"})
 public abstract class BaseDomain<ID extends Number> implements Persistable<ID> {
 
     private ID id;
-    private Date insertDate;
-    private Date lastModifiedDate;
+    private Instant insertDate;
+    private Instant lastModifiedDate;
 
     @Override
     @Transient
@@ -26,13 +25,13 @@ public abstract class BaseDomain<ID extends Number> implements Persistable<ID> {
     @PrePersist
     public void fillInsertDate() {
         if (this.insertDate == null) {
-            this.insertDate = new Date();
+            this.insertDate = Instant.now();
         }
     }
 
     @PreUpdate
     public void fillLastModifiedDate() {
-        this.lastModifiedDate = new Date();
+        this.lastModifiedDate = Instant.now();
     }
 
     //region Getter and Setter
@@ -48,24 +47,22 @@ public abstract class BaseDomain<ID extends Number> implements Persistable<ID> {
     }
 
     @Basic
-    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "insert_date")
-    public Date getInsertDate() {
+    public Instant getInsertDate() {
         return insertDate;
     }
 
-    public void setInsertDate(Date insertDate) {
+    public void setInsertDate(Instant insertDate) {
         this.insertDate = insertDate;
     }
 
     @Basic
-    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "last_modified_date")
-    public Date getLastModifiedDate() {
+    public Instant getLastModifiedDate() {
         return lastModifiedDate;
     }
 
-    public void setLastModifiedDate(Date lastModifiedDate) {
+    public void setLastModifiedDate(Instant lastModifiedDate) {
         this.lastModifiedDate = lastModifiedDate;
     }
     //endregion

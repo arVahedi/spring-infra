@@ -13,7 +13,7 @@ public class UserCrudApiResponseGenerator extends DefaultCrudApiResponseGenerato
         dto.setProperty("email", entity.getEmail());
         dto.setProperty("status", entity.getStatus());
         dto.setProperty("phone", entity.getPhone());
-        dto.setProperty("insertDate", entity.getInsertDate().getTime());
+        dto.setProperty("insertDate", entity.getInsertDate().toEpochMilli());
         return dto;
     }
 }

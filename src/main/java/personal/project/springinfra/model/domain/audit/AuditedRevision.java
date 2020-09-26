@@ -6,7 +6,7 @@ import org.hibernate.envers.RevisionTimestamp;
 import personal.project.springinfra.security.audit.EnhancedRevisionListener;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.Instant;
 
 @Entity
 @Table(name = "revision_info")
@@ -14,7 +14,7 @@ import java.util.Date;
 public class AuditedRevision {
 
     private int id;
-    private Date occurrenceDate;
+    private Instant occurrenceDate;
     private String userInfo;
 
     //region Getter and Setter
@@ -32,13 +32,12 @@ public class AuditedRevision {
 
     @Basic
     @Column(name = "occurrence_date")
-    @Temporal(value = TemporalType.TIMESTAMP)
     @RevisionTimestamp
-    public Date getOccurrenceDate() {
+    public Instant getOccurrenceDate() {
         return occurrenceDate;
     }
 
-    public void setOccurrenceDate(Date occurrenceDate) {
+    public void setOccurrenceDate(Instant occurrenceDate) {
         this.occurrenceDate = occurrenceDate;
     }
 
