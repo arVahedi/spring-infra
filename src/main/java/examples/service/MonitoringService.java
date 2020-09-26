@@ -1,9 +1,10 @@
-package personal.project.springinfra.service;
+package examples.service;
 
 import io.micrometer.core.instrument.MeterRegistry;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import personal.project.springinfra.service.BaseService;
 
 @Slf4j
 @Getter

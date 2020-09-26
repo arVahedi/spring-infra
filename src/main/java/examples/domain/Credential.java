@@ -1,7 +1,8 @@
-package personal.project.springinfra.model.domain;
+package examples.domain;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.RandomStringUtils;
+import personal.project.springinfra.model.domain.BaseDomain;
 
 import javax.persistence.*;
 

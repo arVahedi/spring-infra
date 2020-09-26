@@ -1,8 +1,9 @@
-package personal.project.springinfra.database.repository;
+package examples.repository;
 
 
 import org.springframework.stereotype.Repository;
-import personal.project.springinfra.model.domain.Credential;
+import examples.domain.Credential;
+import personal.project.springinfra.database.repository.BaseRepository;
 
 @Repository
 public interface CredentialRepository extends BaseRepository<Credential, Long> {

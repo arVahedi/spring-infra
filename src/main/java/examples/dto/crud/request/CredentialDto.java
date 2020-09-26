@@ -1,12 +1,11 @@
-package personal.project.springinfra.dto.crud.request;
+package examples.dto.crud.request;
 
 import lombok.Data;
 import personal.project.springinfra.annotation.validation.CascadeValidate;
 import personal.project.springinfra.assets.ValidationGroups;
-import personal.project.springinfra.model.domain.BaseDomain;
-import personal.project.springinfra.model.domain.Credential;
-import personal.project.springinfra.model.domain.OptimisticLockableDomain;
-import personal.project.springinfra.model.domain.User;
+import examples.domain.Credential;
+import examples.domain.User;
+import personal.project.springinfra.dto.crud.request.BaseCrudRequest;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;

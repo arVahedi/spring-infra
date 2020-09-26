@@ -1,10 +1,12 @@
-package personal.project.springinfra.service;
+package examples.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import personal.project.springinfra.database.repository.BaseRepository;
-import personal.project.springinfra.database.repository.UserRepository;
-import personal.project.springinfra.model.domain.User;
+import examples.repository.UserRepository;
+import examples.domain.User;
+import personal.project.springinfra.service.BaseService;
+import personal.project.springinfra.service.DefaultCrudService;
 
 @Service
 public class UserService extends BaseService implements DefaultCrudService<User> {

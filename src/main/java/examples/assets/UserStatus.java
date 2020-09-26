@@ -1,4 +1,4 @@
-package personal.project.springinfra.assets.status;
+package examples.assets;
 
 import personal.project.springinfra.assets.PersistableEnum;
 import personal.project.springinfra.utility.jpa.PersistableEnumConverter;

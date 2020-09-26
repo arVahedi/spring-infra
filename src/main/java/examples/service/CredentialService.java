@@ -1,11 +1,12 @@
-package personal.project.springinfra.service;
+package examples.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import personal.project.springinfra.database.repository.BaseRepository;
-import personal.project.springinfra.database.repository.CredentialRepository;
-import personal.project.springinfra.model.domain.Credential;
+import examples.repository.CredentialRepository;
+import examples.domain.Credential;
+import personal.project.springinfra.service.BaseService;
+import personal.project.springinfra.service.DefaultCrudService;
 
 @Service
 public class CredentialService extends BaseService implements DefaultCrudService<Credential> {

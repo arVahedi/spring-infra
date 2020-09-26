@@ -1,9 +1,10 @@
-package personal.project.springinfra.dto.crud.request;
+package examples.dto.crud.request;
 
 import lombok.Data;
 import personal.project.springinfra.assets.Regex;
-import personal.project.springinfra.assets.status.UserStatus;
-import personal.project.springinfra.model.domain.User;
+import examples.assets.UserStatus;
+import examples.domain.User;
+import personal.project.springinfra.dto.crud.request.BaseCrudRequest;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;

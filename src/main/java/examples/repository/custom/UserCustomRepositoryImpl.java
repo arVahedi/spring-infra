@@ -1,7 +1,8 @@
-package personal.project.springinfra.database.repository.custom;
+package examples.repository.custom;
 
-import personal.project.springinfra.assets.status.UserStatus;
-import personal.project.springinfra.model.domain.User;
+import examples.assets.UserStatus;
+import examples.domain.User;
+import personal.project.springinfra.database.repository.custom.BaseCustomRepository;
 
 public class UserCustomRepositoryImpl extends BaseCustomRepository<User> implements UserCustomRepository {
 

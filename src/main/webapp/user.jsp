@@ -1,4 +1,4 @@
-<%@ page import="personal.project.springinfra.model.domain.User" %>
+<%@ page import="examples.domain.User" %>
 <%@ page import="java.util.List" %>
 <%--
   Created by IntelliJ IDEA.

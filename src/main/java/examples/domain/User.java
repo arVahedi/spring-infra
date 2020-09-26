@@ -1,9 +1,10 @@
-package personal.project.springinfra.model.domain;
+package examples.domain;
 
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Where;
 import org.hibernate.envers.Audited;
-import personal.project.springinfra.assets.status.UserStatus;
+import examples.assets.UserStatus;
+import personal.project.springinfra.model.domain.LogicalDeletableDomain;
 
 import javax.persistence.*;
 

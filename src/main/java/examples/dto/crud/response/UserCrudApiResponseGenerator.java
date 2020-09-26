@@ -1,7 +1,8 @@
-package personal.project.springinfra.dto.crud.response;
+package examples.dto.crud.response;
 
 import personal.project.springinfra.dto.GenericDto;
-import personal.project.springinfra.model.domain.User;
+import examples.domain.User;
+import personal.project.springinfra.dto.crud.response.DefaultCrudApiResponseGenerator;
 
 public class UserCrudApiResponseGenerator extends DefaultCrudApiResponseGenerator<User> {
 
