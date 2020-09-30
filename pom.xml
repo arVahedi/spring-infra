@@ -93,7 +93,7 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-envers</artifactId>
-            <version>5.4.14.Final</version>
+            <version>5.4.21.Final</version>
         </dependency>
 
         <!--Bouncy Castle-->
