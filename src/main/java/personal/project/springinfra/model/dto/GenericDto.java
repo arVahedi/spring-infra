@@ -1,4 +1,4 @@
-package personal.project.springinfra.dto;
+package personal.project.springinfra.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;

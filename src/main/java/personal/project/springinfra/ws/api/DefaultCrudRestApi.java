@@ -6,9 +6,9 @@ import org.springframework.web.bind.annotation.*;
 import personal.project.springinfra.assets.ErrorCode;
 import personal.project.springinfra.assets.ResponseTemplate;
 import personal.project.springinfra.assets.ValidationGroups;
-import personal.project.springinfra.dto.crud.request.BaseCrudRequest;
-import personal.project.springinfra.dto.crud.response.CrudApiResponseGenerator;
-import personal.project.springinfra.dto.crud.response.DefaultCrudApiResponseGenerator;
+import personal.project.springinfra.model.dto.crud.request.BaseCrudRequest;
+import personal.project.springinfra.model.dto.crud.response.CrudApiResponseGenerator;
+import personal.project.springinfra.model.dto.crud.response.DefaultCrudApiResponseGenerator;
 import personal.project.springinfra.model.domain.BaseDomain;
 import personal.project.springinfra.service.CrudService;
 

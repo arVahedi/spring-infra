@@ -3,7 +3,7 @@ package personal.project.springinfra.security.validator;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
-import personal.project.springinfra.annotation.validation.CascadeValidate;
+import personal.project.springinfra.annotation.validation.CascadeValidation;
 import personal.project.springinfra.assets.VirtualValidationGroups;
 
 import javax.validation.ConstraintValidatorContext;
@@ -14,15 +14,15 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
-public class CascadeValidateValidator extends BaseValidator<CascadeValidate, Object> {
+public class CascadeValidationValidator extends BaseValidator<CascadeValidation, Object> {
 
     @Autowired
     private Validator validator;
 
-    private CascadeValidate constraintAnnotation;
+    private CascadeValidation constraintAnnotation;
 
     @Override
-    public void initialize(CascadeValidate constraintAnnotation) {
+    public void initialize(CascadeValidation constraintAnnotation) {
         this.constraintAnnotation = constraintAnnotation;
     }
 

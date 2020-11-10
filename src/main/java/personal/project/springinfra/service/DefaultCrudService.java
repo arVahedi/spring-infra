@@ -2,10 +2,10 @@ package personal.project.springinfra.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
-import personal.project.springinfra.dto.crud.request.BaseCrudRequest;
 import personal.project.springinfra.exception.NoSuchRecordException;
 import personal.project.springinfra.model.domain.BaseDomain;
 import personal.project.springinfra.model.domain.OptimisticLockableDomain;
+import personal.project.springinfra.model.dto.crud.request.BaseCrudRequest;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,9 +17,9 @@ public interface DefaultCrudService<E extends BaseDomain> extends CrudService<E>
         E entity;
         if (request.getId() != null && request.getId().longValue() > 0) {    //This is update operation
             entity = find(request.getId().longValue());
-            request.toEntity(entity);
+            getCrudConverter().toEntity(request, entity);
         } else {    //This is insert operation
-            entity = (E) request.toEntity(getGenericDomainClass());
+            entity = (E) getCrudConverter().toEntity(request, getGenericDomainClass());
             if (entity instanceof OptimisticLockableDomain) {
                 ((OptimisticLockableDomain) entity).setVersion(0L);
             }

@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import examples.dto.crud.request.CredentialDto;
 import examples.dto.crud.response.CredentialCrudApiResponseGenerator;
-import personal.project.springinfra.dto.crud.response.CrudApiResponseGenerator;
+import personal.project.springinfra.model.dto.crud.response.CrudApiResponseGenerator;
 import examples.domain.Credential;
 import personal.project.springinfra.service.CrudService;
 import personal.project.springinfra.ws.api.BaseApi;

@@ -8,5 +8,5 @@ import personal.project.springinfra.database.repository.BaseRepositoryImpl;
 @Configuration
 @EnableJpaRepositories(repositoryBaseClass = BaseRepositoryImpl.class, basePackages = "personal.project.springinfra")
 @EnableTransactionManagement
-public class DatasourceConfig extends BaseConfig {
+public class DatasourceConfig implements BaseConfig {
 }

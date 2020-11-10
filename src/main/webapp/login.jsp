@@ -6,12 +6,13 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <title>Login Page</title>
 </head>
 <body>
-<form method="post" target="/auth">
+<form method="post" action="./authenticate">
     <input name="username" id="username" placeholder="Username">
     <br>
     <input name="password" id="password" type="password" placeholder="Password">

@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class BeanConfig extends BaseConfig {
+public class BeanConfig implements BaseConfig {
 
     //TimedAspect makes @Timed usable on any arbitrary method.
     @Bean

@@ -16,6 +16,7 @@ import personal.project.springinfra.assets.ErrorCode;
 import personal.project.springinfra.assets.ResponseTemplate;
 import personal.project.springinfra.exception.NoSuchRecordException;
 
+import javax.persistence.EntityNotFoundException;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class RestExceptionAdvisor extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler({NoSuchRecordException.class, StaleObjectStateException.class, ObjectOptimisticLockingFailureException.class})
+    @ExceptionHandler({NoSuchRecordException.class, StaleObjectStateException.class, ObjectOptimisticLockingFailureException.class, EntityNotFoundException.class})
     public ResponseEntity<ResponseTemplate> handleExpiredDataException(Exception ex) {
         log.error(ex.getMessage(), ex);
         ResponseTemplate<String> responseTemplate = new ResponseTemplate<>(ErrorCode.EXPIRED_DATA, "Row was updated or deleted by another transaction");

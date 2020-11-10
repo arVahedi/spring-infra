@@ -1,4 +1,4 @@
-package personal.project.springinfra.dto;
+package personal.project.springinfra.model.dto;
 
 import lombok.Data;
 

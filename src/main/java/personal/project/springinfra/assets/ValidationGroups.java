@@ -1,6 +1,6 @@
 package personal.project.springinfra.assets;
 
-import personal.project.springinfra.dto.crud.request.BaseCrudRequest;
+import personal.project.springinfra.model.dto.crud.request.BaseCrudRequest;
 
 import javax.validation.groups.Default;
 

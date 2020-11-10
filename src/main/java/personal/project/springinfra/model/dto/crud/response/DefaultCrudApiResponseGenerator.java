@@ -1,4 +1,4 @@
-package personal.project.springinfra.dto.crud.response;
+package personal.project.springinfra.model.dto.crud.response;
 
 import personal.project.springinfra.model.domain.BaseDomain;
 

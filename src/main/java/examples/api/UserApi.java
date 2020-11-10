@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import examples.dto.crud.request.UserDto;
-import personal.project.springinfra.dto.crud.response.CrudApiResponseGenerator;
+import personal.project.springinfra.model.dto.crud.response.CrudApiResponseGenerator;
 import examples.dto.crud.response.UserCrudApiResponseGenerator;
 import examples.domain.User;
 import personal.project.springinfra.service.CrudService;
