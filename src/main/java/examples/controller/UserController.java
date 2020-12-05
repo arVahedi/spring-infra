@@ -29,7 +29,7 @@ public class UserController extends BaseController {
 
     @Override
     public String getViewPage() {
-        return "user.jsp";
+        return "userManagement.jsp";
 //        return "redirect:/";
     }
 }

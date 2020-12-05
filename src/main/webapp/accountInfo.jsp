@@ -1,8 +1,8 @@
 <%--
   Created by IntelliJ IDEA.
   User: Gl4di4tor
-  Date: 6/5/2020 AD
-  Time: 03:32
+  Date: 11/24/2020 AD
+  Time: 02:14
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
@@ -13,11 +13,11 @@
 
 <html>
 <head>
-    <title>Index page</title>
+    <title>Account Info</title>
 </head>
 <body>
 <jsp:include page="WEB-INF/include/header.jsp"/>
 
-Index page of spring-infra project :)
+This is account info page
 </body>
 </html>

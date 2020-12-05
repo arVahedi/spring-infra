@@ -2,12 +2,15 @@ package personal.project.springinfra.ws.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import personal.project.springinfra.assets.AuthorityType;
 
+import javax.annotation.security.RolesAllowed;
 import java.util.Map;
 
 @Controller
-@RequestMapping(value = {"/login"})
-public class LoginController extends BaseController {
+@RequestMapping(value = {"/admin/user-management"})
+@RolesAllowed({AuthorityType.String.USER_MANAGEMENT_AUTHORITY})
+public class UserManagementController extends BaseController {
 
     @Override
     public String render(Map<String, Object> model) {
@@ -16,6 +19,6 @@ public class LoginController extends BaseController {
 
     @Override
     public String getViewPage() {
-        return "login.jsp";
+        return "/userManagement.jsp";
     }
 }

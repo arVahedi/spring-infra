@@ -7,6 +7,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -40,6 +41,12 @@ public class RestExceptionAdvisor extends ResponseEntityExceptionHandler {
         List<String> messages = ex.getConstraintViolations().stream().map(ConstraintViolation::getMessage).collect(Collectors.toList());
         ResponseTemplate responseTemplate = new ResponseTemplate<>(HttpStatus.BAD_REQUEST, messages);
         return new ResponseEntity<>(responseTemplate, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ResponseTemplate> handleAccessDeniedException(AccessDeniedException ex) {
+        log.error(ex.getMessage(), ex);
+        return new ResponseEntity<>(new ResponseTemplate<>(HttpStatus.FORBIDDEN), HttpStatus.FORBIDDEN);
     }
 
     @ExceptionHandler(Exception.class)
