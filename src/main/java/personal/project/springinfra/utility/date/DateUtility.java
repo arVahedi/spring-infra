@@ -6,10 +6,7 @@ import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.ULocale;
 import lombok.experimental.UtilityClass;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.ZoneId;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
@@ -118,14 +115,22 @@ public class DateUtility {
     }
 
     public LocalDate convertToLocalDate(Date date) {
-        return LocalDateTime.ofInstant(date.toInstant(), TEHRAN_TIME_ZONE).toLocalDate();
+        return LocalDateTime.ofInstant(Instant.ofEpochMilli(date.getTime()), TEHRAN_TIME_ZONE).toLocalDate();
     }
 
     public LocalDateTime convertToLocalDateTime(Date date) {
-        return LocalDateTime.ofInstant(date.toInstant(), TEHRAN_TIME_ZONE);
+        return LocalDateTime.ofInstant(Instant.ofEpochMilli(date.getTime()), TEHRAN_TIME_ZONE);
     }
 
     public LocalDateTime convertToLocalDateTime(String date, String pattern) {
         return LocalDateTime.parse(date, DateTimeFormatter.ofPattern(pattern));
+    }
+
+    public Date minesDays(Date date, int days) {
+        return Date.from(((LocalDateTime.ofInstant(Instant.ofEpochMilli(date.getTime()), ZoneId.systemDefault())).minusDays(days)).atZone(ZoneId.systemDefault()).toInstant());
+    }
+
+    public Date plusDays(Date date, int days) {
+        return Date.from(((LocalDateTime.ofInstant(Instant.ofEpochMilli(date.getTime()), ZoneId.systemDefault())).plusDays(days)).atZone(ZoneId.systemDefault()).toInstant());
     }
 }
