@@ -9,7 +9,7 @@ import java.util.Map;
 
 @Controller
 @RequestMapping(value = {"/admin/user-management"})
-@RolesAllowed({AuthorityType.String.USER_MANAGEMENT_AUTHORITY})
+@RolesAllowed({AuthorityType.USER_MANAGEMENT_AUTHORITY})
 public class UserManagementController extends BaseController {
 
     @Override

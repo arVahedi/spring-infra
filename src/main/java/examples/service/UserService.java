@@ -1,12 +1,12 @@
 package examples.service;
 
+import examples.converter.UserCrudConverter;
+import examples.domain.User;
+import examples.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import personal.project.springinfra.database.repository.BaseRepository;
-import examples.repository.UserRepository;
-import examples.domain.User;
 import personal.project.springinfra.model.converter.BaseCrudConverter;
-import examples.converter.UserCrudConverter;
 import personal.project.springinfra.service.BaseService;
 import personal.project.springinfra.service.DefaultCrudService;
 

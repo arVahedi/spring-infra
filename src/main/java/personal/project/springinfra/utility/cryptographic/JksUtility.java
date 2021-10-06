@@ -16,9 +16,9 @@ import java.security.*;
 
 @UtilityClass
 @Slf4j
-public class JKSUtility {
+public class JksUtility {
 
-    public static KeyStore getKeyStore(KeyStoreType keyStoreType, String keyStorePath, String keyStorePass)
+    public KeyStore getKeyStore(KeyStoreType keyStoreType, String keyStorePath, String keyStorePass)
             throws Exception {
 
         if (keyStorePath.startsWith("file:/")) {
@@ -33,7 +33,7 @@ public class JKSUtility {
         return ks;
     }
 
-    public static String encrypt(KeyStore keyStore, String message, String alias, String jceksPass)
+    public String encrypt(KeyStore keyStore, String message, String alias, String jceksPass)
             throws CryptographyException, NoSuchAlgorithmException, UnrecoverableEntryException, KeyStoreException,
             InvalidKeyException, NoSuchPaddingException, BadPaddingException,
             IllegalBlockSizeException {
@@ -50,7 +50,7 @@ public class JKSUtility {
         return Base64.toBase64String(cipherText);
     }
 
-    public static String decrypt(KeyStore keyStore, String message, String alias, String jceksPass)
+    public String decrypt(KeyStore keyStore, String message, String alias, String jceksPass)
             throws NoSuchAlgorithmException, KeyStoreException, IOException, UnrecoverableKeyException,
             InvalidKeyException, NoSuchPaddingException, BadPaddingException, IllegalBlockSizeException,
             CryptographyException {

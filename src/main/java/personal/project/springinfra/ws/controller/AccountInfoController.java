@@ -9,7 +9,7 @@ import java.util.Map;
 
 @Controller
 @RequestMapping(value = {"/user/account-info"})
-@RolesAllowed({AuthorityType.String.ACCOUNT_INFO_AUTHORITY})
+@RolesAllowed({AuthorityType.ACCOUNT_INFO_AUTHORITY})
 public class AccountInfoController extends BaseController {
 
     @Override

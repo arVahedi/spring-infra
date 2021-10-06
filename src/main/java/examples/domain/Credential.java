@@ -19,7 +19,7 @@ public class Credential extends BaseDomain<Long> {
     private List<CredentialRole> roles;
 
     public void changePassword(String password) {
-        this.password = SpringContext.getBean(PasswordEncoder.class).encode(password);
+        this.password = SpringContext.getApplicationContext().getBean(PasswordEncoder.class).encode(password);
     }
 
     //region Getter and Setter

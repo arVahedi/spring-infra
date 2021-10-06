@@ -39,11 +39,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements B
     @Override
     protected void configure(final AuthenticationManagerBuilder auth) throws Exception {
         auth.inMemoryAuthentication()
-                .withUser("user1").password(passwordEncoder().encode("user1Pass")).roles(AuthorityType.ACCOUNT_INFO_AUTHORITY.getValue())
+                .withUser("user1").password(passwordEncoder().encode("user1Pass")).roles(AuthorityType.ACCOUNT_INFO_AUTHORITY)
                 .and()
-                .withUser("user2").password(passwordEncoder().encode("user2Pass")).roles(AuthorityType.ACCOUNT_INFO_AUTHORITY.getValue())
+                .withUser("user2").password(passwordEncoder().encode("user2Pass")).roles(AuthorityType.ACCOUNT_INFO_AUTHORITY)
                 .and()
-                .withUser("admin").password(passwordEncoder().encode("adminPass")).roles(AuthorityType.ACCOUNT_INFO_AUTHORITY.getValue(), AuthorityType.USER_MANAGEMENT_AUTHORITY.getValue());
+                .withUser("admin").password(passwordEncoder().encode("adminPass")).roles(AuthorityType.ACCOUNT_INFO_AUTHORITY, AuthorityType.USER_MANAGEMENT_AUTHORITY);
     }
 
     @Bean
