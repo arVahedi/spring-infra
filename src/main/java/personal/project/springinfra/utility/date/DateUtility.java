@@ -8,6 +8,7 @@ import lombok.experimental.UtilityClass;
 
 import java.time.*;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalUnit;
 import java.util.Date;
 
 @UtilityClass
@@ -126,11 +127,11 @@ public class DateUtility {
         return LocalDateTime.parse(date, DateTimeFormatter.ofPattern(pattern));
     }
 
-    public Date minesDays(Date date, int days) {
-        return Date.from(((LocalDateTime.ofInstant(Instant.ofEpochMilli(date.getTime()), ZoneId.systemDefault())).minusDays(days)).atZone(ZoneId.systemDefault()).toInstant());
+    public Date mines(Date date, int value, TemporalUnit unit) {
+        return Date.from(((LocalDateTime.ofInstant(Instant.ofEpochMilli(date.getTime()), ZoneId.systemDefault())).minus(value, unit)).atZone(ZoneId.systemDefault()).toInstant());
     }
 
-    public Date plusDays(Date date, int days) {
-        return Date.from(((LocalDateTime.ofInstant(Instant.ofEpochMilli(date.getTime()), ZoneId.systemDefault())).plusDays(days)).atZone(ZoneId.systemDefault()).toInstant());
+    public Date plus(Date date, int value, TemporalUnit unit) {
+        return Date.from(((LocalDateTime.ofInstant(Instant.ofEpochMilli(date.getTime()), ZoneId.systemDefault())).plus(value, unit)).atZone(ZoneId.systemDefault()).toInstant());
     }
 }
