@@ -16,6 +16,8 @@ import java.util.Map;
 @Slf4j
 public class LogAspect extends BaseAspect {
 
+    // TODO: 11/11/2021 AD Use logger of the joinPoint class
+    
     @Before("execution(* personal.project.springinfra..*.*(..))")
     public void logMethodCalled(JoinPoint joinPoint) {
         log.debug("{} method called with args {}.", joinPoint.getSignature().toShortString(), Arrays.asList(joinPoint.getArgs()));

@@ -1,6 +1,7 @@
 package personal.project.springinfra.ws.api.support;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,10 +21,10 @@ import javax.validation.constraints.Pattern;
 @RestController
 @RequestMapping(BaseApi.API_PATH_PREFIX_V1 + "/support/log")
 @Tag(name = "Log Management API", description = "Management level of loggers in runtime")
+@RequiredArgsConstructor
 public class LogManagementApi extends BaseApi {
 
-    @Autowired
-    private LogManagementService logManagementService;
+    private final LogManagementService logManagementService;
 
     @GetMapping("/level/get/{name}")
     public ResponseEntity<ResponseTemplate> getLoggerLevel(

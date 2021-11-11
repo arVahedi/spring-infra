@@ -10,8 +10,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @ServletComponentScan
 public class SpringInfraApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(SpringInfraApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(SpringInfraApplication.class, args);
+    }
 
 }

@@ -1,7 +1,7 @@
 package personal.project.springinfra.security.validator;
 
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import personal.project.springinfra.annotation.validation.CascadeValidation;
 import personal.project.springinfra.assets.VirtualValidationGroups;
@@ -14,10 +14,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
+@RequiredArgsConstructor
 public class CascadeValidationValidator extends BaseValidator<CascadeValidation, Object> {
 
-    @Autowired
-    private Validator validator;
+    private final Validator validator;
 
     private CascadeValidation constraintAnnotation;
 

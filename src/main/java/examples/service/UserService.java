@@ -3,7 +3,7 @@ package examples.service;
 import examples.converter.UserCrudConverter;
 import examples.domain.User;
 import examples.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import personal.project.springinfra.database.repository.BaseRepository;
 import personal.project.springinfra.model.converter.BaseCrudConverter;
@@ -11,12 +11,11 @@ import personal.project.springinfra.service.BaseService;
 import personal.project.springinfra.service.DefaultCrudService;
 
 @Service
+@RequiredArgsConstructor
 public class UserService extends BaseService implements DefaultCrudService<User> {
 
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private UserCrudConverter userCrudConverter;
+    private final UserRepository userRepository;
+    private final UserCrudConverter userCrudConverter;
 
     @Override
     public BaseRepository getRepository() {

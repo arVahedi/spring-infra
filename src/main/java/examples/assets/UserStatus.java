@@ -21,5 +21,6 @@ public enum UserStatus implements PersistableEnum<UserStatus> {
         return this.code;
     }
 
-    public static class Converter extends PersistableEnumConverter<UserStatus> implements AttributeConverter<UserStatus, Integer> {}
+    public static class Converter extends PersistableEnumConverter<UserStatus> implements AttributeConverter<UserStatus, Integer> {
+    }
 }

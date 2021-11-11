@@ -6,6 +6,7 @@ import personal.project.springinfra.model.domain.audit.AuditedRevision;
 import java.util.Date;
 
 public class EnhancedRevisionListener implements RevisionListener {
+
     @Override
     public void newRevision(Object revisionEntity) {
         AuditedRevision auditedRevision = (AuditedRevision) revisionEntity;

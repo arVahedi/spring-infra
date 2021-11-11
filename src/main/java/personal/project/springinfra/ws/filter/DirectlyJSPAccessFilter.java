@@ -14,6 +14,7 @@ import java.io.IOException;
 @Slf4j
 @WebFilter(filterName = "DirectlyJSPAccessFilter", urlPatterns = {"*.jsp", "*.html"})
 public class DirectlyJSPAccessFilter extends BaseFilter {
+
     @Override
     public void init(FilterConfig filterConfig) {
 

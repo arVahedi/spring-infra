@@ -1,5 +1,6 @@
 package personal.project.springinfra.database;
 
+import lombok.RequiredArgsConstructor;
 import org.hibernate.event.service.spi.EventListenerRegistry;
 import org.hibernate.event.spi.EventType;
 import org.hibernate.internal.SessionFactoryImpl;
@@ -11,12 +12,11 @@ import javax.annotation.PostConstruct;
 import javax.persistence.EntityManagerFactory;
 
 @Component
+@RequiredArgsConstructor
 public class HibernateEventListenerManager {
 
-    @Autowired
-    private EntityManagerFactory emf;
-    @Autowired
-    private EnhancedDeleteEventListener enhancedDeleteEventListener;
+    private final EntityManagerFactory emf;
+    private final EnhancedDeleteEventListener enhancedDeleteEventListener;
 
     @PostConstruct
     protected void init() {

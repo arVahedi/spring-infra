@@ -3,15 +3,15 @@ package examples.converter;
 import examples.domain.Credential;
 import examples.domain.User;
 import examples.dto.crud.request.CredentialDto;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import personal.project.springinfra.model.converter.BaseCrudConverter;
 
 @Component
+@RequiredArgsConstructor
 public class CredentialCrudConverter extends BaseCrudConverter<CredentialDto, Credential> {
 
-    @Autowired
-    private UserCrudConverter userCrudConverter;
+    private final UserCrudConverter userCrudConverter;
 
     @Override
     public Credential toEntity(CredentialDto dto, Credential credential) {

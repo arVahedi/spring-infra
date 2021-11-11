@@ -1,11 +1,11 @@
 package examples.controller;
 
+import examples.domain.User;
 import examples.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import examples.domain.User;
 import personal.project.springinfra.ws.controller.BaseController;
 
 import java.util.List;
@@ -13,10 +13,10 @@ import java.util.Map;
 
 @Controller
 @RequestMapping(value = {"/user"})
+@RequiredArgsConstructor
 public class UserController extends BaseController {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
     @Override
     @GetMapping
