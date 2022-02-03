@@ -8,7 +8,7 @@ import java.lang.reflect.ParameterizedType;
 import java.util.stream.Stream;
 
 @Converter(autoApply = true)
-public abstract class PersistableEnumConverter<T extends Enum<T> & PersistableEnum> implements AttributeConverter<T, Integer> {
+public abstract class PersistableEnumConverter<T extends Enum<T> & PersistableEnum<T>> implements AttributeConverter<T, Integer> {
 
     private final Class<T> classOfEnum;
 

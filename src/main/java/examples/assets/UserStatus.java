@@ -3,8 +3,6 @@ package examples.assets;
 import personal.project.springinfra.assets.PersistableEnum;
 import personal.project.springinfra.utility.jpa.PersistableEnumConverter;
 
-import javax.persistence.AttributeConverter;
-
 public enum UserStatus implements PersistableEnum<UserStatus> {
     ACTIVE(1),
     INACTIVE(2),
@@ -21,6 +19,6 @@ public enum UserStatus implements PersistableEnum<UserStatus> {
         return this.code;
     }
 
-    public static class Converter extends PersistableEnumConverter<UserStatus> implements AttributeConverter<UserStatus, Integer> {
+    public static class Converter extends PersistableEnumConverter<UserStatus> {
     }
 }

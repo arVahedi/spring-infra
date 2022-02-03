@@ -11,7 +11,8 @@
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <%@ taglib uri="http://www.springframework.org/security/tags" prefix="security" %>
 
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <title>Index page</title>
 </head>
