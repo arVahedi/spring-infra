@@ -7,7 +7,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.6.1</version>
+        <version>2.6.3</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -89,10 +89,12 @@
         </dependency>
 
         <!--Tomcat Jasper-->
+        <!--The version of Jasper should be as same as the Tomcat version in the Spring web starter-->
         <dependency>
             <groupId>org.apache.tomcat.embed</groupId>
             <artifactId>tomcat-embed-jasper</artifactId>
-            <version>10.0.16</version>
+<!--            <version>10.0.16</version>-->
+            <version>9.0.56</version>
         </dependency>
 
         <!--Auditing-->
