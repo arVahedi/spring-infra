@@ -3,7 +3,7 @@ package examples.converter;
 import examples.domain.User;
 import examples.dto.crud.request.UserDto;
 import org.springframework.stereotype.Component;
-import personal.project.springinfra.model.converter.BaseCrudConverter;
+import springinfra.model.converter.BaseCrudConverter;
 
 @Component
 public class UserCrudConverter extends BaseCrudConverter<UserDto, User> {

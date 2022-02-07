@@ -5,25 +5,23 @@ import examples.domain.Credential;
 import examples.repository.CredentialRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import personal.project.springinfra.database.repository.BaseRepository;
-import personal.project.springinfra.model.converter.BaseCrudConverter;
-import personal.project.springinfra.service.BaseService;
-import personal.project.springinfra.service.DefaultCrudService;
+import springinfra.service.BaseService;
+import springinfra.service.DefaultCrudService;
 
 @Service
 @RequiredArgsConstructor
-public class CredentialService extends BaseService implements DefaultCrudService<Credential> {
+public class CredentialService extends BaseService implements DefaultCrudService<Credential, Long> {
 
     private final CredentialRepository credentialRepository;
     private final CredentialCrudConverter credentialCrudConverter;
 
     @Override
-    public BaseRepository getRepository() {
+    public CredentialRepository getRepository() {
         return this.credentialRepository;
     }
 
     @Override
-    public BaseCrudConverter getCrudConverter() {
+    public CredentialCrudConverter getCrudConverter() {
         return this.credentialCrudConverter;
     }
 

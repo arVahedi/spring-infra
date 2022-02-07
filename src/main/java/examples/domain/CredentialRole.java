@@ -2,14 +2,15 @@ package examples.domain;
 
 import lombok.NoArgsConstructor;
 import org.hibernate.envers.Audited;
-import personal.project.springinfra.model.domain.BaseDomain;
+import org.hibernate.envers.RelationTargetAuditMode;
+import springinfra.model.domain.BaseDomain;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "credential_role")
 @NoArgsConstructor
-@Audited
+@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
 public class CredentialRole extends BaseDomain<Integer> {
     private Credential credential;
     private Role role;

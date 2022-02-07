@@ -3,8 +3,8 @@ package examples.domain;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import personal.project.springinfra.SpringContext;
-import personal.project.springinfra.model.domain.BaseDomain;
+import springinfra.SpringContext;
+import springinfra.model.domain.BaseDomain;
 
 import javax.persistence.*;
 import java.util.List;

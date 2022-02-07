@@ -5,7 +5,7 @@
   Time: 02:16
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page import="personal.project.springinfra.assets.AuthorityType" %>
+<%@ page import="springinfra.assets.AuthorityType" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>

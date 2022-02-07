@@ -3,8 +3,8 @@ package examples.dto.crud.request;
 import examples.assets.UserStatus;
 import examples.domain.User;
 import lombok.Data;
-import personal.project.springinfra.assets.Regex;
-import personal.project.springinfra.model.dto.crud.request.BaseCrudRequest;
+import springinfra.assets.Regex;
+import springinfra.model.dto.crud.request.BaseCrudRequest;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;

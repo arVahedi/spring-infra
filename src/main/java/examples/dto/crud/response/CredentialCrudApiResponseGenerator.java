@@ -1,8 +1,8 @@
 package examples.dto.crud.response;
 
 import examples.domain.Credential;
-import personal.project.springinfra.assets.Constant;
-import personal.project.springinfra.model.dto.crud.response.DefaultCrudApiResponseGenerator;
+import springinfra.assets.Constant;
+import springinfra.model.dto.crud.response.DefaultCrudApiResponseGenerator;
 
 public class CredentialCrudApiResponseGenerator extends DefaultCrudApiResponseGenerator<Credential> {
 

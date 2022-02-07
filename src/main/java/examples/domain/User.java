@@ -4,7 +4,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Where;
 import org.hibernate.envers.Audited;
 import examples.assets.UserStatus;
-import personal.project.springinfra.model.domain.LogicalDeletableDomain;
+import springinfra.model.domain.LogicalDeletableDomain;
 
 import javax.persistence.*;
 

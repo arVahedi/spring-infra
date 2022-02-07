@@ -5,7 +5,7 @@ import examples.domain.User;
 import examples.dto.crud.request.CredentialDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import personal.project.springinfra.model.converter.BaseCrudConverter;
+import springinfra.model.converter.BaseCrudConverter;
 
 @Component
 @RequiredArgsConstructor

@@ -5,25 +5,23 @@ import examples.domain.User;
 import examples.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import personal.project.springinfra.database.repository.BaseRepository;
-import personal.project.springinfra.model.converter.BaseCrudConverter;
-import personal.project.springinfra.service.BaseService;
-import personal.project.springinfra.service.DefaultCrudService;
+import springinfra.service.BaseService;
+import springinfra.service.DefaultCrudService;
 
 @Service
 @RequiredArgsConstructor
-public class UserService extends BaseService implements DefaultCrudService<User> {
+public class UserService extends BaseService implements DefaultCrudService<User, Long> {
 
     private final UserRepository userRepository;
     private final UserCrudConverter userCrudConverter;
 
     @Override
-    public BaseRepository getRepository() {
+    public UserRepository getRepository() {
         return this.userRepository;
     }
 
     @Override
-    public BaseCrudConverter getCrudConverter() {
+    public UserCrudConverter getCrudConverter() {
         return this.userCrudConverter;
     }
 

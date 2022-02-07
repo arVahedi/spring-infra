@@ -1,0 +1,55 @@
+package springinfra.ws.api;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+import springinfra.assets.ErrorCode;
+import springinfra.assets.ResponseTemplate;
+import springinfra.assets.ValidationGroups;
+import springinfra.model.dto.crud.request.BaseCrudRequest;
+import springinfra.model.dto.crud.response.CrudApiResponseGenerator;
+import springinfra.model.dto.crud.response.DefaultCrudApiResponseGenerator;
+import springinfra.model.domain.BaseDomain;
+import springinfra.service.CrudService;
+
+import javax.validation.constraints.Min;
+
+public interface DefaultCrudRestApi<D extends BaseCrudRequest, I extends Number> extends CrudRestApi<D, I> {
+
+    CrudApiResponseGenerator crudApiResponseGenerator = new DefaultCrudApiResponseGenerator();
+
+    @PostMapping
+    default ResponseEntity<ResponseTemplate> save(@RequestBody @Validated(ValidationGroups.InsertValidationGroup.class) D request) {
+        BaseDomain domain = getService().saveOrUpdate(request);
+        return ResponseEntity.ok(new ResponseTemplate<>(ErrorCode.NO_ERROR, getCrudApiResponseGenerator().onSave(domain)));
+    }
+
+    @PutMapping
+    default ResponseEntity<ResponseTemplate> update(@RequestBody @Validated(ValidationGroups.UpdateValidationGroup.class) D request) {
+        BaseDomain domain = getService().saveOrUpdate(request);
+        return ResponseEntity.ok(new ResponseTemplate<>(ErrorCode.NO_ERROR, getCrudApiResponseGenerator().onUpdate(domain)));
+    }
+
+    @DeleteMapping("/{id}")
+    default ResponseEntity<ResponseTemplate> delete(@PathVariable @Min(value = 1, message = "Minimum acceptable value for id is 1") I id) {
+        BaseDomain domain = getService().delete(id);
+        return ResponseEntity.ok(new ResponseTemplate<>(ErrorCode.NO_ERROR, getCrudApiResponseGenerator().onDelete(domain)));
+    }
+
+    @GetMapping("/{id}")
+    default ResponseEntity<ResponseTemplate> find(@PathVariable @Min(value = 1, message = "Minimum acceptable value for id is 1") I id) {
+        BaseDomain domain = getService().find(id);
+        return ResponseEntity.ok(new ResponseTemplate<>(ErrorCode.NO_ERROR, getCrudApiResponseGenerator().onFind(domain)));
+    }
+
+    @GetMapping("/list")
+    default ResponseEntity<ResponseTemplate> list() {
+        return ResponseEntity.ok(new ResponseTemplate<>(ErrorCode.NO_ERROR, getCrudApiResponseGenerator().onList(getService().findAll())));
+    }
+
+    CrudService getService();
+
+    default CrudApiResponseGenerator getCrudApiResponseGenerator() {
+        return crudApiResponseGenerator;
+    }
+}

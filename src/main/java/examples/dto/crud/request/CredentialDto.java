@@ -2,9 +2,9 @@ package examples.dto.crud.request;
 
 import examples.domain.Credential;
 import lombok.Data;
-import personal.project.springinfra.annotation.validation.CascadeValidation;
-import personal.project.springinfra.assets.ValidationGroups;
-import personal.project.springinfra.model.dto.crud.request.BaseCrudRequest;
+import springinfra.annotation.validation.CascadeValidation;
+import springinfra.assets.ValidationGroups;
+import springinfra.model.dto.crud.request.BaseCrudRequest;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;

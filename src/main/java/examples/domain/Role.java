@@ -4,8 +4,8 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 import org.hibernate.envers.Audited;
-import personal.project.springinfra.assets.AuthorityType;
-import personal.project.springinfra.model.domain.BaseDomain;
+import springinfra.assets.AuthorityType;
+import springinfra.model.domain.BaseDomain;
 
 import javax.persistence.*;
 import java.util.List;

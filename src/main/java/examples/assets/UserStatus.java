@@ -1,7 +1,7 @@
 package examples.assets;
 
-import personal.project.springinfra.assets.PersistableEnum;
-import personal.project.springinfra.utility.jpa.PersistableEnumConverter;
+import springinfra.assets.PersistableEnum;
+import springinfra.utility.jpa.PersistableEnumConverter;
 
 public enum UserStatus implements PersistableEnum<UserStatus> {
     ACTIVE(1),
