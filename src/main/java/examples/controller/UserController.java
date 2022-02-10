@@ -21,7 +21,7 @@ public class UserController extends BaseController {
     @Override
     @GetMapping
     public String render(Map<String, Object> model) {
-        List<User> userList = this.userService.findAll();
+        List<User> userList = this.userService.list();
         model.put("userList", userList);
 
         return getViewPage();

@@ -1,5 +1,6 @@
 package springinfra.ws.api;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -42,9 +43,9 @@ public interface DefaultCrudRestApi<D extends BaseCrudRequest, I extends Number>
         return ResponseEntity.ok(new ResponseTemplate<>(ErrorCode.NO_ERROR, getCrudApiResponseGenerator().onFind(domain)));
     }
 
-    @GetMapping("/list")
-    default ResponseEntity<ResponseTemplate> list() {
-        return ResponseEntity.ok(new ResponseTemplate<>(ErrorCode.NO_ERROR, getCrudApiResponseGenerator().onList(getService().findAll())));
+    @GetMapping
+    default ResponseEntity<ResponseTemplate> list(Pageable pageable) {
+        return ResponseEntity.ok(new ResponseTemplate<>(ErrorCode.NO_ERROR, getCrudApiResponseGenerator().onList(getService().list(pageable))));
     }
 
     CrudService getService();

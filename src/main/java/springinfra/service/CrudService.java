@@ -16,9 +16,9 @@ public interface CrudService<E extends BaseDomain, I extends Number> {
 
     E find(I id);
 
-    List<E> findAll();
+    List<E> list();
 
-    List<E> findAll(Pageable pageable);
+    List<E> list(Pageable pageable);
 
     BaseRepository getRepository();
 

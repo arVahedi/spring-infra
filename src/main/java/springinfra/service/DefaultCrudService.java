@@ -41,11 +41,11 @@ public interface DefaultCrudService<E extends BaseDomain, I extends Number> exte
         return optional.orElseThrow(() -> new NoSuchRecordException(String.format("%s with id [%d] doesn't exist", getGenericDomainClass().getSimpleName(), id)));
     }
 
-    default List<E> findAll() {
+    default List<E> list() {
         return getRepository().findAll();
     }
 
-    default List<E> findAll(Pageable pageable) {
+    default List<E> list(Pageable pageable) {
         return getRepository().findAll(pageable).toList();
     }
 
