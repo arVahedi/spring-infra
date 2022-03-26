@@ -16,10 +16,10 @@ public class InMemoryIdentityProviderModule extends BaseIdentityProviderModule {
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.inMemoryAuthentication()
-                .withUser("user1").password(new Argon2PasswordEncoder().encode("user1Pass")).roles(AuthorityType.ACCOUNT_INFO_AUTHORITY.getValue())
+                .withUser("user1").password(new Argon2PasswordEncoder().encode("user1Pass")).authorities(AuthorityType.ACCOUNT_INFO_AUTHORITY.getValue())
                 .and()
-                .withUser("user2").password(new Argon2PasswordEncoder().encode("user2Pass")).roles(AuthorityType.ACCOUNT_INFO_AUTHORITY.getValue())
+                .withUser("user2").password(new Argon2PasswordEncoder().encode("user2Pass")).authorities(AuthorityType.ACCOUNT_INFO_AUTHORITY.getValue())
                 .and()
-                .withUser("admin").password(new Argon2PasswordEncoder().encode("adminPass")).roles(AuthorityType.ACCOUNT_INFO_AUTHORITY.getValue(), AuthorityType.USER_MANAGEMENT_AUTHORITY.getValue());
+                .withUser("admin").password(new Argon2PasswordEncoder().encode("adminPass")).authorities(AuthorityType.ACCOUNT_INFO_AUTHORITY.getValue(), AuthorityType.USER_MANAGEMENT_AUTHORITY.getValue());
     }
 }
