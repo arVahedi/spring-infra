@@ -5,11 +5,12 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.data.domain.Persistable;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.Instant;
 
 @MappedSuperclass
 @JsonIgnoreProperties({"hibernateLazyInitializer"})
-public abstract class BaseDomain<ID extends Number> implements Persistable<ID> {
+public abstract class BaseDomain<ID extends Number> implements Persistable<ID>, Serializable {
 
     private ID id;
     private Instant insertDate;
