@@ -7,6 +7,7 @@ import springinfra.SpringContext;
 import springinfra.model.domain.BaseDomain;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -16,7 +17,7 @@ public class Credential extends BaseDomain<Long> {
     private String password;
     private User user;
 
-    private List<CredentialRole> roles;
+    private List<CredentialRole> roles = new ArrayList<>();
 
     public void changePassword(String password) {
         this.password = SpringContext.getApplicationContext().getBean(PasswordEncoder.class).encode(password);

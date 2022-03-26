@@ -39,27 +39,27 @@ public class RepositoryAspect extends BaseAspect {
             return;
         }
 
-        if (returnValue instanceof BaseDomain) {
-            baseRepository.detach((BaseDomain) returnValue);
+        if (returnValue instanceof BaseDomain baseDomain) {
+            baseRepository.detach(baseDomain);
 
-        } else if (returnValue instanceof List) {
-            for (Object item : (List) returnValue) {
-                if (item instanceof BaseDomain) {
-                    baseRepository.detach((BaseDomain) item);
+        } else if (returnValue instanceof List list) {
+            for (Object item : list) {
+                if (item instanceof BaseDomain baseDomain) {
+                    baseRepository.detach(baseDomain);
                 }
             }
 
-        } else if (returnValue instanceof Optional) {
-            ((Optional) returnValue).ifPresent(item -> {
-                if (item instanceof BaseDomain) {
-                    baseRepository.detach((BaseDomain) item);
+        } else if (returnValue instanceof Optional optional) {
+            optional.ifPresent(item -> {
+                if (item instanceof BaseDomain baseDomain) {
+                    baseRepository.detach(baseDomain);
                 }
             });
 
-        } else if (returnValue instanceof Page) {
-            ((Page) returnValue).getContent().forEach(item -> {
-                if (item instanceof BaseDomain) {
-                    baseRepository.detach((BaseDomain) item);
+        } else if (returnValue instanceof Page page) {
+            page.getContent().forEach(item -> {
+                if (item instanceof BaseDomain baseDomain) {
+                    baseRepository.detach(baseDomain);
                 }
             });
         }

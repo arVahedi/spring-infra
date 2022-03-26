@@ -8,6 +8,8 @@ import springinfra.model.dto.crud.request.BaseCrudRequest;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 public class CredentialDto extends BaseCrudRequest<Credential, Long> {
@@ -18,4 +20,5 @@ public class CredentialDto extends BaseCrudRequest<Credential, Long> {
     @CascadeValidation(cascadeGroups = ValidationGroups.DynamicCrudValidationGroup.class)
     @NotNull(message = "user property is required")
     private UserDto user;
+    private List<Integer> roles = new ArrayList<>();
 }

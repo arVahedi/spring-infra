@@ -8,6 +8,7 @@ import springinfra.model.domain.BaseDomain;
 import springinfra.model.domain.OptimisticLockableDomain;
 import springinfra.model.dto.crud.request.BaseCrudRequest;
 
+import java.text.MessageFormat;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,13 +17,13 @@ public interface DefaultCrudService<E extends BaseDomain, I extends Number> exte
     @Transactional(rollbackFor = Exception.class)
     default E saveOrUpdate(BaseCrudRequest request) {
         E entity;
-        if (request.getId() != null && request.getId().longValue() > 0) {    //This is update operation
+        if (isUpdateOperation(request)) {    //This is update operation
             entity = find((I) request.getId());
             getCrudConverter().toEntity(request, entity);
         } else {    //This is insert operation
             entity = (E) getCrudConverter().toEntity(request, getGenericDomainClass());
-            if (entity instanceof OptimisticLockableDomain) {
-                ((OptimisticLockableDomain) entity).setVersion(0L);
+            if (entity instanceof OptimisticLockableDomain optimisticLockableDomain) {
+                optimisticLockableDomain.setVersion(0L);
             }
         }
 
@@ -38,7 +39,7 @@ public interface DefaultCrudService<E extends BaseDomain, I extends Number> exte
 
     default E find(I id) {
         Optional<E> optional = getRepository().findById(id);
-        return optional.orElseThrow(() -> new NoSuchRecordException(String.format("%s with id [%d] doesn't exist", getGenericDomainClass().getSimpleName(), id)));
+        return optional.orElseThrow(() -> new NoSuchRecordException(MessageFormat.format("{0} with id [{1}] doesn''t exist", getGenericDomainClass().getSimpleName(), id)));
     }
 
     default List<E> list() {
@@ -47,6 +48,10 @@ public interface DefaultCrudService<E extends BaseDomain, I extends Number> exte
 
     default List<E> list(Pageable pageable) {
         return getRepository().findAll(pageable).toList();
+    }
+
+    default boolean isUpdateOperation(BaseCrudRequest request) {
+        return request.getId() != null && request.getId().longValue() > 0;
     }
 
     @Slf4j

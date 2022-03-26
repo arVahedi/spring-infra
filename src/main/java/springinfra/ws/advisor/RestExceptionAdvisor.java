@@ -17,6 +17,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import springinfra.assets.ErrorCode;
 import springinfra.assets.ResponseTemplate;
 import springinfra.exception.NoSuchRecordException;
+import springinfra.exception.UsernameAlreadyExistsException;
 
 import javax.persistence.EntityNotFoundException;
 import javax.validation.ConstraintViolation;
@@ -48,6 +49,12 @@ public class RestExceptionAdvisor extends ResponseEntityExceptionHandler {
     public ResponseEntity<ResponseTemplate<String>> handleAccessDeniedException(AccessDeniedException ex) {
         log.error(ex.getMessage(), ex);
         return new ResponseEntity<>(new ResponseTemplate<>(HttpStatus.FORBIDDEN), HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(UsernameAlreadyExistsException.class)
+    public ResponseEntity<ResponseTemplate<String>> handleUsernameAlreadyExistsException(UsernameAlreadyExistsException ex) {
+        log.error(ex.getMessage(), ex);
+        return new ResponseEntity<>(new ResponseTemplate<>(HttpStatus.BAD_REQUEST, "Username already exists"), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(PropertyReferenceException.class)

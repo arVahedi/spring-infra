@@ -1,12 +1,16 @@
 package examples.repository;
 
 
-import org.springframework.stereotype.Repository;
 import examples.domain.Credential;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import springinfra.database.repository.BaseRepository;
+
+import java.util.Optional;
 
 @Repository
 @Transactional(readOnly = true)
 public interface CredentialRepository extends BaseRepository<Credential, Long> {
+
+    Optional<Credential> findByUsername(String username);
 }

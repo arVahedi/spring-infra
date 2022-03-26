@@ -25,12 +25,12 @@ public class CredentialApi extends BaseApi implements DefaultCrudRestApi<Credent
     private CrudApiResponseGenerator<Credential> crudApiResponseGenerator = new CredentialCrudApiResponseGenerator();
 
     @Override
-    public CrudService getService() {
+    public CredentialService getService() {
         return this.credentialService;
     }
 
     @Override
-    public CrudApiResponseGenerator getCrudApiResponseGenerator() {
+    public CrudApiResponseGenerator<Credential> getCrudApiResponseGenerator() {
         return this.crudApiResponseGenerator;
     }
 }

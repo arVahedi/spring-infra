@@ -24,5 +24,7 @@ public interface CrudService<E extends BaseDomain, I extends Number> {
 
     BaseCrudConverter getCrudConverter();
 
+    boolean isUpdateOperation(BaseCrudRequest request);
+
     Class<E> getGenericDomainClass();
 }
