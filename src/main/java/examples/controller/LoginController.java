@@ -1,18 +1,14 @@
-package springinfra.ws.controller;
+package examples.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import springinfra.ws.controller.BaseController;
 
 import java.util.Map;
 
 @Controller
 @RequestMapping(value = {"/login"})
 public class LoginController extends BaseController {
-
-    @Override
-    public String render(Map<String, Object> model) {
-        return getViewPage();
-    }
 
     @Override
     public String getViewPage() {

@@ -23,11 +23,11 @@
     <c:choose>
         <c:when test="${isAuthenticated}">
             <a href="/logout">Logout</a>
-            <security:authorize access="hasRole('${AuthorityType.USER_MANAGEMENT_AUTHORITY}')">
+            <security:authorize access="hasAuthority('${AuthorityType.USER_MANAGEMENT_AUTHORITY}')">
             <a href="/admin/user-management">User Management</a>
             </security:authorize>
-            <security:authorize access="hasRole('${AuthorityType.ACCOUNT_INFO_AUTHORITY}')">
-            <a href="/user/account-info">My Account</a>
+            <security:authorize access="hasAuthority('${AuthorityType.ACCOUNT_INFO_AUTHORITY}')">
+            <a href="/user/account">My Account</a>
             </security:authorize>
         </c:when>
         <c:otherwise>

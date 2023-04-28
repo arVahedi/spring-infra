@@ -15,7 +15,7 @@ import org.springframework.security.web.header.writers.DelegatingRequestMatcherH
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.RegexRequestMatcher;
 import springinfra.configuration.BaseConfig;
-import springinfra.configuration.security.idp.BaseIdentityProviderModule;
+import springinfra.configuration.security.idp.BaseIdentityProviderModuleConfig;
 
 import java.util.Optional;
 
@@ -25,7 +25,7 @@ import java.util.Optional;
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true, jsr250Enabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements BaseConfig {
 
-    private final Optional<BaseIdentityProviderModule> identityProviderModule;
+    private final Optional<BaseIdentityProviderModuleConfig> identityProviderModule;
 
     @Override
     public void configure(HttpSecurity httpSecurity) throws Exception {

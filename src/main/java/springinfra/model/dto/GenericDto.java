@@ -9,9 +9,6 @@ import com.voodoodyne.jackson.jsog.JSOGGenerator;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by Gladiator on 5/5/2017 AD.
- */
 
 @JsonIdentityInfo(generator = JSOGGenerator.class)
 @JsonInclude(JsonInclude.Include.NON_NULL)
