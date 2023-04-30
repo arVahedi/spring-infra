@@ -3,8 +3,8 @@ package springinfra.security.validator;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.util.CollectionUtils;
-import springinfra.annotation.validation.CascadeValidation;
-import springinfra.assets.VirtualValidationGroups;
+import springinfra.annotation.validation.GroupBasedValidation;
+import springinfra.assets.AbstractiveValidationGroup;
 
 import javax.validation.ConstraintValidatorContext;
 import javax.validation.ConstraintViolation;
@@ -15,14 +15,14 @@ import java.util.List;
 import java.util.Set;
 
 @RequiredArgsConstructor
-public class CascadeValidationValidator extends BaseValidator<CascadeValidation, Object> {
+public class GroupBasedValidationValidator extends BaseValidator<GroupBasedValidation, Object> {
 
     private final Validator validator;
 
-    private CascadeValidation constraintAnnotation;
+    private GroupBasedValidation constraintAnnotation;
 
     @Override
-    public void initialize(CascadeValidation constraintAnnotation) {
+    public void initialize(GroupBasedValidation constraintAnnotation) {
         this.constraintAnnotation = constraintAnnotation;
     }
 
@@ -31,15 +31,15 @@ public class CascadeValidationValidator extends BaseValidator<CascadeValidation,
     public boolean isValid(Object object, ConstraintValidatorContext constraintValidatorContext) {
 
         List<Class> validationGroups = new ArrayList<>();
-        for (Class<?> group : this.constraintAnnotation.cascadeGroups()) {
-            if (VirtualValidationGroups.class.isAssignableFrom(group)) {
-                validationGroups.addAll(Arrays.asList(((VirtualValidationGroups) group.getConstructor().newInstance()).actualGroups(object)));
+        for (Class<?> group : this.constraintAnnotation.value()) {
+            if (AbstractiveValidationGroup.class.isAssignableFrom(group)) {
+                validationGroups.addAll(Arrays.asList(((AbstractiveValidationGroup) group.getConstructor().newInstance()).getGroups(object)));
             } else {
                 validationGroups.add(group);
             }
         }
 
-        Set<ConstraintViolation<Object>> constraintViolations = this.validator.validate(object, validationGroups.toArray(new Class[validationGroups.size()]));
+        Set<ConstraintViolation<Object>> constraintViolations = this.validator.validate(object, validationGroups.toArray(new Class[0]));
 
         if (!CollectionUtils.isEmpty(constraintViolations)) {
             constraintValidatorContext.disableDefaultConstraintViolation();

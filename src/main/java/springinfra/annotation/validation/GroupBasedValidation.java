@@ -1,6 +1,6 @@
 package springinfra.annotation.validation;
 
-import springinfra.security.validator.CascadeValidationValidator;
+import springinfra.security.validator.GroupBasedValidationValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
@@ -9,10 +9,10 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Constraint(validatedBy = CascadeValidationValidator.class)
+@Constraint(validatedBy = GroupBasedValidationValidator.class)
 @Target({ElementType.PARAMETER, ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface CascadeValidation {
+public @interface GroupBasedValidation {
 
     String message() default "Invalid DTO for operation";
 
@@ -20,5 +20,5 @@ public @interface CascadeValidation {
 
     Class<? extends Payload>[] payload() default {};
 
-    Class<?>[] cascadeGroups() default {};
+    Class<?>[] value();
 }

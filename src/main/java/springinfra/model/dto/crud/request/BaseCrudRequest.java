@@ -1,7 +1,8 @@
 package springinfra.model.dto.crud.request;
 
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import springinfra.assets.ValidationGroups;
 import springinfra.model.domain.BaseDomain;
 import springinfra.model.dto.BaseDto;
@@ -10,7 +11,8 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
 
-@Data
+@Getter
+@Setter
 public abstract class BaseCrudRequest<E extends BaseDomain, ID extends Number> extends BaseDto {
     @NotNull(message = "id is required", groups = ValidationGroups.UpdateValidationGroup.class)
     @Min(value = 1, message = "Minimum acceptable value for id is 1", groups = ValidationGroups.UpdateValidationGroup.class)

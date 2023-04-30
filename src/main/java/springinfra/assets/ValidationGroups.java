@@ -6,9 +6,9 @@ import javax.validation.groups.Default;
 
 public interface ValidationGroups {
 
-    class DynamicCrudValidationGroup extends VirtualValidationGroups {
+    class DynamicCrudValidationGroup implements AbstractiveValidationGroup {
         @Override
-        public Class<?>[] actualGroups(Object object) {
+        public Class<?>[] getGroups(Object object) {
             if (object instanceof BaseCrudRequest baseCrudRequest) {
                 if (baseCrudRequest.getId() == null) {
                     return new Class[]{InsertValidationGroup.class};

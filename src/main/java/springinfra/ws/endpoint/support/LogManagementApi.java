@@ -1,4 +1,4 @@
-package springinfra.ws.api.support;
+package springinfra.ws.endpoint.support;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import springinfra.assets.ErrorCode;
 import springinfra.assets.ResponseTemplate;
 import springinfra.service.LogManagementService;
-import springinfra.ws.api.BaseApi;
+import springinfra.ws.endpoint.BaseApi;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;

@@ -1,4 +1,4 @@
-package examples.api;
+package examples.endpoint;
 
 import examples.dto.crud.request.RoleDto;
 import examples.service.RoleService;
@@ -7,8 +7,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import springinfra.ws.api.BaseApi;
-import springinfra.ws.api.DefaultCrudRestApi;
+import springinfra.ws.endpoint.BaseApi;
+import springinfra.ws.endpoint.DefaultCrudRestApi;
 
 @RestController
 @RequestMapping(BaseApi.API_PATH_PREFIX_V1 + "/role")

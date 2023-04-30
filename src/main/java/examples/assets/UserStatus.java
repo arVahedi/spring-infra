@@ -10,7 +10,7 @@ public enum UserStatus implements PersistableEnum<UserStatus> {
     INACTIVE(2),
     SUSPEND(3);
 
-    private Integer code;
+    private final Integer code;
 
     UserStatus(Integer code) {
         this.code = code;

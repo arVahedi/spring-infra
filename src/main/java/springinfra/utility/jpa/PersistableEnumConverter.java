@@ -10,26 +10,26 @@ import java.util.stream.Stream;
 @Converter(autoApply = true)
 public abstract class PersistableEnumConverter<T extends Enum<T> & PersistableEnum<T>> implements AttributeConverter<T, Integer> {
 
-    private final Class<T> classOfEnum;
+	private final Class<T> classOfEnum;
 
-    public PersistableEnumConverter() {
-        this.classOfEnum = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
-    }
+	protected PersistableEnumConverter() {
+		this.classOfEnum = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+	}
 
-    @Override
-    public Integer convertToDatabaseColumn(T attribute) {
-        return attribute != null ? attribute.getCode() : null;
-    }
+	@Override
+	public Integer convertToDatabaseColumn(T attribute) {
+		return attribute != null ? attribute.getCode() : null;
+	}
 
-    @Override
-    public T convertToEntityAttribute(Integer code) {
-        if (code == null) {
-            return null;
-        }
+	@Override
+	public T convertToEntityAttribute(Integer code) {
+		if (code == null) {
+			return null;
+		}
 
-        return Stream.of(classOfEnum.getEnumConstants())
-                .filter(e -> e.getCode().intValue() == code.intValue())
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException(String.format("Value [%d] is not exist in %s", code.intValue(), classOfEnum.getSimpleName())));
-    }
+		return Stream.of(classOfEnum.getEnumConstants())
+				.filter(e -> e.getCode().intValue() == code.intValue())
+				.findFirst()
+				.orElseThrow(() -> new IllegalArgumentException(String.format("Value [%d] is not exist in %s", code, classOfEnum.getSimpleName())));
+	}
 }

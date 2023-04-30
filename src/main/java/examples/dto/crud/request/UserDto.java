@@ -2,7 +2,8 @@ package examples.dto.crud.request;
 
 import examples.assets.UserStatus;
 import examples.domain.User;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import springinfra.assets.Regex;
 import springinfra.model.dto.crud.request.BaseCrudRequest;
 
@@ -10,7 +11,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
-@Data
+@Getter
+@Setter
 public class UserDto extends BaseCrudRequest<User, Long> {
     @NotBlank(message = "First-Name is required")
     private String firstName;

@@ -1,0 +1,26 @@
+version: '3'
+services:
+  #  spring-infra:
+  #    container_name: spring-infra
+  #    build:
+  #      context: .
+  #      dockerfile: Dockerfile
+  #    image: spring-infra:0.0.1-SNAPSHOT
+  #    ports:
+  #      - "8101:8101"
+  #    depends_on:
+  #      - mysql
+
+
+  mysql:
+    image: mysql:8.0.31
+    environment:
+      - MYSQL_DATABASE=spring_infra
+      - MYSQL_ROOT_PASSWORD=secure_access
+    ports:
+      - '3306:3306'
+    volumes:
+      - spring-infra-volume:/var/lib/mysql
+
+volumes:
+  spring-infra-volume:

@@ -1,4 +1,4 @@
-package springinfra.ws.api;
+package springinfra.ws.endpoint;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
