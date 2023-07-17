@@ -1,22 +1,23 @@
-package examples.controller;
+package examples.ui;
 
 import examples.domain.User;
 import examples.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import springinfra.assets.AuthorityType;
-import springinfra.ws.controller.BaseController;
+import springinfra.controller.ui.UIController;
 
-import javax.annotation.security.RolesAllowed;
 import java.util.List;
 import java.util.Map;
 
 @Controller
 @RequestMapping(value = {"/admin/user-management"})
-@RolesAllowed({AuthorityType.StringFormat.USER_MANAGEMENT_AUTHORITY})
+@PreAuthorize("hasAuthority(T(springinfra.assets.AuthorityType).USER_MANAGEMENT_AUTHORITY)")
 @RequiredArgsConstructor
-public class UserManagementController extends BaseController {
+public class UserManagementUIController implements UIController {
+
+    public static final String VIEW_PAGE = "/userManagement.jsp";
 
     private final UserService userService;
 
@@ -25,11 +26,6 @@ public class UserManagementController extends BaseController {
         List<User> userList = this.userService.list();
         model.put("userList", userList);
 
-        return getViewPage();
-    }
-
-    @Override
-    public String getViewPage() {
-        return "/userManagement.jsp";
+        return VIEW_PAGE;
     }
 }

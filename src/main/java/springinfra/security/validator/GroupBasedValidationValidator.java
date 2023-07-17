@@ -6,9 +6,9 @@ import org.springframework.util.CollectionUtils;
 import springinfra.annotation.validation.GroupBasedValidation;
 import springinfra.assets.AbstractiveValidationGroup;
 
-import javax.validation.ConstraintValidatorContext;
-import javax.validation.ConstraintViolation;
-import javax.validation.Validator;
+import jakarta.validation.ConstraintValidatorContext;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validator;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

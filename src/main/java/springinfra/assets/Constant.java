@@ -1,5 +1,7 @@
 package springinfra.assets;
 
+import org.springframework.http.HttpHeaders;
+
 public class Constant {
 
     private Constant() {
@@ -7,4 +9,6 @@ public class Constant {
     }
 
     public static final String PASSWORD_MASK = "******";
+    public static final String AUTHORIZATION_TOKEN_COOKIE_NAME = HttpHeaders.AUTHORIZATION;
+    public static final String AUTHORIZATION_TOKEN_PREFIX = "Bearer ";
 }

@@ -1,4 +1,4 @@
-package springinfra.ws.endpoint;
+package springinfra.controller.rest;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -9,9 +9,9 @@ import springinfra.assets.ResponseTemplate;
 import springinfra.assets.ValidationGroups;
 import springinfra.model.dto.crud.request.BaseCrudRequest;
 
-import javax.validation.constraints.Min;
+import jakarta.validation.constraints.Min;
 
-public interface CrudRestApi<D extends BaseCrudRequest, I extends Number> {
+public interface CrudRestController<D extends BaseCrudRequest, I extends Number> {
 
     ResponseEntity<ResponseTemplate> save(@RequestBody @Validated(ValidationGroups.InsertValidationGroup.class) D request);
 

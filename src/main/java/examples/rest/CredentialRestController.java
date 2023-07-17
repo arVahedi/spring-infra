@@ -1,4 +1,4 @@
-package examples.endpoint;
+package examples.rest;
 
 import examples.domain.Credential;
 import examples.dto.crud.request.CredentialDto;
@@ -10,15 +10,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import springinfra.model.dto.crud.response.CrudApiResponseGenerator;
-import springinfra.ws.endpoint.BaseApi;
-import springinfra.ws.endpoint.DefaultCrudRestApi;
+import springinfra.controller.rest.BaseRestController;
+import springinfra.controller.rest.DefaultCrudRestController;
 
 @RestController
-@RequestMapping(BaseApi.API_PATH_PREFIX_V1 + "/credential")
+@RequestMapping(BaseRestController.API_PATH_PREFIX_V1 + "/credential")
 @Slf4j
 @Tag(name = "Credential API", description = "Credential management API")
 @RequiredArgsConstructor
-public class CredentialApi extends BaseApi implements DefaultCrudRestApi<CredentialDto, Long> {
+public class CredentialRestController extends BaseRestController implements DefaultCrudRestController<CredentialDto, Long> {
 
     private final CredentialService credentialService;
     private CrudApiResponseGenerator<Credential> crudApiResponseGenerator = new CredentialCrudApiResponseGenerator();

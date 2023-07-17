@@ -1,4 +1,4 @@
-package examples.endpoint;
+package examples.rest;
 
 import examples.domain.User;
 import examples.dto.crud.request.UserDto;
@@ -10,15 +10,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import springinfra.model.dto.crud.response.CrudApiResponseGenerator;
-import springinfra.ws.endpoint.BaseApi;
-import springinfra.ws.endpoint.DefaultCrudRestApi;
+import springinfra.controller.rest.BaseRestController;
+import springinfra.controller.rest.DefaultCrudRestController;
 
 @RestController
-@RequestMapping(BaseApi.API_PATH_PREFIX_V1 + "/user")
+@RequestMapping(BaseRestController.API_PATH_PREFIX_V1 + "/user")
 @Slf4j
 @Tag(name = "User API", description = "User management API")
 @RequiredArgsConstructor
-public class UserApi extends BaseApi implements DefaultCrudRestApi<UserDto, Long> {
+public class UserRestController extends BaseRestController implements DefaultCrudRestController<UserDto, Long> {
 
     private final UserService userService;
     private CrudApiResponseGenerator<User> crudApiResponseGenerator = new UserCrudApiResponseGenerator();

@@ -1,40 +1,26 @@
 package examples.domain;
 
+import jakarta.persistence.*;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.RelationTargetAuditMode;
 import springinfra.model.domain.BaseDomain;
 
-import javax.persistence.*;
-
+@Getter
+@Setter
 @Entity
 @Table(name = "credential_role")
 @NoArgsConstructor
 @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
 public class CredentialRole extends BaseDomain<Integer> {
-    private Credential credential;
-    private Role role;
 
-    //region Getter and Setter
     @ManyToOne(targetEntity = Credential.class, fetch = FetchType.EAGER, cascade = {CascadeType.DETACH, CascadeType.REFRESH})
     @JoinColumn(name = "credential_id", referencedColumnName = "id")
-    public Credential getCredential() {
-        return credential;
-    }
-
-    public void setCredential(Credential credential) {
-        this.credential = credential;
-    }
+    private Credential credential;
 
     @ManyToOne(targetEntity = Role.class, fetch = FetchType.EAGER, cascade = {CascadeType.DETACH, CascadeType.REFRESH})
     @JoinColumn(name = "role_id", referencedColumnName = "id")
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
-    }
-
-    //endregion
+    private Role role;
 }

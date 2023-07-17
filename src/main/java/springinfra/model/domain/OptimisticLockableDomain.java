@@ -1,24 +1,18 @@
 package springinfra.model.domain;
 
-import javax.persistence.Column;
-import javax.persistence.MappedSuperclass;
-import javax.persistence.Version;
+import jakarta.persistence.Column;
+import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.Version;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 @MappedSuperclass
 public abstract class OptimisticLockableDomain<ID extends Number> extends BaseDomain<ID> {
 
-    private Long version;
-
-    //region Getter and Setter
     @Version
     @Column(name = "version")
-    public Long getVersion() {
-        return version;
-    }
-
-    public void setVersion(Long version) {
-        this.version = version;
-    }
-    //endregion
+    private Long version;
 
 }

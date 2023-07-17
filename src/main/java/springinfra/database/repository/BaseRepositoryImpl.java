@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import springinfra.model.domain.BaseDomain;
 
-import javax.persistence.EntityManager;
+import jakarta.persistence.EntityManager;
 
 @NoRepositoryBean
 @Transactional

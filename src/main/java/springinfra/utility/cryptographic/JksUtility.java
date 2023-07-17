@@ -2,76 +2,64 @@ package springinfra.utility.cryptographic;
 
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
-import org.bouncycastle.util.encoders.Base64;
-import springinfra.exception.CryptographyException;
+import org.springframework.util.ResourceUtils;
 
-import javax.crypto.BadPaddingException;
-import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.security.*;
+import java.security.cert.CertificateException;
+import java.text.MessageFormat;
 
 @UtilityClass
 @Slf4j
 public class JksUtility {
 
-    public KeyStore getKeyStore(KeyStoreType keyStoreType, String keyStorePath, String keyStorePass)
-            throws Exception {
+    public KeyStore getKeyStore(KeyStoreType keyStoreType, String keyStorePath, String keyStorePass) throws IOException, KeyStoreException, CertificateException, NoSuchAlgorithmException {
 
-        if (keyStorePath.startsWith("file:/")) {
-            keyStorePath = keyStorePath.substring(5);
+        KeyStore keyStore = KeyStore.getInstance(keyStoreType.getValue());
+
+        File file = ResourceUtils.getFile(keyStorePath);
+        if (!file.exists()) {
+            throw new FileNotFoundException(MessageFormat.format("The key store file {0} does not exist!", keyStorePath));
         }
-        KeyStore ks = KeyStore.getInstance(keyStoreType.getValue());
-        FileInputStream fileInputStream = new FileInputStream(keyStorePath);
-        if (fileInputStream == null) {
-            throw new Exception("JKS doesn't exist!");
-        }
-        ks.load(fileInputStream, keyStorePass.toCharArray());
-        return ks;
+        FileInputStream fileInputStream = new FileInputStream(file);
+        keyStore.load(fileInputStream, keyStorePass.toCharArray());
+        return keyStore;
     }
 
-    public String encrypt(KeyStore keyStore, String message, String alias, String jceksPass)
-            throws CryptographyException, NoSuchAlgorithmException, UnrecoverableEntryException, KeyStoreException,
-            InvalidKeyException, NoSuchPaddingException, BadPaddingException,
-            IllegalBlockSizeException {
+    public KeyPair getKeyPair(KeyStore keyStore, String keyAlias, String jceksPass) throws UnrecoverableKeyException, KeyStoreException, NoSuchAlgorithmException {
+        Key key = getKey(keyStore, keyAlias, jceksPass);
 
-        Key secretKeyEntry = keyStore.getKey(alias, jceksPass.toCharArray());
-        if (secretKeyEntry == null) {
-            log.error(String.format("There isn't any secret key in keystore for given alias [%s].", alias));
-            throw new CryptographyException(String.format("There isn't any secret key in keystore for given alias [%s].", alias));
+        if (key instanceof PrivateKey privateKey) {
+            // Get certificate of public key
+            java.security.cert.Certificate cert = keyStore.getCertificate(keyAlias);
+
+            // Get public key
+            PublicKey publicKey = cert.getPublicKey();
+
+            // Return a key pair
+            return new KeyPair(publicKey, privateKey);
         }
-        Cipher cipher = Cipher.getInstance("AES");
-        cipher.init(Cipher.ENCRYPT_MODE, secretKeyEntry);
-        final byte[] plainTextBytes = message.getBytes(StandardCharsets.UTF_8);
-        final byte[] cipherText = cipher.doFinal(plainTextBytes);
-        return Base64.toBase64String(cipherText);
+
+        throw new KeyStoreException(MessageFormat.format("The key {0} is not a private key", keyAlias));
     }
 
-    public String decrypt(KeyStore keyStore, String message, String alias, String jceksPass)
-            throws NoSuchAlgorithmException, KeyStoreException, IOException, UnrecoverableKeyException,
-            InvalidKeyException, NoSuchPaddingException, BadPaddingException, IllegalBlockSizeException,
-            CryptographyException {
-
-        Key secretKeyEntry = keyStore.getKey(alias, jceksPass.toCharArray());
-        if (secretKeyEntry == null) {
-            log.error(String.format("There isn't any secret key in keystore for given alias [%s].", alias));
-            throw new CryptographyException(String.format("There isn't any secret key in keystore for given alias [%s].", alias));
+    public Key getKey(KeyStore keyStore, String keyAlias, String jceksPass) throws UnrecoverableKeyException, KeyStoreException, NoSuchAlgorithmException {
+        Key key = keyStore.getKey(keyAlias, jceksPass.toCharArray());
+        if (key == null) {
+            throw new KeyStoreException(MessageFormat.format("There is not any secret key in keystore for given alias {0}}.", keyAlias));
         }
 
-        Cipher decipher = Cipher.getInstance("AES");
-        decipher.init(Cipher.DECRYPT_MODE, secretKeyEntry);
-        final byte[] plainText = decipher.doFinal(Base64.decode(message));
-        return new String(plainText, StandardCharsets.UTF_8);
+        return key;
     }
 
     public enum KeyStoreType {
         JKS("JKS"),
         JCEKS("JCEKS");
 
-        private String value;
+        private final String value;
 
         KeyStoreType(String value) {
             this.value = value;
@@ -81,4 +69,5 @@ public class JksUtility {
             return value;
         }
     }
+
 }

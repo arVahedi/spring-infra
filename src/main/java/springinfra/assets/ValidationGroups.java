@@ -2,7 +2,7 @@ package springinfra.assets;
 
 import springinfra.model.dto.crud.request.BaseCrudRequest;
 
-import javax.validation.groups.Default;
+import jakarta.validation.groups.Default;
 
 public interface ValidationGroups {
 

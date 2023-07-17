@@ -14,15 +14,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script src="js/jquery-3.7.0.min.js"></script>
     <title>Login</title>
 </head>
 <body>
-<form method="post" action="./authenticate">
-    <input name="username" id="username" placeholder="Username">
-    <br>
-    <input name="password" id="password" type="password" placeholder="Password">
-    <br>
-    <button type="submit">Login</button>
+<jsp:include page="WEB-INF/include/header.jsp"/>
+
+<form id="LoginForm" onsubmit="return false">
+    <h1>Login Form</h1>
+    <div class="FormRow">
+        <label for="Username">Username:</label>
+        <input type="text" size="15" id="Username" name="Username">
+    </div>
+    <div class="FormRow">
+        <label for="Password">Password: </label>
+        <input type="password" size="15" id="Password" name="Password">
+    </div>
+    <div class="FormRow" id="LoginButtonDiv">
+        <input type="button" value="Login" id="LoginBtn">
+    </div>
+    <div id="BadLogin">
+        <p>The login information you entered does not match
+            an account in our records. Please try again.</p>
+    </div>
 </form>
+
+<script src="js/login.js"></script>
 </body>
 </html>

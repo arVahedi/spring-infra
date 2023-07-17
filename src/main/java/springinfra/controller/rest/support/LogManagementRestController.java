@@ -1,4 +1,4 @@
-package springinfra.ws.endpoint.support;
+package springinfra.controller.rest.support;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -10,18 +10,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import springinfra.assets.ErrorCode;
 import springinfra.assets.ResponseTemplate;
+import springinfra.controller.rest.BaseRestController;
 import springinfra.service.LogManagementService;
-import springinfra.ws.endpoint.BaseApi;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 
 @Slf4j
 @RestController
-@RequestMapping(BaseApi.API_PATH_PREFIX_V1 + "/support/log")
+@RequestMapping(BaseRestController.API_PATH_PREFIX_V1 + "/support/log")
 @Tag(name = "Log Management API", description = "Management level of loggers in runtime")
 @RequiredArgsConstructor
-public class LogManagementApi extends BaseApi {
+public class LogManagementRestController extends BaseRestController {
 
     private final LogManagementService logManagementService;
 

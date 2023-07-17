@@ -7,8 +7,8 @@ import org.hibernate.internal.SessionFactoryImpl;
 import org.springframework.stereotype.Component;
 import springinfra.database.listener.EnhancedDeleteEventListener;
 
-import javax.annotation.PostConstruct;
-import javax.persistence.EntityManagerFactory;
+import jakarta.annotation.PostConstruct;
+import jakarta.persistence.EntityManagerFactory;
 
 @Component
 @RequiredArgsConstructor

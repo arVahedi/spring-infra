@@ -1,14 +1,20 @@
-package springinfra.ws.advisor;
+package springinfra.controller.advisor;
 
 
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.StaleObjectStateException;
 import org.springframework.data.mapping.PropertyReferenceException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -19,15 +25,12 @@ import springinfra.assets.ResponseTemplate;
 import springinfra.exception.NoSuchRecordException;
 import springinfra.exception.UsernameAlreadyExistsException;
 
-import javax.persistence.EntityNotFoundException;
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@RestControllerAdvice
 @Slf4j
+@RestControllerAdvice
 public class RestExceptionAdvisor extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler({NoSuchRecordException.class, StaleObjectStateException.class, ObjectOptimisticLockingFailureException.class, EntityNotFoundException.class})
@@ -51,6 +54,12 @@ public class RestExceptionAdvisor extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(new ResponseTemplate<>(HttpStatus.FORBIDDEN), HttpStatus.FORBIDDEN);
     }
 
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<ResponseTemplate<String>> handleAccessDeniedException(BadCredentialsException ex) {
+        log.error(ex.getMessage(), ex);
+        return new ResponseEntity<>(new ResponseTemplate<>(HttpStatus.UNAUTHORIZED), HttpStatus.UNAUTHORIZED);
+    }
+
     @ExceptionHandler(UsernameAlreadyExistsException.class)
     public ResponseEntity<ResponseTemplate<String>> handleUsernameAlreadyExistsException(UsernameAlreadyExistsException ex) {
         log.error(ex.getMessage(), ex);
@@ -70,7 +79,7 @@ public class RestExceptionAdvisor extends ResponseEntityExceptionHandler {
     }
 
     @Override
-    public ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+    public ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
         log.error(ex.getMessage(), ex);
         List<String> messages = new ArrayList<>();
         ex.getBindingResult().getFieldErrors().forEach(fieldError -> messages.add(fieldError.getDefaultMessage()));

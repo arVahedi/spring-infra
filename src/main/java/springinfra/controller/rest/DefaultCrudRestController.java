@@ -1,4 +1,4 @@
-package springinfra.ws.endpoint;
+package springinfra.controller.rest;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -13,9 +13,9 @@ import springinfra.model.dto.crud.response.DefaultCrudApiResponseGenerator;
 import springinfra.model.domain.BaseDomain;
 import springinfra.service.CrudService;
 
-import javax.validation.constraints.Min;
+import jakarta.validation.constraints.Min;
 
-public interface DefaultCrudRestApi<D extends BaseCrudRequest, I extends Number> extends CrudRestApi<D, I> {
+public interface DefaultCrudRestController<D extends BaseCrudRequest, I extends Number> extends CrudRestController<D, I> {
 
     CrudApiResponseGenerator crudApiResponseGenerator = new DefaultCrudApiResponseGenerator();
 
