@@ -52,13 +52,13 @@ public class RestExceptionAdvisor extends ResponseEntityExceptionHandler {
     public ResponseEntity<ResponseTemplate<String>> handleAccessDeniedException(AccessDeniedException ex) {
         log.error(ex.getMessage(), ex);
         HttpStatus status = IdentityUtility.isAuthenticated() ? HttpStatus.FORBIDDEN : HttpStatus.UNAUTHORIZED;
-        return new ResponseEntity<>(new ResponseTemplate<>(status), status);
+        return ResponseEntity.status(status).build();
     }
 
     @ExceptionHandler({BadCredentialsException.class, InvalidBearerTokenException.class})
     public ResponseEntity<ResponseTemplate<String>> handleAccessDeniedException(BadCredentialsException ex) {
         log.error(ex.getMessage(), ex);
-        return new ResponseEntity<>(new ResponseTemplate<>(HttpStatus.UNAUTHORIZED), HttpStatus.UNAUTHORIZED);
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
     @ExceptionHandler(UsernameAlreadyExistsException.class)
