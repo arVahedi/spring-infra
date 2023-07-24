@@ -45,7 +45,7 @@ public class JwtUtility {
             /*rsaJsonWebKey = RsaJwkGenerator.generateJwk(2048);
             rsaJsonWebKey.setKeyId("k1");*/
 
-            KeyStore keyStore = JksUtility.getKeyStore(JksUtility.KeyStoreType.JKS, "classpath:Spring-infra.jks", "123456");
+            KeyStore keyStore = JksUtility.getKeyStore(JksUtility.KeyStoreType.JKS, "spring-infra.jks", "123456");
             KeyPair keyPair = JksUtility.getKeyPair(keyStore, "Spring-infra", "123456");
             rsaJsonWebKey = (RsaJsonWebKey) PublicJsonWebKey.Factory.newPublicJwk(keyPair.getPublic());
             rsaJsonWebKey.setPrivateKey(keyPair.getPrivate());

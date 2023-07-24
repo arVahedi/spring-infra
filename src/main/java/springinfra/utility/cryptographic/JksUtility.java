@@ -2,12 +2,10 @@ package springinfra.utility.cryptographic;
 
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.util.ResourceUtils;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.security.*;
 import java.security.cert.CertificateException;
 import java.text.MessageFormat;
@@ -17,14 +15,8 @@ import java.text.MessageFormat;
 public class JksUtility {
 
     public KeyStore getKeyStore(KeyStoreType keyStoreType, String keyStorePath, String keyStorePass) throws IOException, KeyStoreException, CertificateException, NoSuchAlgorithmException {
-
         KeyStore keyStore = KeyStore.getInstance(keyStoreType.getValue());
-
-        File file = ResourceUtils.getFile(keyStorePath);
-        if (!file.exists()) {
-            throw new FileNotFoundException(MessageFormat.format("The key store file {0} does not exist!", keyStorePath));
-        }
-        FileInputStream fileInputStream = new FileInputStream(file);
+        InputStream fileInputStream = new ClassPathResource(keyStorePath).getInputStream();
         keyStore.load(fileInputStream, keyStorePass.toCharArray());
         return keyStore;
     }
