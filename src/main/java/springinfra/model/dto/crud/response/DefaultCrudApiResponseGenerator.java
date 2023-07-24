@@ -5,7 +5,7 @@ import springinfra.model.domain.BaseDomain;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class DefaultCrudApiResponseGenerator<E extends BaseDomain> implements CrudApiResponseGenerator<E> {
+public class DefaultCrudApiResponseGenerator<E extends BaseDomain<? extends Number>> implements CrudApiResponseGenerator<E> {
 
     @Override
     public Object onSave(E entity) {

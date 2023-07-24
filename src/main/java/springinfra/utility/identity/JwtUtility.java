@@ -2,6 +2,7 @@ package springinfra.utility.identity;
 
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
+import org.jose4j.json.JsonUtil;
 import org.jose4j.jwa.AlgorithmConstraints;
 import org.jose4j.jwk.PublicJsonWebKey;
 import org.jose4j.jwk.RsaJsonWebKey;
@@ -11,6 +12,8 @@ import org.jose4j.jwt.JwtClaims;
 import org.jose4j.jwt.consumer.InvalidJwtException;
 import org.jose4j.jwt.consumer.JwtConsumer;
 import org.jose4j.jwt.consumer.JwtConsumerBuilder;
+import org.jose4j.jwt.consumer.JwtContext;
+import org.jose4j.jwx.JsonWebStructure;
 import org.jose4j.lang.JoseException;
 import springinfra.assets.ClaimName;
 import springinfra.utility.cryptographic.JksUtility;
@@ -18,6 +21,8 @@ import springinfra.utility.cryptographic.JksUtility;
 import java.io.IOException;
 import java.security.*;
 import java.security.cert.CertificateException;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -86,17 +91,26 @@ public class JwtUtility {
         return jws.getCompactSerialization();
     }
 
-    public Map<String, Object> getAllClaims(String token) throws InvalidJwtException {
+    public Map<String, Object> getClaims(String token) throws InvalidJwtException {
         return jwtConsumer.processToClaims(token).getClaimsMap();
     }
 
     public Optional<String> getUsernameFromToken(String token) throws InvalidJwtException {
-        return getClaimFromToken(token, ClaimName.USERNAME);
+        return getClaim(token, ClaimName.USERNAME);
     }
 
-    public Optional<String> getClaimFromToken(String token, String claimName) throws InvalidJwtException {
+    public Optional<String> getClaim(String token, String claimName) throws InvalidJwtException {
         JwtClaims jwtClaims = jwtConsumer.processToClaims(token);
         return Optional.ofNullable(jwtClaims.getClaimValueAsString(claimName));
+    }
+
+    public Map<String, Object> getHeaders(String token) throws InvalidJwtException, JoseException {
+        JwtContext jwtContext = jwtConsumer.process(token);
+        List<JsonWebStructure> jsonWebStructures = jwtContext.getJoseObjects();
+        if (!jsonWebStructures.isEmpty()) {
+            return JsonUtil.parseJson(jsonWebStructures.get(0).getHeaders().getFullHeaderAsJsonString());
+        }
+        return Collections.emptyMap();
     }
 
     public void validateToken(String token) throws InvalidJwtException {

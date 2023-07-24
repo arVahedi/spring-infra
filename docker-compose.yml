@@ -20,7 +20,30 @@ services:
     ports:
       - '3306:3306'
     volumes:
-      - spring-infra-volume:/var/lib/mysql
+      - spring-infra-volume_mysql:/var/lib/mysql
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:22.0.0
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=keycloak_secure_access
+      - QUARKUS_TRANSACTION_MANAGER_ENABLE_RECOVERY=true
+      - KC_HOSTNAME_STRICT=false
+      - KC_HTTP_ENABLED=true
+      - KC_HOSTNAME_STRICT_HTTPS=false
+      - KC_HEALTH_ENABLED=true
+      - KC_METRICS_ENABLED=true
+#      - KC_HOSTNAME=auth.spring-infra.io
+    ports:
+      - '9090:8080'
+    command:
+      - "start-dev"
+      - "--hostname-port=9090"
+    depends_on:
+      - mysql
+    volumes:
+      - spring-infra-volume_keycloak:/opt/keycloak/data
 
 volumes:
-  spring-infra-volume:
+  spring-infra-volume_mysql:
+  spring-infra-volume_keycloak:

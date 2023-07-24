@@ -8,7 +8,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import springinfra.controller.filter.JwtValidationFilter;
@@ -17,16 +16,13 @@ import springinfra.controller.filter.JwtValidationFilter;
 @RequiredArgsConstructor
 @Configuration(DataSourceIdentityProviderModuleConfig.BEAN_NAME)
 @ConditionalOnProperty(value = "security.idp.module", havingValue = DataSourceIdentityProviderModuleConfig.BEAN_NAME)
-public class DataSourceIdentityProviderModuleConfig extends BaseIdentityProviderModuleConfig {
+public class DataSourceIdentityProviderModuleConfig extends BuildInIdentityProviderConfig {
     public static final String BEAN_NAME = "dataSourceIdentityProviderModule";
 
     private final CredentialRepository credentialRepository;
 
     @Override
     public void configure(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity
-                .sessionManagement(httpSecuritySessionManagementConfigurer -> httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS)); // No session will be created or used by Spring Security.
-
         // Add JWT validator filter
         httpSecurity.addFilterBefore(
                 jwtValidationFilter(),

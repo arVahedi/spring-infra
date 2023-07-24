@@ -1,9 +1,7 @@
 package springinfra.configuration.security;
 
 import lombok.RequiredArgsConstructor;
-import org.apache.tomcat.util.http.Rfc6265CookieProcessor;
-import org.apache.tomcat.util.http.SameSiteCookies;
-import org.springframework.boot.web.embedded.tomcat.TomcatContextCustomizer;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -12,6 +10,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -21,6 +20,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.RegexRequestMatcher;
 import springinfra.configuration.BaseConfig;
 import springinfra.configuration.security.idp.BaseIdentityProviderModuleConfig;
+import springinfra.configuration.security.idp.BuildInIdentityProviderConfig;
 
 import java.util.Optional;
 
@@ -29,7 +29,7 @@ import static springinfra.assets.Constant.AUTHORIZATION_TOKEN_COOKIE_NAME;
 @RequiredArgsConstructor
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity(prePostEnabled = true, securedEnabled = true, jsr250Enabled = true)
+@EnableMethodSecurity(securedEnabled = true, jsr250Enabled = true)
 public class WebSecurityConfig implements BaseConfig {
 
     private final Optional<BaseIdentityProviderModuleConfig> identityProviderModuleConfig;
@@ -43,6 +43,9 @@ public class WebSecurityConfig implements BaseConfig {
         httpSecurity.headers(httpSecurityHeadersConfigurer -> httpSecurityHeadersConfigurer.addHeaderWriter(new DelegatingRequestMatcherHeaderWriter(new AntPathRequestMatcher("/doc/api/**"), new ContentSecurityPolicyHeaderWriter("script-src 'self' 'unsafe-inline'; object-src 'self'; report-uri /csp-report-endpoint/"))));
         //We prevent inline scripts for all requests except these are started with /doc/api/** (swagger page)
         httpSecurity.headers(httpSecurityHeadersConfigurer -> httpSecurityHeadersConfigurer.addHeaderWriter(new DelegatingRequestMatcherHeaderWriter(new RegexRequestMatcher("^(?!\\/doc\\/api\\/).+", null), new ContentSecurityPolicyHeaderWriter("script-src 'self'; object-src 'self'; report-uri /csp-report-endpoint/"))));
+
+        httpSecurity
+                .sessionManagement(httpSecuritySessionManagementConfigurer -> httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS)); // No session will be created or used by Spring Security.
 
         httpSecurity
                 .logout(httpSecurityLogoutConfigurer -> httpSecurityLogoutConfigurer.logoutUrl("/logout").logoutSuccessUrl("/").deleteCookies(AUTHORIZATION_TOKEN_COOKIE_NAME, "JSESSIONID").invalidateHttpSession(true));
@@ -60,6 +63,8 @@ public class WebSecurityConfig implements BaseConfig {
     }
 
     @Bean
+    // Because exposing AuthenticationManager as a bean with OAuth2 can cause stack overflow issue when authentication is rejected
+    @ConditionalOnBean(BuildInIdentityProviderConfig.class)
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         Optional<AuthenticationManager> authenticationManager = Optional.empty();
         if (this.identityProviderModuleConfig.isPresent()) {
@@ -67,14 +72,5 @@ public class WebSecurityConfig implements BaseConfig {
         }
 
         return authenticationManager.orElse(authenticationConfiguration.getAuthenticationManager());
-    }
-
-    @Bean
-    public TomcatContextCustomizer tomcatContextCustomizer() {
-        return context -> {
-            final Rfc6265CookieProcessor cookieProcessor = new Rfc6265CookieProcessor();
-            cookieProcessor.setSameSiteCookies(SameSiteCookies.STRICT.getValue());
-            context.setCookieProcessor(cookieProcessor);
-        };
     }
 }

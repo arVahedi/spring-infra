@@ -11,10 +11,10 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.lang.Nullable;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.oauth2.server.resource.InvalidBearerTokenException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -24,10 +24,10 @@ import springinfra.assets.ErrorCode;
 import springinfra.assets.ResponseTemplate;
 import springinfra.exception.NoSuchRecordException;
 import springinfra.exception.UsernameAlreadyExistsException;
+import springinfra.utility.identity.IdentityUtility;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @RestControllerAdvice
@@ -43,7 +43,7 @@ public class RestExceptionAdvisor extends ResponseEntityExceptionHandler {
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<ResponseTemplate<List<String>>> handleConstraintViolationException(ConstraintViolationException ex) {
         log.error(ex.getMessage(), ex);
-        List<String> messages = ex.getConstraintViolations().stream().map(ConstraintViolation::getMessage).collect(Collectors.toList());
+        List<String> messages = ex.getConstraintViolations().stream().map(ConstraintViolation::getMessage).toList();
         ResponseTemplate<List<String>> responseTemplate = new ResponseTemplate<>(HttpStatus.BAD_REQUEST, messages);
         return new ResponseEntity<>(responseTemplate, HttpStatus.BAD_REQUEST);
     }
@@ -51,10 +51,11 @@ public class RestExceptionAdvisor extends ResponseEntityExceptionHandler {
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<ResponseTemplate<String>> handleAccessDeniedException(AccessDeniedException ex) {
         log.error(ex.getMessage(), ex);
-        return new ResponseEntity<>(new ResponseTemplate<>(HttpStatus.FORBIDDEN), HttpStatus.FORBIDDEN);
+        HttpStatus status = IdentityUtility.isAuthenticated() ? HttpStatus.FORBIDDEN : HttpStatus.UNAUTHORIZED;
+        return new ResponseEntity<>(new ResponseTemplate<>(status), status);
     }
 
-    @ExceptionHandler(BadCredentialsException.class)
+    @ExceptionHandler({BadCredentialsException.class, InvalidBearerTokenException.class})
     public ResponseEntity<ResponseTemplate<String>> handleAccessDeniedException(BadCredentialsException ex) {
         log.error(ex.getMessage(), ex);
         return new ResponseEntity<>(new ResponseTemplate<>(HttpStatus.UNAUTHORIZED), HttpStatus.UNAUTHORIZED);

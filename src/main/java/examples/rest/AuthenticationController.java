@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jose4j.lang.JoseException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.server.Cookie;
 import org.springframework.http.*;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -37,11 +38,16 @@ import static springinfra.assets.Constant.AUTHORIZATION_TOKEN_COOKIE_NAME;
 @Valid
 public class AuthenticationController extends BaseRestController {
 
-    private final AuthenticationManager authenticationManager;
+    private AuthenticationManager authenticationManager;
 
     @PostMapping
     public ResponseEntity<ResponseTemplate<AuthResponse>> authenticate(@RequestBody @Validated AuthRequest authRequest) throws JoseException {
         log.info("Received authentication request with username [{}]", authRequest.getUsername());
+
+        if (authenticationManager == null) {     // If the AuthenticationManager is not exposed globally as a bean, means we don't support build-in authentication on this server. (likely because we are using oAuth2)
+            log.warn("Build-in Authentication is not supported. 410 http status would be returned to the client.");
+            return ResponseEntity.status(HttpStatus.GONE).body(new ResponseTemplate<>(HttpStatus.GONE));
+        }
 
         Authentication authentication = this.authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
         log.info("User [{}] has been authenticated successfully", authRequest.getUsername());
@@ -63,5 +69,10 @@ public class AuthenticationController extends BaseRestController {
                         AuthResponse.builder()
                                 .token(accessToken)
                                 .build()));
+    }
+
+    @Autowired(required = false)
+    public void setAuthenticationManager(AuthenticationManager authenticationManager) {
+        this.authenticationManager = authenticationManager;
     }
 }

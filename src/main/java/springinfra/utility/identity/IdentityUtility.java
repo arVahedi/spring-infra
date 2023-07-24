@@ -21,7 +21,10 @@ public class IdentityUtility {
 
     public Optional<String> getUsername() {
         if (isAuthenticated()) {
-            return Optional.ofNullable(((UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername());
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            if (authentication.getPrincipal() instanceof UserDetails userDetails) {
+                return Optional.ofNullable(userDetails.getUsername());
+            }
         }
 
         return Optional.empty();

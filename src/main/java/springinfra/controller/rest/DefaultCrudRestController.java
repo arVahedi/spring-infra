@@ -1,5 +1,6 @@
 package springinfra.controller.rest;
 
+import jakarta.validation.constraints.Min;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -7,13 +8,11 @@ import org.springframework.web.bind.annotation.*;
 import springinfra.assets.ErrorCode;
 import springinfra.assets.ResponseTemplate;
 import springinfra.assets.ValidationGroups;
+import springinfra.model.domain.BaseDomain;
 import springinfra.model.dto.crud.request.BaseCrudRequest;
 import springinfra.model.dto.crud.response.CrudApiResponseGenerator;
 import springinfra.model.dto.crud.response.DefaultCrudApiResponseGenerator;
-import springinfra.model.domain.BaseDomain;
 import springinfra.service.CrudService;
-
-import jakarta.validation.constraints.Min;
 
 public interface DefaultCrudRestController<D extends BaseCrudRequest, I extends Number> extends CrudRestController<D, I> {
 
