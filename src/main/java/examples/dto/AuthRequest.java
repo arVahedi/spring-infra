@@ -1,10 +1,9 @@
 package examples.dto;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 import springinfra.model.dto.BaseDto;
-
-import jakarta.validation.constraints.NotBlank;
 
 @Getter
 @Setter
@@ -14,5 +13,4 @@ public class AuthRequest extends BaseDto {
     private String username;
     @NotBlank(message = "username parameter is required and can not be blank")
     private String password;
-
 }

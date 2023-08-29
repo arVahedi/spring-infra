@@ -14,7 +14,7 @@ import springinfra.controller.rest.BaseRestController;
 import springinfra.controller.rest.DefaultCrudRestController;
 
 @RestController
-@RequestMapping(BaseRestController.API_PATH_PREFIX_V1 + "/credential")
+@RequestMapping(BaseRestController.API_PATH_PREFIX_V1 + "/credentials")
 @Slf4j
 @Tag(name = "Credential API", description = "Credential management API")
 @RequiredArgsConstructor

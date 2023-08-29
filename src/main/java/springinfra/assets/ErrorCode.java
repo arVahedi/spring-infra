@@ -6,12 +6,10 @@ package springinfra.assets;
  */
 public enum ErrorCode {
     //region Errors
-    NO_ERROR(200, "NO_ERROR", "user_message_no_error"),    // No error
-    GENERAL_ERROR(500, "GENERAL_ERROR", "user_message_general_error"),   // General Error
     EXPIRED_DATA(6001, "EXPIRED_DATA", "user_message_expired_data"),      // Expired data
     USER_LOCKED(6002, "USER_LOCKED", "user_message_user_locked"),   //USER LOCKED
     USER_SUSPENDED(6003, "USER_SUSPENDED", "user_message_user_suspended"),     //User is suspended
-    USER_NOT_EXIST(6004, "USER_NOT_EXIST", "user_message_user_not_exist");
+    USER_NOT_EXIST(6004, "USER_NOT_EXIST", "user_message_user_not_exist");     //User doesn't exist
     //endregion
 
     //region Fields

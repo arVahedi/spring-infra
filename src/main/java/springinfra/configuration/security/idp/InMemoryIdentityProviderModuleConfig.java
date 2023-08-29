@@ -8,14 +8,10 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import springinfra.assets.AuthorityType;
-import springinfra.controller.filter.JwtValidationFilter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,18 +29,6 @@ public class InMemoryIdentityProviderModuleConfig extends BuildInIdentityProvide
     public static final String BEAN_NAME = "inMemoryIdentityProviderModule";
 
     private List<String> credentials;
-
-    @Override
-    public void configure(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity
-                .sessionManagement(httpSecuritySessionManagementConfigurer -> httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS)); // No session will be created or used by Spring Security.
-
-        // Add JWT validator filter
-        httpSecurity.addFilterBefore(
-                jwtValidationFilter(),
-                UsernamePasswordAuthenticationFilter.class
-        );
-    }
 
     @Bean
     public InMemoryUserDetailsManager userDetailsService() {
@@ -67,10 +51,5 @@ public class InMemoryIdentityProviderModuleConfig extends BuildInIdentityProvide
                     authorities.stream().map(SimpleGrantedAuthority::new).toList()));
         });
         return new InMemoryUserDetailsManager(userDetails);
-    }
-
-    @Bean
-    public JwtValidationFilter jwtValidationFilter() {
-        return new JwtValidationFilter();
     }
 }

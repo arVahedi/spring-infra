@@ -1,4 +1,4 @@
-package springinfra.configuration.security.oauth2;
+package springinfra.security.oauth2;
 
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -12,13 +12,17 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * This class is used for gathering the user's authorities (permissions) according to his ID token.
+ * In simplest words, it gets the user's OIDC ID token (which is always JWT) and returns his permissions back.
+ */
 @NoArgsConstructor
-public class OAuth2JwtGrantedAuthoritiesConverter implements Converter<Jwt, Collection<GrantedAuthority>> {
+public class OidcJwtGrantedAuthoritiesConverter implements Converter<Jwt, Collection<GrantedAuthority>> {
 
     private String clientId;
     private String authorityPostfix;
 
-    public OAuth2JwtGrantedAuthoritiesConverter(String clientId, String authorityPostfix) {
+    public OidcJwtGrantedAuthoritiesConverter(String clientId, String authorityPostfix) {
         this.clientId = clientId;
         this.authorityPostfix = authorityPostfix;
     }

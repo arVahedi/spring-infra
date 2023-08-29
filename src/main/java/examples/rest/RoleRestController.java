@@ -11,7 +11,7 @@ import springinfra.controller.rest.BaseRestController;
 import springinfra.controller.rest.DefaultCrudRestController;
 
 @RestController
-@RequestMapping(BaseRestController.API_PATH_PREFIX_V1 + "/role")
+@RequestMapping(BaseRestController.API_PATH_PREFIX_V1 + "/roles")
 @Slf4j
 @Tag(name = "Role API", description = "Role management API")
 @RequiredArgsConstructor

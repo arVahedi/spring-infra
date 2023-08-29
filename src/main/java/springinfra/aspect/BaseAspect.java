@@ -1,4 +1,4 @@
 package springinfra.aspect;
 
-public abstract class BaseAspect {
+public interface BaseAspect {
 }

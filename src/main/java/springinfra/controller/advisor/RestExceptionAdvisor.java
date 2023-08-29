@@ -2,6 +2,7 @@ package springinfra.controller.advisor;
 
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
@@ -14,16 +15,20 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.oauth2.server.resource.InvalidBearerTokenException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import springinfra.assets.ErrorCode;
 import springinfra.assets.ResponseTemplate;
 import springinfra.exception.NoSuchRecordException;
 import springinfra.exception.UsernameAlreadyExistsException;
+import springinfra.utility.http.HttpRequestUtility;
 import springinfra.utility.identity.IdentityUtility;
 
 import java.util.ArrayList;
@@ -51,13 +56,37 @@ public class RestExceptionAdvisor extends ResponseEntityExceptionHandler {
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<ResponseTemplate<String>> handleAccessDeniedException(AccessDeniedException ex) {
         log.error(ex.getMessage(), ex);
+        try {
+            HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+            if (HttpRequestUtility.isUiRequest(request)) {
+                String redirectUrl = IdentityUtility.isAuthenticated() ? "/403" : "/login";
+
+                HttpHeaders headers = new HttpHeaders();
+                headers.add("Location", redirectUrl);
+                return new ResponseEntity<>(headers, HttpStatus.FOUND);
+            }
+        } catch (Exception e) {
+            log.warn(e.getMessage());
+        }
+
         HttpStatus status = IdentityUtility.isAuthenticated() ? HttpStatus.FORBIDDEN : HttpStatus.UNAUTHORIZED;
         return ResponseEntity.status(status).build();
     }
 
     @ExceptionHandler({BadCredentialsException.class, InvalidBearerTokenException.class})
-    public ResponseEntity<ResponseTemplate<String>> handleAccessDeniedException(BadCredentialsException ex) {
+    public ResponseEntity<ResponseTemplate<String>> handleBadCredentialsException(BadCredentialsException ex) {
         log.error(ex.getMessage(), ex);
+        try {
+            HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+            if (HttpRequestUtility.isUiRequest(request)) {
+                HttpHeaders headers = new HttpHeaders();
+                headers.add("Location", "/login");
+                return new ResponseEntity<>(headers, HttpStatus.FOUND);
+            }
+        } catch (Exception e) {
+            log.warn(e.getMessage());
+        }
+
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
@@ -73,10 +102,10 @@ public class RestExceptionAdvisor extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(new ResponseTemplate<>(HttpStatus.BAD_REQUEST, "No property found"), HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(Exception.class)
+    @ExceptionHandler({Exception.class, InternalAuthenticationServiceException.class})
     public ResponseEntity<ResponseTemplate<String>> handleGeneralException(Exception ex) {
         log.error(ex.getMessage(), ex);
-        return new ResponseEntity<>(new ResponseTemplate<>(ErrorCode.GENERAL_ERROR), HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(new ResponseTemplate<>(HttpStatus.INTERNAL_SERVER_ERROR), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @Override

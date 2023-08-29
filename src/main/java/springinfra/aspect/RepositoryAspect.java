@@ -17,7 +17,7 @@ import java.util.Optional;
 @Component
 @Aspect
 @Slf4j
-public class RepositoryAspect extends BaseAspect {
+public class RepositoryAspect implements BaseAspect {
 
     @AfterReturning(value = "this(org.springframework.data.repository.Repository)", returning = "returnValue")
     public void detachEntity(JoinPoint joinPoint, Object returnValue) throws Exception {

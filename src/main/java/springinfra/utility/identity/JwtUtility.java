@@ -113,6 +113,21 @@ public class JwtUtility {
         return Collections.emptyMap();
     }
 
+    public Map<String, Object> getHeadersWithoutValidation(String token) throws InvalidJwtException, JoseException {
+        JwtConsumer jwtNoValidationConsumer = new JwtConsumerBuilder()
+                .setSkipAllValidators()
+                .setDisableRequireSignature()
+                .setSkipSignatureVerification()
+                .build();
+
+        JwtContext jwtContext = jwtNoValidationConsumer.process(token);
+        List<JsonWebStructure> jsonWebStructures = jwtContext.getJoseObjects();
+        if (!jsonWebStructures.isEmpty()) {
+            return JsonUtil.parseJson(jsonWebStructures.get(0).getHeaders().getFullHeaderAsJsonString());
+        }
+        return Collections.emptyMap();
+    }
+
     public void validateToken(String token) throws InvalidJwtException {
         jwtConsumer.process(token);
     }

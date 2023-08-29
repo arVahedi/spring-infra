@@ -1,19 +1,27 @@
 package springinfra.configuration.security;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
+import org.springframework.security.config.annotation.web.HttpSecurityBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.LogoutConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.intercept.AuthorizationFilter;
+import org.springframework.security.web.authentication.logout.HeaderWriterLogoutHandler;
+import org.springframework.security.web.authentication.logout.LogoutFilter;
+import org.springframework.security.web.header.writers.ClearSiteDataHeaderWriter;
 import org.springframework.security.web.header.writers.ContentSecurityPolicyHeaderWriter;
 import org.springframework.security.web.header.writers.DelegatingRequestMatcherHeaderWriter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
@@ -22,10 +30,11 @@ import springinfra.configuration.BaseConfig;
 import springinfra.configuration.security.idp.BaseIdentityProviderModuleConfig;
 import springinfra.configuration.security.idp.BuildInIdentityProviderConfig;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Optional;
 
-import static springinfra.assets.Constant.AUTHORIZATION_TOKEN_COOKIE_NAME;
-
+@Slf4j
 @RequiredArgsConstructor
 @Configuration
 @EnableWebSecurity
@@ -44,11 +53,18 @@ public class WebSecurityConfig implements BaseConfig {
         //We prevent inline scripts for all requests except these are started with /doc/api/** (swagger page)
         httpSecurity.headers(httpSecurityHeadersConfigurer -> httpSecurityHeadersConfigurer.addHeaderWriter(new DelegatingRequestMatcherHeaderWriter(new RegexRequestMatcher("^(?!\\/doc\\/api\\/).+", null), new ContentSecurityPolicyHeaderWriter("script-src 'self'; object-src 'self'; report-uri /csp-report-endpoint/"))));
 
+        // We handle form login in our restful endpoint (AuthenticationController.class)
+        httpSecurity.formLogin(AbstractHttpConfigurer::disable);
+
         httpSecurity
                 .sessionManagement(httpSecuritySessionManagementConfigurer -> httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS)); // No session will be created or used by Spring Security.
 
+
+        // We disabled the default logout filter because we want to change its order to be after the authentication filter to be able to access the Authentication object in our LogoutSuccessfulHandler(s)
         httpSecurity
-                .logout(httpSecurityLogoutConfigurer -> httpSecurityLogoutConfigurer.logoutUrl("/logout").logoutSuccessUrl("/").deleteCookies(AUTHORIZATION_TOKEN_COOKIE_NAME, "JSESSIONID").invalidateHttpSession(true));
+                .logout(AbstractHttpConfigurer::disable)
+                .addFilterAfter(createLogoutFilter(httpSecurity), AuthorizationFilter.class);
+
 
         if (this.identityProviderModuleConfig.isPresent()) {
             this.identityProviderModuleConfig.get().configure(httpSecurity);
@@ -62,8 +78,19 @@ public class WebSecurityConfig implements BaseConfig {
         return Argon2PasswordEncoder.defaultsForSpringSecurity_v5_8();
     }
 
+    /**
+     * Exposing a global AuthenticationManager as a bean due to be able to use it in all over the application
+     * such as our custom login rest endpoint in our build-in identity provider.
+     * <strong>This bean creation is conditional on existing a {@link BuildInIdentityProviderConfig} because
+     * exposing AuthenticationManager as a bean with OAuth2 ({@link springinfra.configuration.security.idp.OidcIdentityProviderModuleConfig})
+     * can cause stack overflow issue when authentication is rejected</strong>
+     *
+     * @param authenticationConfiguration global configuration of authentication manager that is used for getting default authentication manager
+     *                                    in case that we don't have any custom authentication manager in our identity provider module ({@link BaseIdentityProviderModuleConfig#getAuthenticationManager(AuthenticationConfiguration)})
+     * @return an AuthenticationManager as a global bean
+     * @throws Exception any expected exception
+     */
     @Bean
-    // Because exposing AuthenticationManager as a bean with OAuth2 can cause stack overflow issue when authentication is rejected
     @ConditionalOnBean(BuildInIdentityProviderConfig.class)
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         Optional<AuthenticationManager> authenticationManager = Optional.empty();
@@ -72,5 +99,38 @@ public class WebSecurityConfig implements BaseConfig {
         }
 
         return authenticationManager.orElse(authenticationConfiguration.getAuthenticationManager());
+    }
+
+    /**
+     * We don't use {@link HttpSecurity#logout(Customizer) logout} method in the HttpSecurity because it causes
+     * the {@link org.springframework.security.web.authentication.logout.LogoutFilter LogoutFilter} be put before all authentication filters
+     * which causes we don't have access to the Authentication object in our LogoutHandlers and LogoutSuccessfulHandlers.
+     * To fix this issue we have to disable the logout feature of HttpSecurity and then configure the logout logic manually.
+     *
+     * @param httpSecurity the global object of HttpSecurity that is used for all security configuration
+     * @return corresponding our customized LogoutFilter
+     * @throws NoSuchMethodException     a reflection based exception when we try to invoke this private {@link LogoutConfigurer#createLogoutFilter(HttpSecurityBuilder)} method for creating LogoutFilter
+     * @throws InvocationTargetException a reflection based exception when we try to invoke this private {@link LogoutConfigurer#createLogoutFilter(HttpSecurityBuilder)} method for creating LogoutFilter
+     * @throws IllegalAccessException    a reflection based exception when we try to invoke this private {@link LogoutConfigurer#createLogoutFilter(HttpSecurityBuilder)} method for creating LogoutFilter
+     */
+    private LogoutFilter createLogoutFilter(HttpSecurity httpSecurity) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        HeaderWriterLogoutHandler clearSiteData = new HeaderWriterLogoutHandler(new ClearSiteDataHeaderWriter(ClearSiteDataHeaderWriter.Directive.ALL));
+
+        LogoutConfigurer<HttpSecurity> logoutConfigurer = new LogoutConfigurer<>();
+        logoutConfigurer.setBuilder(httpSecurity);
+        logoutConfigurer.invalidateHttpSession(true);
+        logoutConfigurer.logoutUrl("/logout");
+        logoutConfigurer.logoutSuccessUrl("/");
+        logoutConfigurer.addLogoutHandler(clearSiteData);
+
+        // Ask identityProviderModuleConfig for customized logout logic
+        this.identityProviderModuleConfig.ifPresent(identityProviderModule -> identityProviderModule.configureLogout(logoutConfigurer));
+
+        Method createLogoutFilterMethod = logoutConfigurer.getClass().getDeclaredMethod("createLogoutFilter", HttpSecurityBuilder.class);
+        createLogoutFilterMethod.setAccessible(true);
+        LogoutFilter logoutFilter = (LogoutFilter) createLogoutFilterMethod.invoke(logoutConfigurer, httpSecurity);
+        createLogoutFilterMethod.setAccessible(false);
+
+        return logoutFilter;
     }
 }

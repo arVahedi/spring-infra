@@ -13,7 +13,7 @@ $(document).ready(function () {
             dataType: "json",
             success: function (data) {
                 console.log(data);
-                window.localStorage.setItem("authorization", data.result.token);
+                // window.localStorage.setItem("authorization", data.result.token);
                 location.reload();
             },
             error: function (errMsg) {

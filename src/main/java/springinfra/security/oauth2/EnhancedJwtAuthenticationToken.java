@@ -1,4 +1,4 @@
-package springinfra.configuration.security.oauth2;
+package springinfra.security.oauth2;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.SpringSecurityCoreVersion;

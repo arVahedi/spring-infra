@@ -1,5 +1,5 @@
 # Spring-Infra
-Infrastructure for any project based on spring framework
+Infrastructure (codebase) for any project based on spring framework
 
 ### How to run it:
 
