@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtException;
+import org.springframework.security.oauth2.server.resource.InvalidBearerTokenException;
 import springinfra.assets.ClaimName;
 import springinfra.security.oauth2.EnhancedBearerTokenResolver;
 import springinfra.security.oauth2.EnhancedJwtAuthenticationConverter;
@@ -26,6 +27,9 @@ public abstract class BuildInIdentityProviderConfig extends BaseIdentityProvider
         //This line is responsible for handling post-authentication requests, which means this causes we be able to convert the authorization header to the corresponding ID token and realize whether the user is authenticated or not.
         httpSecurity.oauth2ResourceServer(oAuth2ResourceServerConfigurer -> oAuth2ResourceServerConfigurer
                 .bearerTokenResolver(new EnhancedBearerTokenResolver())
+                .authenticationEntryPoint((request, response, authException) -> {
+                    throw new InvalidBearerTokenException(authException.getMessage(), authException);
+                })
                 .jwt(jwtConfigurer -> jwtConfigurer
                         .decoder(jwtDecoder())
                         .jwtAuthenticationConverter(jwtAuthenticationConverter())));

@@ -19,6 +19,7 @@ import springinfra.utility.identity.JwtUtility;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import static springinfra.assets.Constant.AUTHORIZATION_TOKEN_COOKIE_NAME;
 
@@ -33,7 +34,7 @@ public class SuccessfulAuthenticationHandler extends SavedRequestAwareAuthentica
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws ServletException, IOException {
-        log.info("Trying to add user id token in cookie");
+        log.info("Trying to add user's id token in cookie");
         boolean shouldBeRedirect = request.getParameter(REDIRECT_FLAG_NAME) != null;
 
         try {
@@ -51,12 +52,8 @@ public class SuccessfulAuthenticationHandler extends SavedRequestAwareAuthentica
 
             request.setAttribute(AUTH_TOKEN_REQUEST_ATTRIBUTE, authToken);
 
-            Cookie authCookie = new Cookie(AUTHORIZATION_TOKEN_COOKIE_NAME, authToken);
-            authCookie.setPath("/");
-            authCookie.setSecure(true);
-            authCookie.setHttpOnly(false);
-            authCookie.setAttribute("SameSite", org.springframework.boot.web.server.Cookie.SameSite.STRICT.attributeValue());
-            response.addCookie(authCookie);
+
+            response.addCookie(generateAuthorizationCookie(Optional.of(authToken)));
             log.info("Authorization cookie is set successfully");
         } catch (Exception ex) {
             log.error(ex.getMessage(), ex);
@@ -65,5 +62,17 @@ public class SuccessfulAuthenticationHandler extends SavedRequestAwareAuthentica
         if (shouldBeRedirect) {
             super.onAuthenticationSuccess(request, response, authentication);
         }
+    }
+
+    public static Cookie generateAuthorizationCookie(Optional<String> token) {
+        Cookie authCookie = new Cookie(AUTHORIZATION_TOKEN_COOKIE_NAME, token.orElse(null));
+        authCookie.setPath("/");
+        authCookie.setSecure(true);
+        authCookie.setHttpOnly(false);
+        authCookie.setAttribute("SameSite", org.springframework.boot.web.server.Cookie.SameSite.STRICT.attributeValue());
+        if (token.isEmpty()) {
+            authCookie.setMaxAge(0);
+        }
+        return authCookie;
     }
 }

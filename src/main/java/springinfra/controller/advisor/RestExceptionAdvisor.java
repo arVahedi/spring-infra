@@ -3,6 +3,7 @@ package springinfra.controller.advisor;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +17,7 @@ import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
+import org.springframework.security.oauth2.jwt.JwtValidationException;
 import org.springframework.security.oauth2.server.resource.InvalidBearerTokenException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -24,15 +26,19 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import springinfra.assets.Constant;
 import springinfra.assets.ErrorCode;
 import springinfra.assets.ResponseTemplate;
 import springinfra.exception.NoSuchRecordException;
 import springinfra.exception.UsernameAlreadyExistsException;
+import springinfra.system.listener.SuccessfulAuthenticationHandler;
 import springinfra.utility.http.HttpRequestUtility;
 import springinfra.utility.identity.IdentityUtility;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @RestControllerAdvice
@@ -73,15 +79,23 @@ public class RestExceptionAdvisor extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(status).build();
     }
 
-    @ExceptionHandler({BadCredentialsException.class, InvalidBearerTokenException.class})
-    public ResponseEntity<ResponseTemplate<String>> handleBadCredentialsException(BadCredentialsException ex) {
+    @ExceptionHandler({BadCredentialsException.class, InvalidBearerTokenException.class, JwtValidationException.class})
+    public ResponseEntity<ResponseTemplate<String>> handleBadCredentialsException(Exception ex) {
         log.error(ex.getMessage(), ex);
         try {
-            HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-            if (HttpRequestUtility.isUiRequest(request)) {
-                HttpHeaders headers = new HttpHeaders();
-                headers.add("Location", "/login");
-                return new ResponseEntity<>(headers, HttpStatus.FOUND);
+            ServletRequestAttributes requestAttributes = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes());
+            if (requestAttributes != null) {
+                HttpServletRequest request = requestAttributes.getRequest();
+                if (HttpRequestUtility.isUiRequest(request)) {
+                    HttpServletResponse httpServletResponse = requestAttributes.getResponse();
+                    if (httpServletResponse != null && Arrays.stream(request.getCookies()).anyMatch(cookie -> cookie.getName().equalsIgnoreCase(Constant.AUTHORIZATION_TOKEN_COOKIE_NAME))) {
+                        httpServletResponse.addCookie(SuccessfulAuthenticationHandler.generateAuthorizationCookie(Optional.empty()));
+                    }
+
+                    HttpHeaders headers = new HttpHeaders();
+                    headers.add("Location", "/login");
+                    return new ResponseEntity<>(headers, HttpStatus.FOUND);
+                }
             }
         } catch (Exception e) {
             log.warn(e.getMessage());

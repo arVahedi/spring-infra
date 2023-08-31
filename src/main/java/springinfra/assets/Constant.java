@@ -12,4 +12,5 @@ public class Constant {
     public static final String AUTHORIZATION_TOKEN_COOKIE_NAME = HttpHeaders.AUTHORIZATION;
     public static final String AUTHORIZATION_TOKEN_PREFIX = "Bearer ";
     public static final String AUTHORITY_POSTFIX = "_AUTHORITY";
+    public static final String CSP_REPOST_ENDPOINT = "/csp-report-endpoint/";
 }

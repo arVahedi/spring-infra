@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Configuration;
  * @author arVahedi
  */
 
-/*@OpenAPIDefinition(
+@OpenAPIDefinition(
         info = @Info(title = "Spring-Infra API", version = "v1"),
         security = @SecurityRequirement(name = "bearerAuth")
 )
@@ -22,7 +22,7 @@ import org.springframework.context.annotation.Configuration;
         type = SecuritySchemeType.HTTP,
         bearerFormat = "JWT",
         scheme = "bearer"
-)*/
+)
 @Configuration
 public class OpenApiConfig implements BaseConfig {
 
