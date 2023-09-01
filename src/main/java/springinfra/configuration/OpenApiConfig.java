@@ -5,12 +5,12 @@ import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
+import lombok.Getter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 
 /**
  * This class responsible for swagger configuration
- *
- * @author arVahedi
  */
 
 @OpenAPIDefinition(
@@ -24,6 +24,15 @@ import org.springframework.context.annotation.Configuration;
         scheme = "bearer"
 )
 @Configuration
+@Getter
 public class OpenApiConfig implements BaseConfig {
 
+    public static final String SWAGGER_HTML_URI = "swagger-ui/index.html";
+
+    @Value("${springdoc.api-docs.enabled:true}")
+    private boolean apiDocsEnabled;
+    @Value("${springdoc.swagger-ui.path:null}")
+    private String swaggerUiPath;
+    @Value("${springdoc.api-docs.path:null}")
+    private String apiDocsPath;
 }

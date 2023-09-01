@@ -2,6 +2,7 @@ package springinfra.configuration.security;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -34,6 +35,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Optional;
 
+import static springinfra.assets.AuthorityType.StringFormat.MONITORING_AUTHORITY;
 import static springinfra.assets.Constant.CSP_REPOST_ENDPOINT;
 
 @Slf4j
@@ -61,6 +63,9 @@ public class WebSecurityConfig implements BaseConfig {
         httpSecurity
                 .sessionManagement(httpSecuritySessionManagementConfigurer -> httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS)); // No session will be created or used by Spring Security.
 
+        httpSecurity.authorizeHttpRequests(authorizationManagerRequestMatcherRegistry -> authorizationManagerRequestMatcherRegistry
+                .requestMatchers(EndpointRequest.toAnyEndpoint()).hasAuthority(MONITORING_AUTHORITY)        // For accessing to all actuator endpoints this specific authority will be needed
+                .anyRequest().permitAll());     // We permit all requests here to check those required authorities via prePostAnnotation on the class or method level. If we remove this line, those annotations won't work and all requests will be blocked regardless of their authorities
 
         // We disabled the default logout filter because we want to change its order to be after the authentication filter to be able to access the Authentication object in our LogoutSuccessfulHandler(s)
         httpSecurity
