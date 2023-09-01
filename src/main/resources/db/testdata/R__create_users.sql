@@ -9,6 +9,9 @@ INSERT IGNORE INTO role (id, name, insert_date) VALUES (1, 'Administration', NOW
 INSERT INTO role_authority (role_id, authority) SELECT id, 'USER_MANAGEMENT_AUTHORITY' FROM role WHERE name = 'Administration'
                                                                                                    AND NOT EXISTS(SELECT 1 FROM role_authority
                                                                                                                            where authority = 'USER_MANAGEMENT_AUTHORITY' and role_id IN (SELECT id FROM role WHERE name = 'Administration'));
+INSERT INTO role_authority (role_id, authority) SELECT id, 'MONITORING_AUTHORITY' FROM role WHERE name = 'Administration'
+                                                                                                   AND NOT EXISTS(SELECT 1 FROM role_authority
+                                                                                                                           where authority = 'MONITORING_AUTHORITY' and role_id IN (SELECT id FROM role WHERE name = 'Administration'));
 INSERT INTO role_authority (role_id, authority) SELECT id, 'ACCOUNT_INFO_AUTHORITY' FROM role WHERE name = 'Administration'
                                                                                                 AND NOT EXISTS(SELECT 1 FROM role_authority
                                                                                                                where authority = 'ACCOUNT_INFO_AUTHORITY' and role_id IN (SELECT id FROM role WHERE name = 'Administration'));
