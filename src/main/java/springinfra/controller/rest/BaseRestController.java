@@ -2,6 +2,10 @@ package springinfra.controller.rest;
 
 import org.springframework.validation.annotation.Validated;
 
+/**
+ * The parent of all API controllers
+ */
+
 @Validated
 public abstract class BaseRestController {
 

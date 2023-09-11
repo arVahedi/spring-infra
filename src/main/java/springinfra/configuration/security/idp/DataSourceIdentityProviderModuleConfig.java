@@ -13,7 +13,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 @RequiredArgsConstructor
 @Configuration(DataSourceIdentityProviderModuleConfig.BEAN_NAME)
 @ConditionalOnProperty(value = "security.idp.module", havingValue = DataSourceIdentityProviderModuleConfig.BEAN_NAME)
-public class DataSourceIdentityProviderModuleConfig extends BuildInIdentityProviderConfig {
+public class DataSourceIdentityProviderModuleConfig extends BuiltInIdentityProviderConfig {
     public static final String BEAN_NAME = "dataSourceIdentityProviderModule";
 
     private final CredentialRepository credentialRepository;

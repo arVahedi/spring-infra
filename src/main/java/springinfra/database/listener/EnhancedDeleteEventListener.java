@@ -8,6 +8,13 @@ import org.hibernate.persister.entity.EntityPersister;
 import org.springframework.stereotype.Component;
 import springinfra.model.domain.LogicalDeletableDomain;
 
+/**
+ * This is an enhanced delete event listener for Hibernate that can handle both logical and physical deletions automatically
+ * according to type of entity object.
+ *
+ * @see LogicalDeletableDomain
+ */
+
 @Component
 public class EnhancedDeleteEventListener extends DefaultDeleteEventListener {
 
@@ -21,7 +28,6 @@ public class EnhancedDeleteEventListener extends DefaultDeleteEventListener {
             cascadeBeforeDelete(event.getSession(), entityPersister, entityEntry, transientEntities);
 
             cascadeAfterDelete(event.getSession(), entityPersister, eventObject, transientEntities);
-
         } else {
             super.onDelete(event, transientEntities);
         }

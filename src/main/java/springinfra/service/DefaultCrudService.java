@@ -6,12 +6,20 @@ import org.springframework.transaction.annotation.Transactional;
 import springinfra.database.repository.BaseRepository;
 import springinfra.exception.NoSuchRecordException;
 import springinfra.model.domain.BaseDomain;
-import springinfra.model.dto.crud.request.BaseCrudDto;
+import springinfra.model.dto.crud.BaseCrudDto;
 import springinfra.model.mapper.BaseCrudMapper;
 
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.Optional;
+
+/**
+ * This is a default and basic implementation of {@link CrudService}
+ *
+ * @param <I> the identity of entity and crud DTO object (both should have the same identity type)
+ * @param <E> the target entity class (usually a child of {@link BaseDomain} class
+ * @param <D> the target crud DTO class (usually a child of {@link BaseCrudDto} class
+ */
 
 public interface DefaultCrudService<I extends Number, E extends BaseDomain<I>, D extends BaseCrudDto<E, I>> extends CrudService<I, E, D> {
 

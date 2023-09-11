@@ -1,7 +1,7 @@
 package examples.service;
 
 import examples.domain.Role;
-import examples.dto.crud.request.RoleDto;
+import examples.dto.crud.RoleDto;
 import examples.mapper.RoleMapper;
 import examples.repository.RoleRepository;
 import lombok.Getter;

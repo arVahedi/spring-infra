@@ -9,6 +9,11 @@ import java.io.Serial;
 import java.util.Collection;
 import java.util.Map;
 
+/**
+ * This a custom container of AbstractOAuth2TokenAuthenticationToken that supports JWT as token for oAuth 2.0.
+ * So we can use common methods of JWT to deal with its token.
+ */
+
 public class EnhancedJwtAuthenticationToken extends AbstractOAuth2TokenAuthenticationToken<Jwt> {
     @Serial
     private static final long serialVersionUID = SpringSecurityCoreVersion.SERIAL_VERSION_UID;
@@ -18,7 +23,7 @@ public class EnhancedJwtAuthenticationToken extends AbstractOAuth2TokenAuthentic
     }
 
     public EnhancedJwtAuthenticationToken(Jwt jwt, Object principal, Object credentials,
-                                  Collection<? extends GrantedAuthority> authorities) {
+                                          Collection<? extends GrantedAuthority> authorities) {
         super(jwt, principal, credentials, authorities);
         this.setAuthenticated(true);
     }

@@ -3,11 +3,17 @@ package springinfra.configuration;
 import io.micrometer.core.aop.TimedAspect;
 import io.micrometer.core.instrument.MeterRegistry;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
+
+/**
+ * This configuration class is responsible for managing independent beans
+ * <p>
+ * <strong>Independent</strong> means these beans are not related to other specific configuration classes, otherwise you can find them in
+ * their own configuration classes.
+ */
 
 @RequiredArgsConstructor
 @Configuration

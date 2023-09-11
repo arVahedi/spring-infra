@@ -1,4 +1,4 @@
-package examples.dto.crud.request;
+package examples.dto.crud;
 
 import examples.domain.Credential;
 import jakarta.validation.constraints.NotBlank;
@@ -7,7 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 import springinfra.annotation.validation.GroupBasedValidation;
 import springinfra.assets.ValidationGroups;
-import springinfra.model.dto.crud.request.BaseCrudDto;
+import springinfra.model.dto.crud.BaseCrudDto;
 
 import java.util.ArrayList;
 import java.util.List;

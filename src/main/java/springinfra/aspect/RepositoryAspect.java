@@ -19,6 +19,13 @@ import java.util.Optional;
 @Slf4j
 public class RepositoryAspect implements BaseAspect {
 
+    /**
+     * We detach any Entity (BaseDomain) object which is returned by our repositories before going to service layer.
+     *
+     * @param joinPoint   all repository methods
+     * @param returnValue the entity which is returned by repository
+     * @throws Exception Any expected exception
+     */
     @AfterReturning(value = "this(org.springframework.data.repository.Repository)", returning = "returnValue")
     public void detachEntity(JoinPoint joinPoint, Object returnValue) throws Exception {
         if (returnValue == null) {

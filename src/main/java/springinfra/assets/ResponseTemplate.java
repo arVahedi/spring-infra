@@ -2,28 +2,23 @@ package springinfra.assets;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.*;
 import org.springframework.http.HttpStatus;
 
 /**
- * Created by gladiator on 2/24/16.
+ * A template for all responses that are return from APIs.
  */
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class ResponseTemplate<T> {
-    //region Fields
     private int statusCode;
     private T result;
-    //endregion
-
-    //region Constructors
-    public ResponseTemplate() {
-    }
 
     public ResponseTemplate(int statusCode) {
         this.statusCode = statusCode;
-    }
-
-    public ResponseTemplate(int statusCode, T result) {
-        this.statusCode = statusCode;
-        this.result = result;
     }
 
     public ResponseTemplate(HttpStatus httpStatus) {
@@ -45,28 +40,9 @@ public class ResponseTemplate<T> {
         this.statusCode = error.getCode();
         this.result = result;
     }
-    //endregion
 
     public String makeResponse() throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         return mapper.writeValueAsString(this);
     }
-
-    //region Getter and Setter
-    public int getStatusCode() {
-        return statusCode;
-    }
-
-    public void setStatusCode(int statusCode) {
-        this.statusCode = statusCode;
-    }
-
-    public T getResult() {
-        return result;
-    }
-
-    public void setResult(T result) {
-        this.result = result;
-    }
-    //endregion
 }

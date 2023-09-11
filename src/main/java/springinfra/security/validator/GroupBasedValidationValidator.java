@@ -14,6 +14,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * @see GroupBasedValidation
+ */
+
 @RequiredArgsConstructor
 public class GroupBasedValidationValidator extends BaseValidator<GroupBasedValidation, Object> {
 

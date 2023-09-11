@@ -1,7 +1,7 @@
 package examples.rest;
 
 import examples.domain.User;
-import examples.dto.crud.request.UserDto;
+import examples.dto.crud.UserDto;
 import examples.mapper.UserMapper;
 import examples.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;

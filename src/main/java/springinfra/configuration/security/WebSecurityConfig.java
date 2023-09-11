@@ -29,7 +29,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.RegexRequestMatcher;
 import springinfra.configuration.BaseConfig;
 import springinfra.configuration.security.idp.BaseIdentityProviderModuleConfig;
-import springinfra.configuration.security.idp.BuildInIdentityProviderConfig;
+import springinfra.configuration.security.idp.BuiltInIdentityProviderConfig;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -88,7 +88,7 @@ public class WebSecurityConfig implements BaseConfig {
     /**
      * Exposing a global AuthenticationManager as a bean due to be able to use it in all over the application
      * such as our custom login rest endpoint in our build-in identity provider.
-     * <strong>This bean creation is conditional on existing a {@link BuildInIdentityProviderConfig} because
+     * <strong>This bean creation is conditional on existing a {@link BuiltInIdentityProviderConfig} because
      * exposing AuthenticationManager as a bean with OAuth2 ({@link springinfra.configuration.security.idp.OidcIdentityProviderModuleConfig})
      * can cause stack overflow issue when authentication is rejected</strong>
      *
@@ -98,7 +98,7 @@ public class WebSecurityConfig implements BaseConfig {
      * @throws Exception any expected exception
      */
     @Bean
-    @ConditionalOnBean(BuildInIdentityProviderConfig.class)
+    @ConditionalOnBean(BuiltInIdentityProviderConfig.class)
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         Optional<AuthenticationManager> authenticationManager = Optional.empty();
         if (this.identityProviderModuleConfig.isPresent()) {

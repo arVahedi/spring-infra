@@ -15,6 +15,15 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Optional;
 
+/**
+ * This class is responsible for converting an existing JWT token to the corresponding AbstractAuthenticationToken which
+ * is specifically our custom {@link EnhancedJwtAuthenticationToken} that treats the token as a JWT token.
+ * The convert operation means <strong>the corresponding user details, authorities, and other required details are extracted by this class from the JWT token.</strong>
+ *
+ * @see EnhancedJwtAuthenticationToken
+ * @see OidcJwtGrantedAuthoritiesConverter
+ */
+
 @Setter
 public class EnhancedJwtAuthenticationConverter implements Converter<Jwt, AbstractAuthenticationToken> {
 
@@ -24,7 +33,6 @@ public class EnhancedJwtAuthenticationConverter implements Converter<Jwt, Abstra
 
     @Override
     public final AbstractAuthenticationToken convert(@NonNull Jwt jwt) {
-
         String principalClaimValue = jwt.getClaimAsString(this.principalClaimName);
         UserDetails userDetails;
         if (this.userDetailsService != null) {

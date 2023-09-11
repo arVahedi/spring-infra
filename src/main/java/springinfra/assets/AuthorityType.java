@@ -1,6 +1,9 @@
 package springinfra.assets;
 
 
+import lombok.Getter;
+
+@Getter
 public enum AuthorityType {
     MONITORING_AUTHORITY(StringFormat.MONITORING_AUTHORITY),
     USER_MANAGEMENT_AUTHORITY(StringFormat.USER_MANAGEMENT_AUTHORITY),
@@ -10,10 +13,6 @@ public enum AuthorityType {
 
     AuthorityType(String value) {
         this.value = value;
-    }
-
-    public String getValue() {
-        return this.value;
     }
 
     @Override

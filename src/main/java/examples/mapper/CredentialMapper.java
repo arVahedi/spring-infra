@@ -3,7 +3,7 @@ package examples.mapper;
 import examples.domain.Credential;
 import examples.domain.CredentialRole;
 import examples.domain.Role;
-import examples.dto.crud.request.CredentialDto;
+import examples.dto.crud.CredentialDto;
 import examples.service.RoleService;
 import org.mapstruct.*;
 import org.springframework.beans.factory.annotation.Autowired;

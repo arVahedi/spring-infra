@@ -1,7 +1,7 @@
 package examples.service;
 
 import examples.domain.User;
-import examples.dto.crud.request.UserDto;
+import examples.dto.crud.UserDto;
 import examples.mapper.UserMapper;
 import examples.repository.UserRepository;
 import lombok.Getter;

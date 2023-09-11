@@ -1,4 +1,4 @@
-package examples.dto.crud.request;
+package examples.dto.crud;
 
 import examples.assets.UserStatus;
 import examples.domain.User;
@@ -8,7 +8,7 @@ import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.Setter;
 import springinfra.assets.Regex;
-import springinfra.model.dto.crud.request.BaseCrudDto;
+import springinfra.model.dto.crud.BaseCrudDto;
 
 @Getter
 @Setter

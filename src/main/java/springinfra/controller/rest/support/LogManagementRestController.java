@@ -16,6 +16,7 @@ import springinfra.assets.ResponseTemplate;
 import springinfra.controller.rest.BaseRestController;
 import springinfra.service.LogManagementService;
 
+// TODO: 11.09.23 Can be replaced with actuator endpoints or not??!
 @Slf4j
 @RestController
 @RequestMapping(BaseRestController.API_PATH_PREFIX_V1 + "/support/log")

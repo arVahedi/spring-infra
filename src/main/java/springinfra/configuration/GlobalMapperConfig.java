@@ -3,7 +3,13 @@ package springinfra.configuration;
 
 import org.mapstruct.*;
 import springinfra.model.domain.BaseDomain;
-import springinfra.model.dto.crud.request.BaseCrudDto;
+import springinfra.model.dto.crud.BaseCrudDto;
+
+/**
+ * This is global configuration of mapstruct mappers.
+ * <p>
+ * For further information take a look at <a href="https://mapstruct.org/documentation/stable/reference/html/#shared-configurations">its official documentation</a>
+ */
 
 @MapperConfig(
         componentModel = "spring",

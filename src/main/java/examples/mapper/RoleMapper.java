@@ -1,7 +1,7 @@
 package examples.mapper;
 
 import examples.domain.Role;
-import examples.dto.crud.request.RoleDto;
+import examples.dto.crud.RoleDto;
 import org.mapstruct.Mapper;
 import springinfra.configuration.GlobalMapperConfig;
 import springinfra.model.mapper.BaseCrudMapper;

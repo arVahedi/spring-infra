@@ -16,6 +16,7 @@ import java.util.stream.Stream;
  * This class is used for gathering the user's authorities (permissions) according to his ID token.
  * In simplest words, it gets the user's OIDC ID token (which is always JWT) and returns his permissions back.
  */
+
 @NoArgsConstructor
 public class OidcJwtGrantedAuthoritiesConverter implements Converter<Jwt, Collection<GrantedAuthority>> {
 

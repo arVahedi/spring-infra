@@ -10,6 +10,13 @@ import org.springframework.data.domain.Persistable;
 import java.io.Serializable;
 import java.time.Instant;
 
+/**
+ * The parent of all entity classes. As you can see all entities will have an {@link #id}, {@link #insertDate},
+ * and {@link #lastModifiedDate}.
+ *
+ * @param <I> the type of identity of entity which should be a subclass of {@link Number}
+ */
+
 @Getter
 @Setter
 @MappedSuperclass
@@ -35,6 +42,9 @@ public abstract class BaseDomain<I extends Number> implements Persistable<I>, Se
         return this.id == null || this.id.longValue() == 0;
     }
 
+    /**
+     * This method handles filling out insert date of a record automatically.
+     */
     @PrePersist
     public void fillInsertDate() {
         if (this.insertDate == null) {
@@ -42,6 +52,9 @@ public abstract class BaseDomain<I extends Number> implements Persistable<I>, Se
         }
     }
 
+    /**
+     * This method handles filling out and keep updated the last modification date of a record automatically.
+     */
     @PreUpdate
     public void fillLastModifiedDate() {
         this.lastModifiedDate = Instant.now();

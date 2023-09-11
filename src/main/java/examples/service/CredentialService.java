@@ -1,7 +1,7 @@
 package examples.service;
 
 import examples.domain.Credential;
-import examples.dto.crud.request.CredentialDto;
+import examples.dto.crud.CredentialDto;
 import examples.mapper.CredentialMapper;
 import examples.repository.CredentialRepository;
 import lombok.Getter;

@@ -1,7 +1,7 @@
 package examples.rest;
 
 import examples.domain.Role;
-import examples.dto.crud.request.RoleDto;
+import examples.dto.crud.RoleDto;
 import examples.mapper.RoleMapper;
 import examples.service.RoleService;
 import io.swagger.v3.oas.annotations.Operation;

@@ -4,6 +4,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.Map;
 
+/**
+ * The parent of all UI controllers (in MVC model) before going to presentation pages
+ */
+
 public interface UIController {
 
     @GetMapping

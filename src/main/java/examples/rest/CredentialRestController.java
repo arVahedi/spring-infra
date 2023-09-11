@@ -1,7 +1,7 @@
 package examples.rest;
 
 import examples.domain.Credential;
-import examples.dto.crud.request.CredentialDto;
+import examples.dto.crud.CredentialDto;
 import examples.mapper.CredentialMapper;
 import examples.service.CredentialService;
 import io.swagger.v3.oas.annotations.Operation;

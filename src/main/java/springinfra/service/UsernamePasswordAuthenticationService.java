@@ -23,15 +23,24 @@ import org.springframework.security.web.authentication.session.SessionAuthentica
 import org.springframework.security.web.context.RequestAttributeSecurityContextRepository;
 import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.stereotype.Service;
-import springinfra.configuration.security.idp.BuildInIdentityProviderConfig;
+import springinfra.configuration.security.idp.BuiltInIdentityProviderConfig;
 
 import javax.naming.OperationNotSupportedException;
 import java.io.IOException;
 import java.util.Optional;
 
+/**
+ * This service class is used for authenticating users via their username and password. It's usually used by {@link springinfra.controller.rest.AuthenticationController}
+ * for supporting a <strong>built-in</strong> authentication mechanism.
+ * <p>
+ * Consider that the word built-in means we don't use any external authorization server like what we use in the OIDC protocol. That's the reason
+ * why creation of this bean depends on existing an instance of {@link BuiltInIdentityProviderConfig}, because just in that case we are supporting
+ * a built-in authentication mechanism and need to this service, otherwise we are likely using OIDC protocol and an external authorization server.
+ */
+
 @Slf4j
 @Service
-@ConditionalOnBean(BuildInIdentityProviderConfig.class)
+@ConditionalOnBean(BuiltInIdentityProviderConfig.class)
 @RequiredArgsConstructor
 public class UsernamePasswordAuthenticationService extends BaseService {
 

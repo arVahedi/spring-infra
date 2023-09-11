@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import springinfra.assets.ResponseTemplate;
-import springinfra.configuration.security.idp.BuildInIdentityProviderConfig;
+import springinfra.configuration.security.idp.BuiltInIdentityProviderConfig;
 import springinfra.service.UsernamePasswordAuthenticationService;
 
 import javax.naming.OperationNotSupportedException;
@@ -27,9 +27,16 @@ import java.io.IOException;
 
 import static springinfra.system.listener.SuccessfulAuthenticationHandler.AUTH_TOKEN_REQUEST_ATTRIBUTE;
 
+/**
+ * This is an endpoint that we support for authenticating users by their username and password in a built-in authentication mechanism.
+ * <p>
+ * * Consider that the word built-in means we don't use any external authorization server like what we use in the OIDC protocol. That's the reason
+ * * why creation of this bean depends on existing an instance of {@link BuiltInIdentityProviderConfig}, because just in that case we are supporting
+ * * a built-in authentication mechanism and need to this service, otherwise we are likely using OIDC protocol and an external authorization server.
+ */
 
 @RestController
-@ConditionalOnBean(BuildInIdentityProviderConfig.class)
+@ConditionalOnBean(BuiltInIdentityProviderConfig.class)
 @RequestMapping(BaseRestController.API_PATH_PREFIX_V1 + "/authenticate")
 @Slf4j
 @Tag(name = "Authentication API", description = "Authentication API")

@@ -25,7 +25,7 @@ import java.util.List;
 @Configuration(InMemoryIdentityProviderModuleConfig.BEAN_NAME)
 @ConditionalOnProperty(value = "security.idp.module", havingValue = InMemoryIdentityProviderModuleConfig.BEAN_NAME)
 @ConfigurationProperties(prefix = "security.idp.in-memory")
-public class InMemoryIdentityProviderModuleConfig extends BuildInIdentityProviderConfig {
+public class InMemoryIdentityProviderModuleConfig extends BuiltInIdentityProviderConfig {
     public static final String BEAN_NAME = "inMemoryIdentityProviderModule";
 
     private List<String> credentials;

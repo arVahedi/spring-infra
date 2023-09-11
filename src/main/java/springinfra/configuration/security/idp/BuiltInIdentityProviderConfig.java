@@ -15,7 +15,7 @@ import springinfra.utility.identity.JwtUtility;
 
 import java.time.Instant;
 
-public abstract class BuildInIdentityProviderConfig extends BaseIdentityProviderModuleConfig {
+public abstract class BuiltInIdentityProviderConfig extends BaseIdentityProviderModuleConfig {
 
     /**
      * @param httpSecurity the global HttpSecurity retrieved from WebSecurityConfig

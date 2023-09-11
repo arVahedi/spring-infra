@@ -1,4 +1,4 @@
-package springinfra.model.dto.crud.request;
+package springinfra.model.dto.crud;
 
 
 import jakarta.validation.constraints.NotNull;
