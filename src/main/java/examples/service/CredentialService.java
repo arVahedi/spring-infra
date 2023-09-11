@@ -1,14 +1,15 @@
 package examples.service;
 
-import examples.converter.CredentialCrudConverter;
 import examples.domain.Credential;
 import examples.dto.crud.request.CredentialDto;
+import examples.mapper.CredentialMapper;
 import examples.repository.CredentialRepository;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import springinfra.exception.UsernameAlreadyExistsException;
-import springinfra.model.dto.crud.request.BaseCrudRequest;
 import springinfra.service.BaseService;
 import springinfra.service.DefaultCrudService;
 
@@ -16,39 +17,38 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class CredentialService extends BaseService implements DefaultCrudService<Credential, Long> {
+public class CredentialService extends BaseService implements DefaultCrudService<Long, Credential, CredentialDto> {
 
-    private final CredentialRepository credentialRepository;
-    private final CredentialCrudConverter credentialCrudConverter;
+    private final PasswordEncoder passwordEncoder;
+    @Getter
+    private final CredentialRepository repository;
+    @Getter
+    private final CredentialMapper mapper;
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public Credential saveOrUpdate(BaseCrudRequest request) {
+    public Credential save(CredentialDto request) {
         //Prevent duplicate usernames
-        Optional<Credential> credential = this.credentialRepository.findByUsername(((CredentialDto) request).getUsername());
-        if (isUpdateOperation(request)) {
-            if (credential.isPresent() && credential.get().getId().longValue() != request.getId().longValue()) {
-                throw new UsernameAlreadyExistsException();
-            }
-        } else if (credential.isPresent()) {
+        checkUsernameDuplication(request.getUsername(), Optional.empty());
+        return DefaultCrudService.super.save(request);
+    }
+
+    @Override
+    public Credential update(Long id, CredentialDto request) {
+        //Prevent duplicate usernames
+        checkUsernameDuplication(request.getUsername(), Optional.of(id));
+        return DefaultCrudService.super.update(id, request);
+    }
+
+    public void changePassword(Credential credential, String password) {
+        credential.setPassword(this.passwordEncoder.encode(password));
+    }
+
+    private void checkUsernameDuplication(String username, Optional<Long> excludedId) {
+        Optional<Credential> credential = this.repository.findByUsername((username));
+        if (credential.isPresent() && (excludedId.isEmpty() || (excludedId.get().longValue() != credential.get().getId()))) {
             throw new UsernameAlreadyExistsException();
         }
-
-        return DefaultCrudService.super.saveOrUpdate(request);
     }
 
-    @Override
-    public CredentialRepository getRepository() {
-        return this.credentialRepository;
-    }
-
-    @Override
-    public CredentialCrudConverter getCrudConverter() {
-        return this.credentialCrudConverter;
-    }
-
-    @Override
-    public Class<Credential> getGenericDomainClass() {
-        return Credential.class;
-    }
 }

@@ -2,21 +2,22 @@ package examples.rest;
 
 import examples.domain.User;
 import examples.dto.crud.request.UserDto;
-import examples.dto.crud.response.UserCrudApiResponseGenerator;
+import examples.mapper.UserMapper;
 import examples.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 import springinfra.assets.ResponseTemplate;
+import springinfra.assets.ValidationGroups;
 import springinfra.controller.rest.BaseRestController;
-import springinfra.controller.rest.DefaultCrudRestController;
-import springinfra.model.dto.crud.response.CrudApiResponseGenerator;
 
 import java.util.List;
 
@@ -26,23 +27,43 @@ import java.util.List;
 @Tag(name = "User API", description = "User management API")
 @RequiredArgsConstructor
 @PreAuthorize("hasAuthority(T(springinfra.assets.AuthorityType).USER_MANAGEMENT_AUTHORITY)")
-public class UserRestController extends BaseRestController implements DefaultCrudRestController<UserDto, Long> {
+public class UserRestController extends BaseRestController {
 
     private final UserService userService;
-    private CrudApiResponseGenerator<User> crudApiResponseGenerator = new UserCrudApiResponseGenerator();
+    private final UserMapper userMapper;
 
-    @GetMapping("/au")
-    public ResponseEntity<ResponseTemplate<List<UserDto>>> getUsersWithAuth() {
-        return ResponseEntity.ok(new ResponseTemplate<>(HttpStatus.OK, (List<UserDto>) getCrudApiResponseGenerator().onList(this.userService.list())));
+    @Operation(summary = "Create user", description = "Creating a new user")
+    @PostMapping
+    public ResponseEntity<ResponseTemplate<UserDto>> save(@RequestBody @Validated(ValidationGroups.InsertValidationGroup.class) UserDto request) {
+        User user = this.userService.save(request);
+        return ResponseEntity.ok(new ResponseTemplate<>(HttpStatus.OK, this.userMapper.toDto(user)));
     }
 
-    @Override
-    public UserService getService() {
-        return this.userService;
+    @Operation(summary = "Update user", description = "Updating an exising user")
+    @PutMapping("/{id}")
+    public ResponseEntity<ResponseTemplate<UserDto>> update(@PathVariable @Min(value = 0, message = "Minimum acceptable value for id is 1") long id,
+                                                            @RequestBody @Validated(ValidationGroups.UpdateValidationGroup.class) UserDto request) {
+        User user = this.userService.update(id, request);
+        return ResponseEntity.ok(new ResponseTemplate<>(HttpStatus.OK, this.userMapper.toDto(user)));
     }
 
-    @Override
-    public CrudApiResponseGenerator<User> getCrudApiResponseGenerator() {
-        return this.crudApiResponseGenerator;
+    @Operation(summary = "Delete user", description = "Deleting an exising user")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable @Min(value = 1, message = "Minimum acceptable value for id is 1") long id) {
+        this.userService.delete(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @Operation(summary = "Find user", description = "Retrieving an exising user")
+    @GetMapping("/{id}")
+    public ResponseEntity<ResponseTemplate<UserDto>> find(@PathVariable @Min(value = 1, message = "Minimum acceptable value for id is 1") long id) {
+        User user = this.userService.find(id);
+        return ResponseEntity.ok(new ResponseTemplate<>(HttpStatus.OK, this.userMapper.toDto(user)));
+    }
+
+    @Operation(summary = "Retrieving users", description = "Retrieving all exising users")
+    @GetMapping
+    public ResponseEntity<ResponseTemplate<List<UserDto>>> list(Pageable pageable) {
+        return ResponseEntity.ok(new ResponseTemplate<>(HttpStatus.OK, this.userMapper.toDtos(this.userService.list(pageable))));
     }
 }

@@ -14,12 +14,12 @@ import java.time.Instant;
 @Setter
 @MappedSuperclass
 @JsonIgnoreProperties({"hibernateLazyInitializer"})
-public abstract class BaseDomain<ID extends Number> implements Persistable<ID>, Serializable {
+public abstract class BaseDomain<I extends Number> implements Persistable<I>, Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private ID id;
+    private I id;
 
     @Basic
     @Column(name = "insert_date")

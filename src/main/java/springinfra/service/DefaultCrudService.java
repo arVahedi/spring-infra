@@ -3,31 +3,29 @@ package springinfra.service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
+import springinfra.database.repository.BaseRepository;
 import springinfra.exception.NoSuchRecordException;
 import springinfra.model.domain.BaseDomain;
-import springinfra.model.domain.OptimisticLockableDomain;
-import springinfra.model.dto.crud.request.BaseCrudRequest;
+import springinfra.model.dto.crud.request.BaseCrudDto;
+import springinfra.model.mapper.BaseCrudMapper;
 
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.Optional;
 
-public interface DefaultCrudService<E extends BaseDomain, I extends Number> extends CrudService<E, I> {
+public interface DefaultCrudService<I extends Number, E extends BaseDomain<I>, D extends BaseCrudDto<E, I>> extends CrudService<I, E, D> {
 
     @Transactional(rollbackFor = Exception.class)
-    default E saveOrUpdate(BaseCrudRequest request) {
-        E entity;
-        if (isUpdateOperation(request)) {    //This is update operation
-            entity = find((I) request.getId());
-            getCrudConverter().toEntity(request, entity);
-        } else {    //This is insert operation
-            entity = (E) getCrudConverter().toEntity(request, getGenericDomainClass());
-            if (entity instanceof OptimisticLockableDomain optimisticLockableDomain) {
-                optimisticLockableDomain.setVersion(0L);
-            }
-        }
+    default E save(D request) {
+        E entity = getMapper().toEntity(request);
+        return getRepository().save(entity);
+    }
 
-        return (E) getRepository().save(entity);
+    @Transactional(rollbackFor = Exception.class)
+    default E update(I id, D request) {
+        E entity = find(id);
+        getMapper().updateEntity(entity, request);
+        return getRepository().save(entity);
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -39,7 +37,7 @@ public interface DefaultCrudService<E extends BaseDomain, I extends Number> exte
 
     default E find(I id) {
         Optional<E> optional = getRepository().findById(id);
-        return optional.orElseThrow(() -> new NoSuchRecordException(MessageFormat.format("{0} with id [{1}] doesn''t exist", getGenericDomainClass().getSimpleName(), id)));
+        return optional.orElseThrow(() -> new NoSuchRecordException(MessageFormat.format("The entity with id [{0}] does not exist", id)));
     }
 
     default List<E> list() {
@@ -50,9 +48,9 @@ public interface DefaultCrudService<E extends BaseDomain, I extends Number> exte
         return getRepository().findAll(pageable).toList();
     }
 
-    default boolean isUpdateOperation(BaseCrudRequest request) {
-        return request.getId() != null && request.getId().longValue() > 0;
-    }
+    BaseRepository<E, I> getRepository();
+
+    BaseCrudMapper<E, D> getMapper();
 
     @Slf4j
     class Logger {

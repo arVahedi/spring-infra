@@ -2,7 +2,7 @@ package springinfra.controller.rest;
 
 import examples.dto.AuthRequest;
 import examples.dto.AuthResponse;
-import springinfra.service.UsernamePasswordAuthenticationService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import springinfra.assets.ResponseTemplate;
 import springinfra.configuration.security.idp.BuildInIdentityProviderConfig;
+import springinfra.service.UsernamePasswordAuthenticationService;
 
 import javax.naming.OperationNotSupportedException;
 import java.io.IOException;
@@ -38,6 +39,7 @@ public class AuthenticationController extends BaseRestController {
 
     public final UsernamePasswordAuthenticationService authenticationService;
 
+    @Operation(summary = "Authenticating user", description = "Authenticating an existing user via username and password")
     @PostMapping
     public ResponseEntity<ResponseTemplate<AuthResponse>> authenticate(HttpServletRequest request, HttpServletResponse response, @RequestBody @Validated AuthRequest authRequest) throws ServletException, IOException {
         try {

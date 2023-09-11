@@ -1,8 +1,10 @@
 package examples.service;
 
-import examples.converter.RoleCrudConverter;
 import examples.domain.Role;
+import examples.dto.crud.request.RoleDto;
+import examples.mapper.RoleMapper;
 import examples.repository.RoleRepository;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import springinfra.service.BaseService;
@@ -10,23 +12,11 @@ import springinfra.service.DefaultCrudService;
 
 @Service
 @RequiredArgsConstructor
-public class RoleService extends BaseService implements DefaultCrudService<Role, Integer> {
+public class RoleService extends BaseService implements DefaultCrudService<Integer, Role, RoleDto> {
 
-    private final RoleRepository roleRepository;
-    private final RoleCrudConverter roleCrudConverter;
+    @Getter
+    private final RoleRepository repository;
+    @Getter
+    private final RoleMapper mapper;
 
-    @Override
-    public RoleRepository getRepository() {
-        return this.roleRepository;
-    }
-
-    @Override
-    public RoleCrudConverter getCrudConverter() {
-        return this.roleCrudConverter;
-    }
-
-    @Override
-    public Class<Role> getGenericDomainClass() {
-        return Role.class;
-    }
 }

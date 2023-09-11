@@ -3,10 +3,6 @@ package examples.domain;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import springinfra.SpringContext;
 import springinfra.model.domain.BaseDomain;
 
 import java.util.ArrayList;
@@ -29,11 +25,6 @@ public class Credential extends BaseDomain<Long> {
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
-    @OneToMany(mappedBy = "credential", cascade = CascadeType.ALL, orphanRemoval = true)
-    @LazyCollection(LazyCollectionOption.FALSE)
+    @OneToMany(mappedBy = "credential", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<CredentialRole> roles = new ArrayList<>();
-
-    public void changePassword(String password) {
-        this.password = SpringContext.getApplicationContext().getBean(PasswordEncoder.class).encode(password);
-    }
 }

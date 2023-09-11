@@ -9,10 +9,10 @@ import lombok.Setter;
 @Getter
 @Setter
 @MappedSuperclass
-public abstract class OptimisticLockableDomain<ID extends Number> extends BaseDomain<ID> {
+public abstract class OptimisticLockableDomain<I extends Number> extends BaseDomain<I> {
 
     @Version
     @Column(name = "version")
-    private Long version;
+    private long version;
 
 }

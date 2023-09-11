@@ -2,11 +2,11 @@ package springinfra.model.converter;
 
 import lombok.SneakyThrows;
 import springinfra.model.domain.BaseDomain;
-import springinfra.model.dto.crud.request.BaseCrudRequest;
+import springinfra.model.dto.crud.request.BaseCrudDto;
 
 import java.lang.reflect.ParameterizedType;
 
-public abstract class BaseCrudConverter<D extends BaseCrudRequest, E extends BaseDomain> {
+public abstract class BaseCrudConverter<D extends BaseCrudDto, E extends BaseDomain> {
 
     @SneakyThrows
     public E toEntity(D dto, Class<E> domainClass) {
