@@ -33,7 +33,7 @@ create table revision_info
 (
     id              integer not null auto_increment,
     occurrence_date datetime,
-    user_info       varchar(255),
+    principal       varchar(255),
     primary key (id)
 ) engine = InnoDB;
 

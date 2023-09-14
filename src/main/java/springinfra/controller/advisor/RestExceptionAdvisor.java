@@ -8,6 +8,7 @@ import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.StaleObjectStateException;
+import org.jose4j.jwt.consumer.InvalidJwtException;
 import org.springframework.data.mapping.PropertyReferenceException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -15,6 +16,7 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.oauth2.jwt.JwtValidationException;
@@ -79,7 +81,7 @@ public class RestExceptionAdvisor extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(status).build();
     }
 
-    @ExceptionHandler({BadCredentialsException.class, InvalidBearerTokenException.class, JwtValidationException.class})
+    @ExceptionHandler({BadCredentialsException.class, InvalidBearerTokenException.class, JwtValidationException.class, AuthenticationServiceException.class})
     public ResponseEntity<ResponseTemplate<String>> handleBadCredentialsException(Exception ex) {
         log.error(ex.getMessage(), ex);
         try {

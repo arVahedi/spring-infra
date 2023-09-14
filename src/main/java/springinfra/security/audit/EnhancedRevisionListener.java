@@ -3,6 +3,7 @@ package springinfra.security.audit;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.envers.RevisionListener;
 import springinfra.model.domain.audit.AuditedRevision;
+import springinfra.utility.identity.IdentityUtility;
 
 import java.util.Date;
 
@@ -20,8 +21,7 @@ public class EnhancedRevisionListener implements RevisionListener {
     public void newRevision(Object revisionEntity) {
         if (revisionEntity instanceof AuditedRevision auditedRevision) {
             auditedRevision.setOccurrenceDate(new Date());
-
-            // TODO: 4/13/2020 AD fill user id (https://stackoverflow.com/questions/35433598/hibernate-envers-include-date-of-when-change-happened)
+            auditedRevision.setPrincipal(IdentityUtility.getUsername().orElse(null));
         } else {
             log.warn("An unhandled revision entity has been triggered, its type is {} instead of expected type {}", revisionEntity.getClass().getName(), AuditedRevision.class.getName());
         }

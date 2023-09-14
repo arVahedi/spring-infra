@@ -37,6 +37,6 @@ public class AuditedRevision {
     private Date occurrenceDate;
 
     @Basic
-    @Column(name = "user_info")
-    private String userInfo;
+    @Column(name = "principal")
+    private String principal;
 }

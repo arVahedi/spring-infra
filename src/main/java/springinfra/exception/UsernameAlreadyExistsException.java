@@ -1,7 +1,7 @@
 package springinfra.exception;
 
 
-public class UsernameAlreadyExistsException extends BaseRuntimeException {
+public class UsernameAlreadyExistsException extends UniqueConstraintAlreadyExistsException {
 
     public UsernameAlreadyExistsException() {
         super();

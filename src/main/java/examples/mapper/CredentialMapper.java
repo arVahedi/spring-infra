@@ -4,7 +4,9 @@ import examples.domain.Credential;
 import examples.domain.CredentialRole;
 import examples.domain.Role;
 import examples.dto.crud.CredentialDto;
+import examples.repository.CredentialRepository;
 import examples.service.RoleService;
+import org.apache.commons.lang3.StringUtils;
 import org.mapstruct.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -14,15 +16,21 @@ import springinfra.model.mapper.BaseCrudMapper;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
-@Mapper(config = GlobalMapperConfig.class, uses = UserMapper.class, imports = Constant.class)
+@Mapper(config = GlobalMapperConfig.class, uses = UserMapper.class, imports = {Constant.class, StringUtils.class})
 public abstract class CredentialMapper implements BaseCrudMapper<Credential, CredentialDto> {
 
     private RoleService roleService;
+    private CredentialRepository credentialRepository;
     private PasswordEncoder passwordEncoder;
 
     @Override
     @Mapping(target = "password", source = "password", qualifiedByName = "encodePassword", conditionExpression = "java(!Constant.PASSWORD_MASK.equalsIgnoreCase(dto.getPassword()))", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(target = "username", expression = "java(StringUtils.isNotBlank(dto.getUsername()) ? dto.getUsername().toLowerCase() : dto.getUsername())")
     public abstract Credential toEntity(CredentialDto dto);
 
     @Override
@@ -51,6 +59,20 @@ public abstract class CredentialMapper implements BaseCrudMapper<Credential, Cre
 
     @AfterMapping
     public void handleCredentialRoleBidirectional(@MappingTarget Credential credential) {
+        // Review added credential roles to use the existing ones to prevent re-insert them as much as possible
+        if (!credential.isNew()) {
+            List<CredentialRole> mergedCredentialRoles = new ArrayList<>();
+            List<CredentialRole> newCredentialRoles = credential.getRoles();
+            Optional<Credential> oldCredential = this.credentialRepository.findById(credential.getId());
+            if (oldCredential.isPresent()) {
+                Map<Integer, CredentialRole> existingCredentialRoles = oldCredential.get().getRoles().stream().collect(Collectors.toMap(credentialRole -> credentialRole.getRole().getId(), Function.identity()));
+                newCredentialRoles.forEach(item -> mergedCredentialRoles.add(existingCredentialRoles.getOrDefault(item.getRole().getId(), item)));
+
+                credential.setRoles(mergedCredentialRoles);
+            }
+        }
+
+        // Handle (set) bidirectional relationship of credential and its roles
         credential.getRoles().forEach(credentialRole -> credentialRole.setCredential(credential));
     }
 
@@ -62,5 +84,10 @@ public abstract class CredentialMapper implements BaseCrudMapper<Credential, Cre
     @Autowired
     public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
         this.passwordEncoder = passwordEncoder;
+    }
+
+    @Autowired
+    public void setCredentialRepository(CredentialRepository credentialRepository) {
+        this.credentialRepository = credentialRepository;
     }
 }
