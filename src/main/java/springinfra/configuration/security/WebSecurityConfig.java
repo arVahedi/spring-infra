@@ -22,9 +22,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.intercept.AuthorizationFilter;
 import org.springframework.security.web.authentication.logout.HeaderWriterLogoutHandler;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
-import org.springframework.security.web.header.writers.ClearSiteDataHeaderWriter;
-import org.springframework.security.web.header.writers.ContentSecurityPolicyHeaderWriter;
-import org.springframework.security.web.header.writers.DelegatingRequestMatcherHeaderWriter;
+import org.springframework.security.web.header.writers.*;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.RegexRequestMatcher;
 import springinfra.configuration.BaseConfig;
@@ -51,11 +49,7 @@ public class WebSecurityConfig implements BaseConfig {
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.csrf(AbstractHttpConfigurer::disable);
 
-//        httpSecurity.headers().contentSecurityPolicy("script-src 'self'; object-src 'self'; report-uri /csp-report-endpoint/");
-        //This line is required for loading swagger because it uses inline scripts
-        httpSecurity.headers(httpSecurityHeadersConfigurer -> httpSecurityHeadersConfigurer.addHeaderWriter(new DelegatingRequestMatcherHeaderWriter(new AntPathRequestMatcher("/doc/api/**"), new ContentSecurityPolicyHeaderWriter("script-src 'self' 'unsafe-inline'; object-src 'self'; report-uri " + CSP_REPOST_ENDPOINT))));
-        //We prevent inline scripts for all requests except these are started with /doc/api/** (swagger page)
-        httpSecurity.headers(httpSecurityHeadersConfigurer -> httpSecurityHeadersConfigurer.addHeaderWriter(new DelegatingRequestMatcherHeaderWriter(new RegexRequestMatcher("^(?!\\/doc\\/api\\/).+", null), new ContentSecurityPolicyHeaderWriter("script-src 'self'; object-src 'self'; report-uri " + CSP_REPOST_ENDPOINT))));
+        configureSecurityHeaders(httpSecurity);
 
         // We handle form login in our restful endpoint (AuthenticationController.class)
         httpSecurity.formLogin(AbstractHttpConfigurer::disable);
@@ -139,5 +133,34 @@ public class WebSecurityConfig implements BaseConfig {
         createLogoutFilterMethod.setAccessible(false);
 
         return logoutFilter;
+    }
+
+    /**
+     * This method configures the HTTP headers that are important security-wise
+     *
+     * @param httpSecurity The global shared http security object
+     * @throws Exception any expected exception
+     */
+    private void configureSecurityHeaders(HttpSecurity httpSecurity) throws Exception {
+        httpSecurity.headers(httpSecurityHeadersConfigurer -> httpSecurityHeadersConfigurer
+                .crossOriginOpenerPolicy(crossOriginOpenerPolicyConfig -> crossOriginOpenerPolicyConfig.policy(CrossOriginOpenerPolicyHeaderWriter.CrossOriginOpenerPolicy.SAME_ORIGIN)));
+
+        httpSecurity.headers(httpSecurityHeadersConfigurer -> httpSecurityHeadersConfigurer
+                .crossOriginEmbedderPolicy(crossOriginEmbedderPolicyConfig -> crossOriginEmbedderPolicyConfig.policy(CrossOriginEmbedderPolicyHeaderWriter.CrossOriginEmbedderPolicy.REQUIRE_CORP)));
+
+        httpSecurity.headers(httpSecurityHeadersConfigurer -> httpSecurityHeadersConfigurer
+                .crossOriginResourcePolicy(crossOriginResourcePolicyConfig -> crossOriginResourcePolicyConfig.policy(CrossOriginResourcePolicyHeaderWriter.CrossOriginResourcePolicy.SAME_SITE)));
+
+        httpSecurity.headers(httpSecurityHeadersConfigurer -> httpSecurityHeadersConfigurer
+                .referrerPolicy(referrerPolicyConfig -> referrerPolicyConfig.policy(ReferrerPolicyHeaderWriter.ReferrerPolicy.NO_REFERRER)));
+
+        httpSecurity.headers(httpSecurityHeadersConfigurer -> httpSecurityHeadersConfigurer.addHeaderWriter((request, response) -> response.setHeader("X-Permitted-Cross-Domain-Policies", "none")));
+
+//        httpSecurity.headers().contentSecurityPolicy("script-src 'self'; object-src 'self'; report-uri /csp-report-endpoint/");
+        //This line is required for loading swagger because it uses inline scripts
+        httpSecurity.headers(httpSecurityHeadersConfigurer -> httpSecurityHeadersConfigurer.addHeaderWriter(new DelegatingRequestMatcherHeaderWriter(new AntPathRequestMatcher("/doc/api/**"), new ContentSecurityPolicyHeaderWriter("script-src 'self' 'unsafe-inline'; object-src 'self'; report-uri " + CSP_REPOST_ENDPOINT))));
+        //We prevent inline scripts for all requests except these are started with /doc/api/** (swagger page)
+        httpSecurity.headers(httpSecurityHeadersConfigurer -> httpSecurityHeadersConfigurer.addHeaderWriter(new DelegatingRequestMatcherHeaderWriter(new RegexRequestMatcher("^(?!\\/doc\\/api\\/).+", null), new ContentSecurityPolicyHeaderWriter("script-src 'self'; object-src 'self'; report-uri " + CSP_REPOST_ENDPOINT))));
+
     }
 }
