@@ -1,10 +1,10 @@
 package springinfra.service;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 import springinfra.database.repository.BaseRepository;
-import springinfra.exception.NoSuchRecordException;
 import springinfra.model.domain.BaseDomain;
 import springinfra.model.dto.crud.BaseCrudDto;
 import springinfra.model.mapper.BaseCrudMapper;
@@ -45,7 +45,7 @@ public interface DefaultCrudService<I extends Number, E extends BaseDomain<I>, D
 
     default E find(I id) {
         Optional<E> optional = getRepository().findById(id);
-        return optional.orElseThrow(() -> new NoSuchRecordException(MessageFormat.format("The entity with id [{0}] does not exist", id)));
+        return optional.orElseThrow(() -> new EntityNotFoundException(MessageFormat.format("The entity with id [{0}] does not exist", id)));
     }
 
     default List<E> list() {

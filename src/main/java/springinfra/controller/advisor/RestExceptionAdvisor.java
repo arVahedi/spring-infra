@@ -8,7 +8,6 @@ import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.StaleObjectStateException;
-import org.jose4j.jwt.consumer.InvalidJwtException;
 import org.springframework.data.mapping.PropertyReferenceException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -31,7 +30,6 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import springinfra.assets.Constant;
 import springinfra.assets.ErrorCode;
 import springinfra.assets.ResponseTemplate;
-import springinfra.exception.NoSuchRecordException;
 import springinfra.exception.UsernameAlreadyExistsException;
 import springinfra.system.listener.SuccessfulAuthenticationHandler;
 import springinfra.utility.http.HttpRequestUtility;
@@ -46,7 +44,7 @@ import java.util.Optional;
 @RestControllerAdvice
 public class RestExceptionAdvisor extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler({NoSuchRecordException.class, StaleObjectStateException.class, ObjectOptimisticLockingFailureException.class, EntityNotFoundException.class})
+    @ExceptionHandler({StaleObjectStateException.class, ObjectOptimisticLockingFailureException.class, EntityNotFoundException.class})
     public ResponseEntity<ResponseTemplate<String>> handleExpiredDataException(Exception ex) {
         log.error(ex.getMessage(), ex);
         ResponseTemplate<String> responseTemplate = new ResponseTemplate<>(ErrorCode.EXPIRED_DATA, "Row was updated or deleted by another transaction");
@@ -109,7 +107,7 @@ public class RestExceptionAdvisor extends ResponseEntityExceptionHandler {
     @ExceptionHandler(UsernameAlreadyExistsException.class)
     public ResponseEntity<ResponseTemplate<String>> handleUsernameAlreadyExistsException(UsernameAlreadyExistsException ex) {
         log.error(ex.getMessage(), ex);
-        return new ResponseEntity<>(new ResponseTemplate<>(HttpStatus.BAD_REQUEST, "Username already exists"), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(new ResponseTemplate<>(HttpStatus.CONFLICT, "Username already exists"), HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(PropertyReferenceException.class)
