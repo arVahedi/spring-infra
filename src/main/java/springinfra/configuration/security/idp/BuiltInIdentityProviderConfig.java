@@ -3,6 +3,7 @@ package springinfra.configuration.security.idp;
 import org.jose4j.jwt.consumer.InvalidJwtException;
 import org.jose4j.lang.JoseException;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
@@ -24,6 +25,9 @@ public abstract class BuiltInIdentityProviderConfig extends BaseIdentityProvider
      */
     @Override
     public void configure(HttpSecurity httpSecurity) throws Exception {
+        // We handle form login in our restful endpoint (AuthenticationController.class)
+        httpSecurity.formLogin(AbstractHttpConfigurer::disable);
+
         //This line is responsible for handling post-authentication requests, which means this causes we be able to convert the authorization header to the corresponding ID token and realize whether the user is authenticated or not.
         httpSecurity.oauth2ResourceServer(oAuth2ResourceServerConfigurer -> oAuth2ResourceServerConfigurer
                 .bearerTokenResolver(new EnhancedBearerTokenResolver())

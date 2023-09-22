@@ -51,9 +51,6 @@ public class WebSecurityConfig implements BaseConfig {
 
         configureSecurityHeaders(httpSecurity);
 
-        // We handle form login in our restful endpoint (AuthenticationController.class)
-        httpSecurity.formLogin(AbstractHttpConfigurer::disable);
-
         httpSecurity
                 .sessionManagement(httpSecuritySessionManagementConfigurer -> httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS)); // No session will be created or used by Spring Security.
 

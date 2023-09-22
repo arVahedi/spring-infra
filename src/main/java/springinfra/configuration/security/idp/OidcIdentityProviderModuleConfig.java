@@ -1,8 +1,5 @@
 package springinfra.configuration.security.idp;
 
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.ResolvableType;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -21,8 +19,8 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.HttpSecurityBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.LogoutConfigurer;
+import org.springframework.security.config.annotation.web.configurers.oauth2.client.OAuth2LoginConfigurer;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMapper;
 import org.springframework.security.core.userdetails.User;
@@ -31,6 +29,8 @@ import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserService;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
+import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestRedirectFilter;
+import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.DelegatingOAuth2TokenValidator;
 import org.springframework.security.oauth2.core.OAuth2TokenValidator;
 import org.springframework.security.oauth2.core.oidc.OidcIdToken;
@@ -39,7 +39,6 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.server.resource.InvalidBearerTokenException;
-import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -50,7 +49,6 @@ import springinfra.security.oauth2.*;
 import springinfra.system.listener.SuccessfulAuthenticationHandler;
 import springinfra.utility.identity.JwtUtility;
 
-import java.io.IOException;
 import java.net.URI;
 import java.util.*;
 
@@ -103,7 +101,10 @@ public class OidcIdentityProviderModuleConfig extends BaseIdentityProviderModule
         httpSecurity.oauth2Client(Customizer.withDefaults());
 
         httpSecurity.oauth2Login(Customizer.withDefaults());
-        httpSecurity.oauth2Login(oAuth2LoginConfigurer -> oAuth2LoginConfigurer.successHandler(this.successfulAuthenticationHandler).userInfoEndpoint(userInfoEndpointConfig -> userInfoEndpointConfig.oidcUserService(oidcUserService())));
+        httpSecurity.oauth2Login(oAuth2LoginConfigurer -> oAuth2LoginConfigurer
+                .loginPage("/login")    // It disables the default login page generator of Spring (DefaultLoginPageGeneratingFilter) in order to we can use our custom login page
+                .successHandler(this.successfulAuthenticationHandler)
+                .userInfoEndpoint(userInfoEndpointConfig -> userInfoEndpointConfig.oidcUserService(oidcUserService())));
     }
 
 
@@ -165,6 +166,37 @@ public class OidcIdentityProviderModuleConfig extends BaseIdentityProviderModule
     @Bean
     public OidcUserService oidcUserService() {
         return new OidcUserService();
+    }
+
+    /**
+     * This method returns all active login urls that support OIDC login (Usually we support only one (keycloak) but technically
+     * it could be more (e.g: keycloak + google + facebook + any other OIDC provider)
+     * <p>
+     * This logic has been copied from {@link OAuth2LoginConfigurer#getLoginLinks()}
+     *
+     * @return a map of existing OIDC login links
+     */
+    @SuppressWarnings("unchecked")
+    public Map<String, String> getLoginLinks() {
+        Iterable<ClientRegistration> clientRegistrations = null;
+        ResolvableType type = ResolvableType.forInstance(this.clientRegistrationRepository).as(Iterable.class);
+        if (type != ResolvableType.NONE && ClientRegistration.class.isAssignableFrom(type.resolveGenerics()[0])) {
+            clientRegistrations = (Iterable<ClientRegistration>) this.clientRegistrationRepository;
+        }
+        if (clientRegistrations == null) {
+            return Collections.emptyMap();
+        }
+        String authorizationRequestBaseUri =
+                /* (this.authorizationEndpointConfig.authorizationRequestBaseUri != null) ? this.authorizationEndpointConfig.authorizationRequestBaseUri :*/
+                OAuth2AuthorizationRequestRedirectFilter.DEFAULT_AUTHORIZATION_REQUEST_BASE_URI;
+        Map<String, String> loginUrlToClientName = new HashMap<>();
+        clientRegistrations.forEach(registration -> {
+            if (AuthorizationGrantType.AUTHORIZATION_CODE.equals(registration.getAuthorizationGrantType())) {
+                String authorizationRequestUri = authorizationRequestBaseUri + "/" + registration.getRegistrationId();
+                loginUrlToClientName.put(authorizationRequestUri, registration.getClientName());
+            }
+        });
+        return loginUrlToClientName;
     }
 
     /**
