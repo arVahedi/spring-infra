@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 import springinfra.database.repository.BaseRepository;
 import springinfra.model.domain.BaseDomain;
+import springinfra.model.dto.GenericDto;
 import springinfra.model.dto.crud.BaseCrudDto;
 import springinfra.model.mapper.BaseCrudMapper;
 
@@ -34,6 +35,14 @@ public interface DefaultCrudService<I extends Number, E extends BaseDomain<I>, D
         E entity = find(id);
         getMapper().updateEntity(entity, request);
         return getRepository().save(entity);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    default E patch(I id, GenericDto genericDto) {
+        E entity = find(id);
+        D dto = getMapper().toDto(entity);
+        getMapper().patchDto(dto, genericDto.getProperties());
+        return update(id, dto);
     }
 
     @Transactional(rollbackFor = Exception.class)

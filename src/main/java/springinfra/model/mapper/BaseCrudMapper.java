@@ -4,8 +4,10 @@ import org.mapstruct.InheritConfiguration;
 import org.mapstruct.MappingTarget;
 import springinfra.model.domain.BaseDomain;
 import springinfra.model.dto.crud.BaseCrudDto;
+import springinfra.utility.mapping.ObjectMapperUtility;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * A parent for all crud mappers.
@@ -28,4 +30,8 @@ public interface BaseCrudMapper<E extends BaseDomain<?>, D extends BaseCrudDto<E
     List<E> toEntities(List<D> dtos);
 
     List<D> toDtos(List<E> entities);
+
+    default void patchDto(@MappingTarget D dto, Map<String, Object> properties) {
+        ObjectMapperUtility.convertMapToObject(properties, dto);
+    }
 }

@@ -41,7 +41,7 @@ public class RoleRestController extends BaseRestController {
 
     @Operation(summary = "Update role", description = "Updating an existing role")
     @PutMapping("/{id}")
-    public ResponseEntity<ResponseTemplate<RoleDto>> update(@PathVariable @Min(value = 0, message = "Minimum acceptable value for id is 1") int id,
+    public ResponseEntity<ResponseTemplate<RoleDto>> update(@PathVariable @Min(value = 1, message = "Minimum acceptable value for id is 1") int id,
                                                             @RequestBody @Validated(ValidationGroups.UpdateValidationGroup.class) RoleDto request) {
         Role role = this.roleService.update(id, request);
         return ResponseEntity.ok(new ResponseTemplate<>(HttpStatus.OK, this.roleMapper.toDto(role)));

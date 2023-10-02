@@ -41,7 +41,7 @@ public class CredentialRestController extends BaseRestController {
 
     @Operation(summary = "Update credential", description = "Updating an existing credential")
     @PutMapping("/{id}")
-    public ResponseEntity<ResponseTemplate<CredentialDto>> update(@PathVariable @Min(value = 0, message = "Minimum acceptable value for id is 1") long id,
+    public ResponseEntity<ResponseTemplate<CredentialDto>> update(@PathVariable @Min(value = 1, message = "Minimum acceptable value for id is 1") long id,
                                                                   @RequestBody @Validated(ValidationGroups.UpdateValidationGroup.class) CredentialDto request) {
         Credential credential = this.credentialService.update(id, request);
         return ResponseEntity.ok(new ResponseTemplate<>(HttpStatus.OK, this.credentialMapper.toDto(credential)));

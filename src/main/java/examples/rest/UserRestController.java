@@ -15,9 +15,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import springinfra.annotation.validation.ValidateAs;
 import springinfra.assets.ResponseTemplate;
 import springinfra.assets.ValidationGroups;
 import springinfra.controller.rest.BaseRestController;
+import springinfra.model.dto.GenericDto;
 
 import java.util.List;
 
@@ -41,9 +43,17 @@ public class UserRestController extends BaseRestController {
 
     @Operation(summary = "Update user", description = "Updating an exising user")
     @PutMapping("/{id}")
-    public ResponseEntity<ResponseTemplate<UserDto>> update(@PathVariable @Min(value = 0, message = "Minimum acceptable value for id is 1") long id,
+    public ResponseEntity<ResponseTemplate<UserDto>> update(@PathVariable @Min(value = 1, message = "Minimum acceptable value for id is 1") long id,
                                                             @RequestBody @Validated(ValidationGroups.UpdateValidationGroup.class) UserDto request) {
         User user = this.userService.update(id, request);
+        return ResponseEntity.ok(new ResponseTemplate<>(HttpStatus.OK, this.userMapper.toDto(user)));
+    }
+
+    @Operation(summary = "Patch user", description = "Partial updating an existing user")
+    @PatchMapping("/{id}")
+    public ResponseEntity<ResponseTemplate<UserDto>> patch(@PathVariable @Min(value = 1, message = "Minimum acceptable value for id is 1") long id,
+                                                           @RequestBody @ValidateAs(value = "examples.dto.crud.UserDto", withGroups = ValidationGroups.UpdateValidationGroup.class) GenericDto genericDto) {
+        User user = this.userService.patch(id, genericDto);
         return ResponseEntity.ok(new ResponseTemplate<>(HttpStatus.OK, this.userMapper.toDto(user)));
     }
 

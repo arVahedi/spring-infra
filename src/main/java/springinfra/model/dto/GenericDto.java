@@ -20,7 +20,7 @@ import java.util.Map;
 //@JsonSerialize(using = DTOSerializer.class)
 public class GenericDto {
 
-    private Map<String, Object> properties = new HashMap<>();
+    private final Map<String, Object> properties = new HashMap<>();
 
     public Object getProperty(String key) {
         return properties.get(key);
