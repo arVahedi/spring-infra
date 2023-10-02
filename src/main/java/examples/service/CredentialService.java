@@ -19,7 +19,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class CredentialService extends BaseService implements DefaultCrudService<Long, Credential, CredentialDto> {
 
-    private final PasswordEncoder passwordEncoder;
     @Getter
     private final CredentialRepository repository;
     @Getter
@@ -33,15 +32,12 @@ public class CredentialService extends BaseService implements DefaultCrudService
         return DefaultCrudService.super.save(request);
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public Credential update(Long id, CredentialDto request) {
         //Prevent duplicate usernames
         checkUsernameDuplication(request.getUsername(), Optional.of(id));
         return DefaultCrudService.super.update(id, request);
-    }
-
-    public void changePassword(Credential credential, String password) {
-        credential.setPassword(this.passwordEncoder.encode(password));
     }
 
     private void checkUsernameDuplication(String username, Optional<Long> excludedId) {

@@ -34,7 +34,8 @@ public abstract class CredentialMapper implements BaseCrudMapper<Credential, Cre
     public abstract Credential toEntity(CredentialDto dto);
 
     @Override
-    @Mapping(target = "password", ignore = true)
+//    @Mapping(target = "password", ignore = true)
+    @Mapping(target = "password", constant = Constant.PASSWORD_MASK)
     public abstract CredentialDto toDto(Credential entity);
 
     public List<CredentialRole> mapToCredentialRole(List<Integer> roleIdList) {

@@ -15,9 +15,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import springinfra.annotation.validation.ValidateAs;
 import springinfra.assets.ResponseTemplate;
 import springinfra.assets.ValidationGroups;
 import springinfra.controller.rest.BaseRestController;
+import springinfra.model.dto.GenericDto;
 
 import java.util.List;
 
@@ -44,6 +46,14 @@ public class CredentialRestController extends BaseRestController {
     public ResponseEntity<ResponseTemplate<CredentialDto>> update(@PathVariable @Min(value = 1, message = "Minimum acceptable value for id is 1") long id,
                                                                   @RequestBody @Validated(ValidationGroups.UpdateValidationGroup.class) CredentialDto request) {
         Credential credential = this.credentialService.update(id, request);
+        return ResponseEntity.ok(new ResponseTemplate<>(HttpStatus.OK, this.credentialMapper.toDto(credential)));
+    }
+
+    @Operation(summary = "Patch credential", description = "Partial updating an existing credential")
+    @PatchMapping("/{id}")
+    public ResponseEntity<ResponseTemplate<CredentialDto>> patch(@PathVariable @Min(value = 1, message = "Minimum acceptable value for id is 1") long id,
+                                                                 @RequestBody @ValidateAs(value = "examples.dto.crud.CredentialDto", withGroups = ValidationGroups.UpdateValidationGroup.class) GenericDto genericDto) {
+        Credential credential = this.credentialService.patch(id, genericDto);
         return ResponseEntity.ok(new ResponseTemplate<>(HttpStatus.OK, this.credentialMapper.toDto(credential)));
     }
 
