@@ -26,7 +26,7 @@ import java.util.List;
 @Slf4j
 @Tag(name = "Role API", description = "Role management API")
 @RequiredArgsConstructor
-@PreAuthorize("hasAuthority(T(springinfra.assets.AuthorityType).USER_MANAGEMENT_AUTHORITY)")
+@PreAuthorize("hasAuthority(T(springinfra.assets.AuthorityType).ROLE_MANAGEMENT_AUTHORITY)")
 public class RoleRestController extends BaseRestController {
 
     private final RoleService roleService;

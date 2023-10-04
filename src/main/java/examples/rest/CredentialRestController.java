@@ -15,12 +15,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import springinfra.annotation.FieldLevelSecurity;
 import springinfra.annotation.validation.ValidateAs;
 import springinfra.assets.ResponseTemplate;
 import springinfra.assets.ValidationGroups;
 import springinfra.controller.rest.BaseRestController;
 import springinfra.model.dto.GenericDto;
+import springinfra.utility.identity.IdentityUtility;
 
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -29,6 +32,7 @@ import java.util.List;
 @Tag(name = "Credential API", description = "Credential management API")
 @RequiredArgsConstructor
 @PreAuthorize("hasAuthority(T(springinfra.assets.AuthorityType).USER_MANAGEMENT_AUTHORITY)")
+@FieldLevelSecurity
 public class CredentialRestController extends BaseRestController {
 
     private final CredentialService credentialService;
@@ -66,6 +70,7 @@ public class CredentialRestController extends BaseRestController {
 
     @Operation(summary = "Find credential", description = "Retrieving an existing credential")
     @GetMapping("/{id}")
+    @FieldLevelSecurity
     public ResponseEntity<ResponseTemplate<CredentialDto>> find(@PathVariable @Min(value = 1, message = "Minimum acceptable value for id is 1") long id) {
         Credential credential = this.credentialService.find(id);
         return ResponseEntity.ok(new ResponseTemplate<>(HttpStatus.OK, this.credentialMapper.toDto(credential)));
@@ -75,5 +80,13 @@ public class CredentialRestController extends BaseRestController {
     @GetMapping
     public ResponseEntity<ResponseTemplate<List<CredentialDto>>> list(Pageable pageable) {
         return ResponseEntity.ok(new ResponseTemplate<>(HttpStatus.OK, this.credentialMapper.toDtos(this.credentialService.list(pageable))));
+    }
+
+    @Operation(summary = "Retrieve account info credential", description = "Retrieving the current user's credential")
+    @PreAuthorize("hasAuthority(T(springinfra.assets.AuthorityType).ACCOUNT_INFO_AUTHORITY)")
+    @GetMapping("/account-info")
+    public ResponseEntity<ResponseTemplate<CredentialDto>> accountInfo() {
+        String username = IdentityUtility.getUsername().orElseThrow();
+        return ResponseEntity.ok(new ResponseTemplate<>(HttpStatus.OK, this.credentialMapper.toDto(this.credentialService.findByUsername(username))));
     }
 }

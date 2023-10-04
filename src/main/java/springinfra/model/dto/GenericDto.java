@@ -15,8 +15,8 @@ import java.util.Map;
  * from other DTO classes. it means the {@link #properties} filed will not be shown in the generated json, only inner key values will be exported.
  */
 
-@JsonIdentityInfo(generator = JSOGGenerator.class)
 @JsonInclude(JsonInclude.Include.NON_NULL)
+//@JsonIdentityInfo(generator = JSOGGenerator.class)
 //@JsonSerialize(using = DTOSerializer.class)
 public class GenericDto {
 

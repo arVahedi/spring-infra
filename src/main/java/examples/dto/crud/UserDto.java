@@ -7,8 +7,11 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.Setter;
+import springinfra.annotation.validation.SecureProperty;
 import springinfra.assets.Regex;
 import springinfra.model.dto.crud.BaseCrudDto;
+
+import static springinfra.assets.AuthorityType.ROLE_MANAGEMENT_AUTHORITY;
 
 @Getter
 @Setter
@@ -21,6 +24,7 @@ public class UserDto extends BaseCrudDto<User, Long> {
     private String email;
     @NotBlank(message = "Phone number is required")
     @Pattern(regexp = Regex.PHONE_NUMBER, message = "Phone number format is wrong")
+    @SecureProperty(accessibleFor = ROLE_MANAGEMENT_AUTHORITY, message = "phone property doesn't exist")
     private String phone;
     @NotNull(message = "status is required")
     private UserStatus status;

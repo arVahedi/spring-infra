@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import springinfra.annotation.validation.GroupBasedValidation;
+import springinfra.annotation.validation.SecureProperty;
 import springinfra.assets.ValidationGroups;
 import springinfra.model.dto.crud.BaseCrudDto;
 
@@ -14,6 +15,7 @@ import java.beans.Transient;
 import java.util.ArrayList;
 import java.util.List;
 
+import static springinfra.assets.AuthorityType.ROLE_MANAGEMENT_AUTHORITY;
 import static springinfra.assets.Constant.PASSWORD_MASK;
 
 @Getter
@@ -26,6 +28,7 @@ public class CredentialDto extends BaseCrudDto<Credential, Long> {
     @GroupBasedValidation(ValidationGroups.DynamicCrudValidationGroup.class)
     @NotNull(message = "user property is required")
     private UserDto user;
+    @SecureProperty(accessibleFor = ROLE_MANAGEMENT_AUTHORITY, message = "roles property doesn't exist")
     private List<Integer> roles = new ArrayList<>();
 
     @Transient

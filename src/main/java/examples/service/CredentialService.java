@@ -4,15 +4,16 @@ import examples.domain.Credential;
 import examples.dto.crud.CredentialDto;
 import examples.mapper.CredentialMapper;
 import examples.repository.CredentialRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import springinfra.exception.UsernameAlreadyExistsException;
 import springinfra.service.BaseService;
 import springinfra.service.DefaultCrudService;
 
+import java.text.MessageFormat;
 import java.util.Optional;
 
 @Service
@@ -38,6 +39,10 @@ public class CredentialService extends BaseService implements DefaultCrudService
         //Prevent duplicate usernames
         checkUsernameDuplication(request.getUsername(), Optional.of(id));
         return DefaultCrudService.super.update(id, request);
+    }
+
+    public Credential findByUsername(String username) {
+        return this.repository.findByUsername((username)).orElseThrow(() -> new EntityNotFoundException(MessageFormat.format("The username [{0}] does not exist", username)));
     }
 
     private void checkUsernameDuplication(String username, Optional<Long> excludedId) {
