@@ -24,7 +24,6 @@ public class UserDto extends BaseCrudDto<User, Long> {
     private String email;
     @NotBlank(message = "Phone number is required")
     @Pattern(regexp = Regex.PHONE_NUMBER, message = "Phone number format is wrong")
-    @SecureProperty(accessibleFor = ROLE_MANAGEMENT_AUTHORITY, message = "phone property doesn't exist")
     private String phone;
     @NotNull(message = "status is required")
     private UserStatus status;

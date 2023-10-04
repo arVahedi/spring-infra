@@ -21,6 +21,10 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.*;
 
+/**
+ * @see SecureProperty
+ */
+
 @Slf4j
 @Aspect
 @Component
@@ -102,6 +106,7 @@ public class FieldLevelSecurityAspect implements BaseAspect {
                     filteredValuesPerKey.add(value);
                 }
             }
+
             if (entryValueList.isEmpty()) {
                 Optional<Method> getterMethod = getRespectiveGetterMethod(object.getClass(), field);
                 if (field.isAnnotationPresent(SecureProperty.class) || (getterMethod.isPresent() && getterMethod.get().isAnnotationPresent(SecureProperty.class))) {
