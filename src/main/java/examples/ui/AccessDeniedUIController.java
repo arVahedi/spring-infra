@@ -5,13 +5,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-import springinfra.controller.ui.UIController;
+import springinfra.controller.ui.DefaultUIController;
 
 import java.util.Map;
 
 @Controller
 @RequestMapping(value = {"/403"})
-public class AccessDeniedUIController implements UIController {
+public class AccessDeniedUIController extends DefaultUIController {
 
     public static final String VIEW_PAGE = "/403.jsp";
 

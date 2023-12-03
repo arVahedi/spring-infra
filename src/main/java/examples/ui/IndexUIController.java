@@ -2,13 +2,13 @@ package examples.ui;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import springinfra.controller.ui.UIController;
+import springinfra.controller.ui.DefaultUIController;
 
 import java.util.Map;
 
 @Controller
 @RequestMapping(value = {"/index", "/"})
-public class IndexUIController implements UIController {
+public class IndexUIController extends DefaultUIController {
 
     public static final String VIEW_PAGE = "index.jsp";
 

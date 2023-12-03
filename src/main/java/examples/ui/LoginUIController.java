@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import springinfra.configuration.security.idp.BaseIdentityProviderModuleConfig;
 import springinfra.configuration.security.idp.BuiltInIdentityProviderConfig;
 import springinfra.configuration.security.idp.OidcIdentityProviderModuleConfig;
-import springinfra.controller.ui.UIController;
+import springinfra.controller.ui.DefaultUIController;
 import springinfra.utility.identity.IdentityUtility;
 
 import java.text.MessageFormat;
@@ -16,7 +16,7 @@ import java.util.Optional;
 @Controller
 @RequestMapping(value = {"/login"})
 @RequiredArgsConstructor
-public class LoginUIController implements UIController {
+public class LoginUIController extends DefaultUIController {
 
     public static final String BUILT_IN_LOGIN_JSP = "builtInLogin.jsp";
     public static final String OIDC_LOGIN_JSP = "oidcLogin.jsp";
