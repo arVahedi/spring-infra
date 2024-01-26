@@ -30,6 +30,11 @@ public class ObjectMapperUtility {
                 String getterMethodName = "get" + Character.toUpperCase(key.charAt(0)) + key.substring(1);
                 Optional<Method> setterMethod = Arrays.stream(destinationMethods).filter(method -> method.getName().equals(setterMethodName)).findFirst();
                 Optional<Method> getterMethod = Arrays.stream(destinationMethods).filter(method -> method.getName().equals(getterMethodName)).findFirst();
+                if (getterMethod.isEmpty()) {
+                    //It might be a boolean property, so we try to find its getter method by "is" prefix
+                    String booleanGetterMethodName = "is" + Character.toUpperCase(key.charAt(0)) + key.substring(1);
+                    getterMethod = Arrays.stream(destinationMethods).filter(method -> method.getName().equals(booleanGetterMethodName)).findFirst();
+                }
 
                 if (getterMethod.isPresent() && setterMethod.isPresent()) {
                     if (!ignoreAnnotationsList.isEmpty()) {
