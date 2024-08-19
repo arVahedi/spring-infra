@@ -5,7 +5,7 @@ import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
+import springinfra.security.oauth2.EnhancedJwtAuthenticationToken;
 
 import java.util.Optional;
 
@@ -34,7 +34,7 @@ public class IdentityUtility {
     public Optional<String> getUserToken() {
         if (isAuthenticated()) {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            if (authentication instanceof JwtAuthenticationToken jwtAuthenticationToken) {
+            if (authentication instanceof EnhancedJwtAuthenticationToken jwtAuthenticationToken) {
                 return Optional.of(jwtAuthenticationToken.getToken().getTokenValue());
             }
         }
