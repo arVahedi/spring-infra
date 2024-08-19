@@ -23,7 +23,6 @@ import springinfra.controller.rest.BaseRestController;
 import springinfra.model.dto.GenericDto;
 import springinfra.utility.identity.IdentityUtility;
 
-import java.util.Collections;
 import java.util.List;
 
 @RestController

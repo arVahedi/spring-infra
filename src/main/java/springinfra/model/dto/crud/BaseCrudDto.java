@@ -23,7 +23,7 @@ import java.time.Instant;
 @Getter
 @Setter
 public abstract class BaseCrudDto<E extends BaseDomain<I>, I extends Number> extends BaseDto {
-    @Null(message = "id should be null for insert operation", groups = ValidationGroups.InsertValidationGroup.class)
+    @Null(message = "id should be null for insert/update operation (use path variable instead)")
     private I id;
     @NotNull(message = "version is required", groups = ValidationGroups.UpdateValidationGroup.class)
     @Null(message = "version should be null for insert operation", groups = ValidationGroups.InsertValidationGroup.class)
