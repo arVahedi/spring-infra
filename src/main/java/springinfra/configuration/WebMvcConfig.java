@@ -1,7 +1,7 @@
 package springinfra.configuration;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.web.servlet.filter.OrderedRequestContextFilter;
+import org.springframework.boot.servlet.filter.OrderedRequestContextFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;

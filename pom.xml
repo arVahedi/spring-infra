@@ -7,7 +7,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.1.2</version>
+        <version>4.0.2</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -19,7 +19,7 @@
     <packaging>war</packaging>
 
     <properties>
-        <java.version>17</java.version>
+        <java.version>21</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <log4j2.version>2.20.0</log4j2.version>
@@ -35,6 +35,11 @@
                     <artifactId>spring-boot-starter-logging</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-restclient</artifactId>
         </dependency>
 
         <dependency>
@@ -84,7 +89,7 @@
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-taglibs</artifactId>
-            <version>6.1.1</version>
+<!--            <version>6.1.1</version>-->
         </dependency>
         <dependency>
             <groupId>org.springframework.security</groupId>
@@ -109,7 +114,7 @@
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-aop</artifactId>
+            <artifactId>spring-boot-starter-aspectj</artifactId>
         </dependency>
         <dependency>
             <groupId>org.aspectj</groupId>
@@ -139,14 +144,13 @@
         <dependency>
             <groupId>org.apache.tomcat.embed</groupId>
             <artifactId>tomcat-embed-jasper</artifactId>
-            <version>10.1.10</version>
+<!--            <version>10.1.10</version>-->
         </dependency>
 
         <!--Auditing-->
         <dependency>
-            <groupId>org.hibernate</groupId>
+            <groupId>org.hibernate.orm</groupId>
             <artifactId>hibernate-envers</artifactId>
-            <version>6.2.6.Final</version>
         </dependency>
 
         <!--Bouncy Castle-->
@@ -172,7 +176,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.28</version>
+            <version>1.18.42</version>
             <scope>provided</scope>
         </dependency>
 
@@ -187,7 +191,7 @@
         <dependency>
             <groupId>com.mysql</groupId>
             <artifactId>mysql-connector-j</artifactId>
-            <version>8.0.33</version>
+<!--            <version>8.0.33</version>-->
         </dependency>
 
         <!--Apache Commons Codec-->
@@ -227,12 +231,12 @@
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
-            <version>9.19.4</version>
+<!--            <version>9.19.4</version>-->
         </dependency>
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-mysql</artifactId>
-            <version>9.19.4</version>
+<!--            <version>9.19.4</version>-->
         </dependency>
 
         <!--jose4j supporting jwt-->
@@ -250,6 +254,21 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.13.0</version>
+                <configuration>
+                    <release>21</release>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>1.18.42</version>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

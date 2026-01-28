@@ -5,13 +5,13 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.Where;
+import org.hibernate.annotations.SQLRestriction;
 import org.hibernate.envers.Audited;
 import springinfra.model.domain.LogicalDeletableDomain;
 
 @Entity
 @Table(name = "user")
-@Where(clause = "deleted=false")
+@SQLRestriction("deleted = false")
 @NoArgsConstructor
 @Audited
 @Getter
