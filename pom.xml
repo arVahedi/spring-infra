@@ -89,7 +89,6 @@
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-taglibs</artifactId>
-<!--            <version>6.1.1</version>-->
         </dependency>
         <dependency>
             <groupId>org.springframework.security</groupId>
@@ -119,19 +118,19 @@
         <dependency>
             <groupId>org.aspectj</groupId>
             <artifactId>aspectjweaver</artifactId>
-            <version>1.9.19</version>
+            <version>1.9.25.1</version>
         </dependency>
 
         <!--MapStruct-->
         <dependency>
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct</artifactId>
-            <version>1.5.5.Final</version>
+            <version>1.6.3</version>
         </dependency>
         <dependency>
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct-processor</artifactId>
-            <version>1.5.5.Final</version>
+            <version>1.6.3</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -144,7 +143,6 @@
         <dependency>
             <groupId>org.apache.tomcat.embed</groupId>
             <artifactId>tomcat-embed-jasper</artifactId>
-<!--            <version>10.1.10</version>-->
         </dependency>
 
         <!--Auditing-->
@@ -156,20 +154,22 @@
         <!--Bouncy Castle-->
         <dependency>
             <groupId>org.bouncycastle</groupId>
-            <artifactId>bcprov-jdk15on</artifactId>
-            <version>1.69</version>
+            <artifactId>bcprov-jdk18on</artifactId>
+            <version>1.83</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.bouncycastle</groupId>
-            <artifactId>bcpkix-jdk15on</artifactId>
-            <version>1.64</version>
+            <artifactId>bcpkix-jdk18on</artifactId>
+            <version>1.83</version>
+            <scope>compile</scope>
         </dependency>
 
         <!--Spring Doc-->
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-            <version>2.2.0</version>
+            <version>3.0.1</version>
         </dependency>
 
         <!--Lombok-->
@@ -184,40 +184,39 @@
         <dependency>
             <groupId>com.voodoodyne.jackson.jsog</groupId>
             <artifactId>jackson-jsog</artifactId>
-            <version>1.1.1</version>
+            <version>1.1.2</version>
         </dependency>
 
         <!--MySql jdbc driver-->
         <dependency>
             <groupId>com.mysql</groupId>
             <artifactId>mysql-connector-j</artifactId>
-<!--            <version>8.0.33</version>-->
         </dependency>
 
         <!--Apache Commons Codec-->
         <dependency>
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
-            <version>1.14</version>
+            <version>1.20.0</version>
         </dependency>
 
         <!--ICU4J-->
         <dependency>
             <groupId>com.ibm.icu</groupId>
             <artifactId>icu4j</artifactId>
-            <version>67.1</version>
+            <version>78.2</version>
         </dependency>
 
         <!--JSTL-->
         <dependency>
             <groupId>jakarta.servlet.jsp.jstl</groupId>
             <artifactId>jakarta.servlet.jsp.jstl-api</artifactId>
-            <version>3.0.0</version>
+            <version>3.0.2</version>
         </dependency>
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>glassfish-jstl</artifactId>
-            <version>11.0.15</version>
+            <version>11.0.26</version>
         </dependency>
 
         <!--perf4j-->
@@ -231,19 +230,17 @@
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
-<!--            <version>9.19.4</version>-->
         </dependency>
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-mysql</artifactId>
-<!--            <version>9.19.4</version>-->
         </dependency>
 
         <!--jose4j supporting jwt-->
         <dependency>
             <groupId>org.bitbucket.b_c</groupId>
             <artifactId>jose4j</artifactId>
-            <version>0.9.3</version>
+            <version>0.9.6</version>
         </dependency>
 
     </dependencies>
