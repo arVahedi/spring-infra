@@ -5,8 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
-import springinfra.assets.AuthorityType;
-import springinfra.model.domain.BaseDomain;
+import org.springinfra.assets.AuthorityType;
+import org.springinfra.model.domain.BaseDomain;
 
 import java.util.List;
 

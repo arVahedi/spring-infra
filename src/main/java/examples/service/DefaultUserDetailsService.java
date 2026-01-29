@@ -10,7 +10,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import springinfra.service.BaseService;
+import org.springinfra.service.BaseService;
 
 import java.util.ArrayList;
 import java.util.Collection;

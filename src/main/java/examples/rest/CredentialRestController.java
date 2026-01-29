@@ -15,13 +15,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import springinfra.annotation.FieldLevelSecurity;
-import springinfra.annotation.validation.ValidateAs;
-import springinfra.assets.ResponseTemplate;
-import springinfra.assets.ValidationGroups;
-import springinfra.controller.rest.BaseRestController;
-import springinfra.model.dto.GenericDto;
-import springinfra.utility.identity.IdentityUtility;
+import org.springinfra.annotation.FieldLevelSecurity;
+import org.springinfra.annotation.validation.ValidateAs;
+import org.springinfra.assets.ResponseTemplate;
+import org.springinfra.assets.ValidationGroups;
+import org.springinfra.controller.rest.BaseRestController;
+import org.springinfra.model.dto.GenericDto;
+import org.springinfra.utility.identity.IdentityUtility;
 
 import java.util.List;
 
@@ -30,7 +30,7 @@ import java.util.List;
 @Slf4j
 @Tag(name = "Credential API", description = "Credential management API")
 @RequiredArgsConstructor
-@PreAuthorize("hasAuthority(T(springinfra.assets.AuthorityType).USER_MANAGEMENT_AUTHORITY)")
+@PreAuthorize("hasAuthority(T(org.springinfra.assets.AuthorityType).USER_MANAGEMENT_AUTHORITY)")
 @FieldLevelSecurity
 public class CredentialRestController extends BaseRestController {
 
@@ -82,7 +82,7 @@ public class CredentialRestController extends BaseRestController {
     }
 
     @Operation(summary = "Retrieve account info credential", description = "Retrieving the current user's credential")
-    @PreAuthorize("hasAuthority(T(springinfra.assets.AuthorityType).ACCOUNT_INFO_AUTHORITY)")
+    @PreAuthorize("hasAuthority(T(org.springinfra.assets.AuthorityType).ACCOUNT_INFO_AUTHORITY)")
     @GetMapping("/account-info")
     public ResponseEntity<ResponseTemplate<CredentialDto>> accountInfo() {
         String username = IdentityUtility.getUsername().orElseThrow();

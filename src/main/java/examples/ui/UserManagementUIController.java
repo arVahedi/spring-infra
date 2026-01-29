@@ -6,14 +6,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import springinfra.controller.ui.DefaultUIController;
+import org.springinfra.controller.ui.DefaultUIController;
 
 import java.util.List;
 import java.util.Map;
 
 @Controller
 @RequestMapping(value = {"/admin/user-management"})
-@PreAuthorize("hasAuthority(T(springinfra.assets.AuthorityType).USER_MANAGEMENT_AUTHORITY)")
+@PreAuthorize("hasAuthority(T(org.springinfra.assets.AuthorityType).USER_MANAGEMENT_AUTHORITY)")
 @RequiredArgsConstructor
 public class UserManagementUIController extends DefaultUIController {
 

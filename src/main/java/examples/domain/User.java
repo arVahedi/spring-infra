@@ -7,10 +7,10 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.SQLRestriction;
 import org.hibernate.envers.Audited;
-import springinfra.model.domain.LogicalDeletableDomain;
+import org.springinfra.model.domain.LogicalDeletableDomain;
 
 @Entity
-@Table(name = "user")
+@Table(name = "users")
 @SQLRestriction("deleted = false")
 @NoArgsConstructor
 @Audited

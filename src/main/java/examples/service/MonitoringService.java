@@ -4,7 +4,7 @@ import io.micrometer.core.instrument.MeterRegistry;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import springinfra.service.BaseService;
+import org.springinfra.service.BaseService;
 
 @Slf4j
 @Getter

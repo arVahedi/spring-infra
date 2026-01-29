@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.RelationTargetAuditMode;
-import springinfra.model.domain.BaseDomain;
+import org.springinfra.model.domain.BaseDomain;
 
 @Getter
 @Setter

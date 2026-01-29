@@ -7,11 +7,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.Setter;
-import springinfra.annotation.validation.SecureProperty;
-import springinfra.assets.Regex;
-import springinfra.model.dto.crud.BaseCrudDto;
-
-import static springinfra.assets.AuthorityType.ROLE_MANAGEMENT_AUTHORITY;
+import org.springinfra.assets.Regex;
+import org.springinfra.model.dto.crud.BaseCrudDto;
 
 @Getter
 @Setter

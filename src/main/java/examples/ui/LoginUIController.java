@@ -3,11 +3,11 @@ package examples.ui;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import springinfra.configuration.security.idp.BaseIdentityProviderModuleConfig;
-import springinfra.configuration.security.idp.BuiltInIdentityProviderConfig;
-import springinfra.configuration.security.idp.OidcIdentityProviderModuleConfig;
-import springinfra.controller.ui.DefaultUIController;
-import springinfra.utility.identity.IdentityUtility;
+import org.springinfra.configuration.security.idp.BaseIdentityProviderModuleConfig;
+import org.springinfra.configuration.security.idp.BuiltInIdentityProviderConfig;
+import org.springinfra.configuration.security.idp.OidcIdentityProviderModuleConfig;
+import org.springinfra.controller.ui.DefaultUIController;
+import org.springinfra.utility.identity.IdentityUtility;
 
 import java.text.MessageFormat;
 import java.util.Map;

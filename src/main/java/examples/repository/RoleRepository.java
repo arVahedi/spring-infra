@@ -3,7 +3,7 @@ package examples.repository;
 import examples.domain.Role;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import springinfra.database.repository.BaseRepository;
+import org.springinfra.database.repository.BaseRepository;
 
 import java.util.Optional;
 

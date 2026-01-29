@@ -70,7 +70,7 @@ create table role_authority_audit_log
     primary key (rev, role_id, authority)
 ) engine = InnoDB;
 
-create table user
+create table users
 (
     id                 bigint not null auto_increment,
     insert_date        datetime,
@@ -99,7 +99,7 @@ create table user_audit_log
 ) engine = InnoDB;
 
 alter table credential
-    add constraint FKpg7bdnqxpyhrt7f8soul9y7ne foreign key (user_id) references user (id);
+    add constraint FKpg7bdnqxpyhrt7f8soul9y7ne foreign key (user_id) references users (id);
 alter table credential_role
     add constraint FKhtbtll4hfbsdcw3y6u7a42cr0 foreign key (credential_id) references credential (id);
 alter table credential_role

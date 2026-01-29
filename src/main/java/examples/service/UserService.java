@@ -7,8 +7,8 @@ import examples.repository.UserRepository;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import springinfra.service.BaseService;
-import springinfra.service.DefaultCrudService;
+import org.springinfra.service.BaseService;
+import org.springinfra.service.DefaultCrudService;
 
 @Service
 @RequiredArgsConstructor

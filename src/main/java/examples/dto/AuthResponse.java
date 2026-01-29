@@ -3,7 +3,7 @@ package examples.dto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-import springinfra.model.dto.BaseDto;
+import org.springinfra.model.dto.BaseDto;
 
 @Getter
 @Setter

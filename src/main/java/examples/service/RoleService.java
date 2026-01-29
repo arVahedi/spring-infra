@@ -7,9 +7,9 @@ import examples.repository.RoleRepository;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import springinfra.exception.UniqueConstraintAlreadyExistsException;
-import springinfra.service.BaseService;
-import springinfra.service.DefaultCrudService;
+import org.springinfra.exception.UniqueConstraintAlreadyExistsException;
+import org.springinfra.service.BaseService;
+import org.springinfra.service.DefaultCrudService;
 
 import java.text.MessageFormat;
 import java.util.Optional;

@@ -2,7 +2,7 @@ package examples.ui;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import springinfra.controller.ui.DefaultUIController;
+import org.springinfra.controller.ui.DefaultUIController;
 
 import java.util.Map;
 
