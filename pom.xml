@@ -125,6 +125,12 @@
             <version>1.9.25.1</version>
         </dependency>
 
+        <!--flywaydb-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-flyway</artifactId>
+        </dependency>
+
         <!--MapStruct-->
         <dependency>
             <groupId>org.mapstruct</groupId>
@@ -228,16 +234,6 @@
             <groupId>org.perf4j</groupId>
             <artifactId>perf4j</artifactId>
             <version>0.9.16</version>
-        </dependency>
-
-        <!--flywaydb-->
-        <dependency>
-            <groupId>org.flywaydb</groupId>
-            <artifactId>flyway-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.flywaydb</groupId>
-            <artifactId>flyway-mysql</artifactId>
         </dependency>
 
         <!--jose4j supporting jwt-->

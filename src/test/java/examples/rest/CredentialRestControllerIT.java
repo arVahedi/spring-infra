@@ -1,6 +1,7 @@
 package examples.rest;
 
 import annotation.IntegrationTest;
+import annotation.WithMockJwt;
 import examples.assets.UserStatus;
 import examples.domain.Credential;
 import examples.domain.User;
@@ -8,16 +9,10 @@ import examples.dto.crud.CredentialDto;
 import examples.dto.crud.UserDto;
 import examples.repository.CredentialRepository;
 import lombok.extern.slf4j.Slf4j;
-import annotation.WithMockJwt;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.transaction.annotation.Transactional;
-import org.springinfra.SpringInfraApplication;
 import org.springinfra.assets.AuthorityType;
 import org.springinfra.controller.rest.BaseRestController;
 import tools.jackson.databind.ObjectMapper;
@@ -30,10 +25,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @Slf4j
 @IntegrationTest
-@SpringBootTest(classes = SpringInfraApplication.class)
-@AutoConfigureMockMvc
-@ActiveProfiles("test")
-@Transactional
 @WithMockJwt(username = "admin", authorities = {AuthorityType.StringFormat.USER_MANAGEMENT_AUTHORITY, AuthorityType.StringFormat.ROLE_MANAGEMENT_AUTHORITY})
 class CredentialRestControllerIT {
 
@@ -192,7 +183,7 @@ class CredentialRestControllerIT {
         credential.setUsername(username);
         credential.setPassword("hashed");
         credential.setUser(buildUserEntity(username));
-        return this.credentialRepository.saveAndFlush(credential);
+        return this.credentialRepository.save(credential);
     }
 
     private User buildUserEntity(String usernameSeed) {

@@ -84,7 +84,7 @@ create table users
     primary key (id)
 ) engine = InnoDB;
 
-create table user_audit_log
+create table users_audit_log
 (
     id         bigint  not null,
     rev        integer not null,
@@ -112,5 +112,5 @@ alter table role_authority
     add constraint FK2052966dco7y9f97s1a824bj1 foreign key (role_id) references role (id);
 alter table role_authority_audit_log
     add constraint FK779y5rfjpjkti53ndh4hfqykd foreign key (rev) references revision_info (id);
-alter table user_audit_log
+alter table users_audit_log
     add constraint FK653p67p17jotfw2p6xsuee8bp foreign key (rev) references revision_info (id);
