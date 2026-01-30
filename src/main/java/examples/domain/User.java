@@ -5,18 +5,18 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.SQLRestriction;
+import org.hibernate.annotations.SoftDelete;
 import org.hibernate.envers.Audited;
-import org.springinfra.model.domain.LogicalDeletableDomain;
+import org.springinfra.model.domain.BaseDomain;
 
 @Entity
 @Table(name = "users")
-@SQLRestriction("deleted = false")
 @NoArgsConstructor
 @Audited
 @Getter
 @Setter
-public class User extends LogicalDeletableDomain<Long> {
+@SoftDelete
+public class User extends BaseDomain<Long> {
     @Basic
     @Column(name = "first_name")
     private String firstName;

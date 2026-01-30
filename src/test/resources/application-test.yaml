@@ -16,8 +16,8 @@ security:
         - "admin;$argon2id$v=19$m=4096,t=3,p=1$QnVwdGpUVmR3OUtHV29Pdw$QDBYFDfx9ePp6PwjP95woA;USER_MANAGEMENT_AUTHORITY;ACCOUNT_INFO_AUTHORITY;ROLE_MANAGEMENT_AUTHORITY"
         - "user;$argon2id$v=19$m=4096,t=3,p=1$QnVwdGpUVmR3OUtHV29Pdw$QDBYFDfx9ePp6PwjP95woA;ACCOUNT_INFO_AUTHORITY"
 
-# logging:
-#   level:
-#     org.hibernate.SQL: DEBUG
-#     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
-#     org.hibernate.stat: DEBUG
+  logging:
+    level:
+      org.hibernate.SQL: DEBUG
+      org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+      org.hibernate.stat: DEBUG
