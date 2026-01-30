@@ -18,7 +18,7 @@ import org.springinfra.model.dto.crud.BaseCrudDto;
 public interface GlobalMapperConfig extends BaseConfig {
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "insertDate", ignore = true)
+    @Mapping(target = "createdDate", ignore = true)
     @Mapping(target = "lastModifiedDate", ignore = true)
     BaseDomain<?> anyCrudDtoToDomainObjectConfiguration(BaseCrudDto<?, ?> dto);
 }

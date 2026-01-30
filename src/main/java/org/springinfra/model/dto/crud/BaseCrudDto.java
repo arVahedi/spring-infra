@@ -28,8 +28,8 @@ public abstract class BaseCrudDto<E extends BaseDomain<I>, I extends Number> ext
     @NotNull(message = "version is required", groups = ValidationGroups.UpdateValidationGroup.class)
     @Null(message = "version should be null for insert operation", groups = ValidationGroups.InsertValidationGroup.class)
     private Long version;
-    @Null(message = "insertDate is not allowed to have value, it should be null")
-    private Instant insertDate;
+    @Null(message = "createdDate is not allowed to have value, it should be null")
+    private Instant createdDate;
     @Null(message = "lastModifiedDate is not allowed to have value, it should be null")
     private Instant lastModifiedDate;
 }
