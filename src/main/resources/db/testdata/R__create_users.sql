@@ -1,7 +1,7 @@
-INSERT IGNORE INTO user (id, first_name, last_name, email, status, deleted, insert_date) VALUE (1, 'admin', '', 'admin@spring-infra.project', 1, 0, NOW());
+INSERT IGNORE INTO users (id, first_name, last_name, email, status, deleted, insert_date) VALUE (1, 'admin', '', 'admin@spring-infra.project', 1, 0, NOW());
 INSERT IGNORE INTO credential (id, user_id, username, password, insert_date) VALUE (1, 1, 'admin', '$argon2id$v=19$m=4096,t=3,p=1$QnVwdGpUVmR3OUtHV29Pdw$QDBYFDfx9ePp6PwjP95woA', NOW());
 
-INSERT IGNORE INTO user (id, first_name, last_name, email, status, deleted, insert_date) VALUE (2, 'user', '', 'user@spring-infra.project', 1, 0, NOW());
+INSERT IGNORE INTO users (id, first_name, last_name, email, status, deleted, insert_date) VALUE (2, 'user', '', 'user@spring-infra.project', 1, 0, NOW());
 INSERT IGNORE INTO credential (id, user_id, username, password, insert_date) VALUE (2, 2, 'user', '$argon2id$v=19$m=4096,t=3,p=1$QnVwdGpUVmR3OUtHV29Pdw$QDBYFDfx9ePp6PwjP95woA', NOW());
 
 INSERT IGNORE INTO role (id, name, insert_date) VALUES (1, 'Administration', NOW()), (2, 'Standard User', NOW());

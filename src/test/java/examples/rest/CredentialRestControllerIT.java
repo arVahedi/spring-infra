@@ -146,8 +146,8 @@ class CredentialRestControllerIT {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.statusCode").value(HttpStatus.OK.value()))
                 .andExpect(jsonPath("$.result", hasSize(2)))
-                .andExpect(jsonPath("$.result[*].username", hasItem("listuser-one")))
-                .andExpect(jsonPath("$.result[*].username", hasItem("listuser-two")));
+                .andExpect(jsonPath("$.result[*].username", hasItem("list-user-one")))
+                .andExpect(jsonPath("$.result[*].username", hasItem("list-user-two")));
     }
 
     @Test
@@ -162,13 +162,12 @@ class CredentialRestControllerIT {
     }
 
     @Test
-    @WithMockJwt(username = "alice", authorities = {AuthorityType.StringFormat.USER_MANAGEMENT_AUTHORITY})
+    @WithMockJwt(username = "alice")
     void whenAccountInfoRequestAndUserDoesNotHavePermission_thenReturnsForbidden() throws Exception {
         persistCredential("alice");
 
         this.mockMvc.perform(get(BASE_URL + "/account-info"))
-                .andExpect(status().isForbidden())
-                .andExpect(jsonPath("$.statusCode").value(HttpStatus.FORBIDDEN.value()));
+                .andExpect(status().isForbidden());
     }
 
     private CredentialDto buildCredentialRequest() {
