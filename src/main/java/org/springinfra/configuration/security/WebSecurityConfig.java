@@ -56,7 +56,7 @@ public class WebSecurityConfig implements BaseConfig {
                 .sessionManagement(httpSecuritySessionManagementConfigurer -> httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS)); // No session will be created or used by Spring Security.
 
         httpSecurity.authorizeHttpRequests(authorizationManagerRequestMatcherRegistry -> authorizationManagerRequestMatcherRegistry
-                .requestMatchers(EndpointRequest.toAnyEndpoint()).hasAuthority(MONITORING_AUTHORITY)        // For accessing to all actuator endpoints this specific authority will be needed
+//                .requestMatchers(EndpointRequest.toAnyEndpoint()).hasAuthority(MONITORING_AUTHORITY)        // For accessing to all actuator endpoints this specific authority will be needed (if management.endpoints.web.base-path is set to /monitoring rather than default (/actuator))
                 .anyRequest().permitAll());     // We permit all requests here to check those required authorities via prePostAnnotation on the class or method level. If we remove this line, those annotations won't work and all requests will be blocked regardless of their authorities
 
         // We disabled the default logout filter because we want to change its order to be after the authentication filter to be able to access the Authentication object in our LogoutSuccessfulHandler(s)
