@@ -21,7 +21,7 @@ services:
     ports:
       - '5432:5432'
     volumes:
-      - spring-infra-volume_postgres:/var/lib/postgresql/data
+      - spring-infra-volume_postgres:/var/lib/postgresql
 
   keycloak:
     image: quay.io/keycloak/keycloak:26.5.2
