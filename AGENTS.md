@@ -1,10 +1,11 @@
 # Repository Guidelines
 
 ## Project Structure & Module Organization
-- `src/main/java/springinfra`: core Spring Boot application code (aspects, services, utilities, security, database helpers).
+- `src/main/java/org/springinfra`: core Spring Boot infrastructure (security, web, data, utilities).
+- `src/main/java/examples`: sample domain, services, mappers, and controllers.
 - `src/main/resources`: configuration and resource files; properties are filtered during the Maven build.
 - `src/main/webapp`: JSP/static web assets (WAR packaging).
-- `src/test/java`: test utilities and test classes, organized in mirror packages.
+- `src/test/java`: test utilities, annotations, and tests (mirror package layout).
 - `target`: build output (generated, do not edit).
 
 ## Build, Test, and Development Commands
@@ -21,10 +22,12 @@
 - Keep constants in `springinfra.assets` and follow existing naming (UPPER_SNAKE_CASE).
 
 ## Testing Guidelines
-- Tests live in `src/test/java` and should be named `*Test` (JUnit 6, Mockito 5).
-- Unit tests files should follow naming convention like `*Test.java` and integration test should follow `*IT.java`.
-- Unit / Integration tests should share the same mirror package; for example, controllers in `examples.rest` use tests in `examples.rest`.
-- Prefer Spring Boot testing utilities for integration tests; keep unit tests fast and isolated.
+- Tests live in `src/test/java` and should be named `*Test` (JUnit 6, Mockito 5). Integration tests use `*IT.java`.
+- Use `@IntegrationTest` for full-context tests (it wires `@SpringBootTest`, `@AutoConfigureMockMvc`, test profile, and `MockIdentityProviderConfig`).
+- The test profile uses H2 and in-memory identity provider settings (`src/test/resources/application-test.properties`).
+- Database cleanup is handled by `CleanupDBTestExecutionListener` after each test; avoid manual truncation in tests unless needed.
+- Use `@WithMockJwt` to declare authorities for secured endpoints; keep method names `when...then...`.
+- Prefer Spring Boot testing utilities for integration tests; keep unit tests fast and isolated. 
 - If adding new behavior, include tests that cover both happy-path and failure cases.
 
 ## Commit & Pull Request Guidelines

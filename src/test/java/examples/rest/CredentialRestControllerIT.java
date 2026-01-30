@@ -11,6 +11,7 @@ import examples.repository.CredentialRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springinfra.assets.AuthorityType;
@@ -47,7 +48,7 @@ class CredentialRestControllerIT {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(this.objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.statusCode").value(200))
+                .andExpect(jsonPath("$.statusCode").value(HttpStatus.OK.value()))
                 .andExpect(jsonPath("$.result.username").value("admin"));
     }
 
@@ -60,7 +61,7 @@ class CredentialRestControllerIT {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(this.objectMapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.statusCode").value(400))
+                .andExpect(jsonPath("$.statusCode").value(HttpStatus.BAD_REQUEST.value()))
                 .andExpect(jsonPath("$.result", hasItem("Password value is not valid")));
     }
 
@@ -75,7 +76,7 @@ class CredentialRestControllerIT {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(this.objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.statusCode").value(200))
+                .andExpect(jsonPath("$.statusCode").value(HttpStatus.OK.value()))
                 .andExpect(jsonPath("$.result.username").value("updated"));
     }
 
@@ -88,7 +89,7 @@ class CredentialRestControllerIT {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(this.objectMapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.statusCode").value(400))
+                .andExpect(jsonPath("$.statusCode").value(HttpStatus.BAD_REQUEST.value()))
                 .andExpect(jsonPath("$.result", hasItem("version is required")));
     }
 
@@ -100,7 +101,7 @@ class CredentialRestControllerIT {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"username\":\"patched\"}"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.statusCode").value(200))
+                .andExpect(jsonPath("$.statusCode").value(HttpStatus.OK.value()))
                 .andExpect(jsonPath("$.result.username").value("patched"));
     }
 
@@ -112,13 +113,13 @@ class CredentialRestControllerIT {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"notAField\":\"value\"}"))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.statusCode").value(400))
+                .andExpect(jsonPath("$.statusCode").value(HttpStatus.BAD_REQUEST.value()))
                 .andExpect(jsonPath("$.result", hasItem("[notAField]: Property does not exist")));
     }
 
     @Test
     void whenDeleteRequest_thenReturnsNoContent() throws Exception {
-        Credential existingCredential = persistCredential("todelete");
+        Credential existingCredential = persistCredential("to-delete");
 
         this.mockMvc.perform(delete(BASE_URL + "/{id}", existingCredential.getId()))
                 .andExpect(status().isNoContent());
@@ -130,20 +131,20 @@ class CredentialRestControllerIT {
 
         this.mockMvc.perform(get(BASE_URL + "/{id}", savedCredential.getId()))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.statusCode").value(200))
+                .andExpect(jsonPath("$.statusCode").value(HttpStatus.OK.value()))
                 .andExpect(jsonPath("$.result.username").value("finder"));
     }
 
     @Test
     void whenListRequest_thenReturnsOkResponse() throws Exception {
-        persistCredential("listuser-one");
-        persistCredential("listuser-two");
+        persistCredential("list-user-one");
+        persistCredential("list-user-two");
 
         this.mockMvc.perform(get(BASE_URL)
                         .param("page", "0")
                         .param("size", "20"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.statusCode").value(200))
+                .andExpect(jsonPath("$.statusCode").value(HttpStatus.OK.value()))
                 .andExpect(jsonPath("$.result", hasSize(2)))
                 .andExpect(jsonPath("$.result[*].username", hasItem("listuser-one")))
                 .andExpect(jsonPath("$.result[*].username", hasItem("listuser-two")));
@@ -156,8 +157,18 @@ class CredentialRestControllerIT {
 
         this.mockMvc.perform(get(BASE_URL + "/account-info"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.statusCode").value(200))
+                .andExpect(jsonPath("$.statusCode").value(HttpStatus.OK.value()))
                 .andExpect(jsonPath("$.result.username").value("alice"));
+    }
+
+    @Test
+    @WithMockJwt(username = "alice", authorities = {AuthorityType.StringFormat.USER_MANAGEMENT_AUTHORITY})
+    void whenAccountInfoRequestAndUserDoesNotHavePermission_thenReturnsForbidden() throws Exception {
+        persistCredential("alice");
+
+        this.mockMvc.perform(get(BASE_URL + "/account-info"))
+                .andExpect(status().isForbidden())
+                .andExpect(jsonPath("$.statusCode").value(HttpStatus.FORBIDDEN.value()));
     }
 
     private CredentialDto buildCredentialRequest() {
