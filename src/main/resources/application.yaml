@@ -14,9 +14,9 @@ spring:
     active: dev
   datasource:
     name: spring_infra
-    url: jdbc:mysql://localhost:3306/${spring.datasource.name}?useUnicode=yes&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    username: root
+    url: jdbc:postgresql://localhost:5432/${spring.datasource.name}
+    driver-class-name: org.postgresql.Driver
+    username: postgres
     password: secure_access
     hikari:
       minimum-idle: 5
@@ -25,7 +25,7 @@ spring:
       idle-timeout: 600000
       max-lifetime: 1800000
   jpa:
-    database-platform: org.hibernate.dialect.MySQLDialect
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
     open-in-view: true
     show-sql: false
     hibernate:
