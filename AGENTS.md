@@ -22,6 +22,7 @@
 - Keep constants in `springinfra.assets` and follow existing naming (UPPER_SNAKE_CASE).
 
 ## Testing Guidelines
+- Any code changes must be tested by at least one of unit/integration test(s) or even both.
 - Tests live in `src/test/java` and should be named `*Test` (JUnit 6, Mockito 5). Integration tests use `*IT.java`.
 - Use `@IntegrationTest` for full-context tests (it wires `@SpringBootTest`, `@AutoConfigureMockMvc`, test profile, and `MockIdentityProviderConfig`).
 - The test profile uses H2 and in-memory identity provider settings (`src/test/resources/application-test.properties`).
