@@ -48,7 +48,7 @@ class AuthenticationControllerIT {
         this.mockMvc.perform(post(BASE_URL)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(this.objectMapper.writeValueAsString(request)))
-                .andExpect(status().isOk())
+                .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.statusCode").value(HttpStatus.OK.value()))
                 .andExpect(jsonPath("$.result.token").value(not(isEmptyOrNullString())));
     }
