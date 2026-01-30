@@ -41,7 +41,7 @@ import static org.springinfra.assets.Constant.CSP_REPOST_ENDPOINT;
 @RequiredArgsConstructor
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity(securedEnabled = true, jsr250Enabled = true)
+@EnableMethodSecurity(securedEnabled = true, jsr250Enabled = true, proxyTargetClass = true)
 public class WebSecurityConfig implements BaseConfig {
 
     private final Optional<BaseIdentityProviderModuleConfig> identityProviderModuleConfig;
