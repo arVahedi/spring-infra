@@ -1,5 +1,5 @@
 # Spring-Infra
-![CI](https://github.com/arVahedi/spring-infra/actions/workflows/ci.yml/badge.svg)
+![CI](https://github.com/arVahedi/spring-infra/actions/workflows/ci.yaml/badge.svg)
 
 Infrastructure (codebase) for any project based on spring framework
 
