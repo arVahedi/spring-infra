@@ -1,0 +1,139 @@
+server:
+  port: 8443
+  # servlet:
+  #   context-path: /spring-infra
+  ssl:
+    key-store: classpath:spring-infra.jks
+    key-store-type: JKS
+    key-store-password: 123456
+    key-password: 123456
+    key-alias: Spring-infra
+
+spring:
+  profiles:
+    active: dev
+  datasource:
+    name: spring_infra
+    url: jdbc:mysql://localhost:3306/${spring.datasource.name}?useUnicode=yes&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: secure_access
+    hikari:
+      minimum-idle: 5
+      maximum-pool-size: 200
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+  jpa:
+    database-platform: org.hibernate.dialect.MySQLDialect
+    open-in-view: true
+    show-sql: false
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        enable_lazy_load_no_trans: true
+        format-sql: true
+        integration:
+          envers:
+            enabled: true
+        generate_statistics: false
+      org:
+        hibernate:
+          envers:
+            audit_table_suffix: _audit_log
+  task:
+    scheduling:
+      pool:
+        size: 10
+  flyway:
+    enabled: true
+    baseline-version: 1
+    locations: classpath:db/migration
+  jackson:
+    mapper:
+      ACCEPT_CASE_INSENSITIVE_PROPERTIES: true
+      ACCEPT_CASE_INSENSITIVE_ENUMS: true
+    serialization:
+      FAIL_ON_EMPTY_BEANS: false
+    deserialization:
+      FAIL-ON-UNKNOWN-PROPERTIES: false
+
+security:
+  idp:
+    module: dataSourceIdentityProviderModule
+    # module: oidcIdentityProviderModule
+    # oidc:
+    #   provider: keycloak
+    #   single-sign-out: true
+
+# OIDC resource server configuration
+# spring:
+#   security:
+#     oauth2:
+#       resourceserver:
+#         jwt:
+#           issuer-uri: http://localhost:9090/realms/spring_infra
+#           jwk-set-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}/protocol/openid-connect/certs
+#       client:
+#         registration:
+#           keycloak:
+#             client-id: spring_infra_app
+#             client-secret: Edb94bpfurgYInXHbkyseAWwbTdL3C6x
+#             scope: openid
+#             authorization-grant-type: authorization_code
+#             redirect-uri: "https://localhost:${server.port}/login/oauth2/code/"
+#         provider:
+#           keycloak:
+#             issuer-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}
+#             user-name-attribute: preferred_username
+
+springdoc:
+  api-docs:
+    enabled: false
+    path: /doc/api/spec
+  swagger-ui:
+    path: /doc/api/swagger
+    operationsSorter: alpha
+    tagsSorter: alpha
+    doc-expansion: none
+  show-actuator: true
+
+management:
+  endpoints:
+    web:
+      base-path: /monitoring
+      exposure:
+        include: "*"
+        # exclude: env,beans
+  endpoint:
+    metrics:
+      enabled: true
+    prometheus:
+      enabled: true
+    health:
+      show-details: always
+      show-components: always
+  info:
+    env:
+      enabled: true
+    java:
+      enabled: true
+    os:
+      enabled: true
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+  metrics:
+    web:
+      server:
+        request:
+          autotime:
+            enabled: true
+
+info:
+  app:
+    name: "@project.name@"
+    version: "@project.version@"
+    encoding: "@project.build.sourceEncoding@"

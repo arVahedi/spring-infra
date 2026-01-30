@@ -1,0 +1,23 @@
+spring:
+  flyway:
+    locations: classpath:db/migration,classpath:/db/testdata
+  jpa:
+    show-sql: false
+
+# security:
+#   idp:
+#     module: inMemoryIdentityProviderModule
+#     in-memory:
+#       credentials:
+#         - "adminmem;$argon2id$v=19$m=4096,t=3,p=1$QnVwdGpUVmR3OUtHV29Pdw$QDBYFDfx9ePp6PwjP95woA;USER_MANAGEMENT_AUTHORITY;ACCOUNT_INFO_AUTHORITY"
+#         - "usermem;$argon2id$v=19$m=4096,t=3,p=1$QnVwdGpUVmR3OUtHV29Pdw$QDBYFDfx9ePp6PwjP95woA;ACCOUNT_INFO_AUTHORITY"
+
+springdoc:
+  api-docs:
+    enabled: true
+
+# logging:
+#   level:
+#     org.hibernate.SQL: DEBUG
+#     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+#     org.hibernate.stat: DEBUG

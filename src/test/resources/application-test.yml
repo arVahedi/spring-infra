@@ -1,0 +1,23 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:spring_infra;MODE=MySQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: ""
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    show-sql: false
+
+security:
+  idp:
+    module: inMemoryIdentityProviderModule
+    in-memory:
+      credentials:
+        - "admin;$argon2id$v=19$m=4096,t=3,p=1$QnVwdGpUVmR3OUtHV29Pdw$QDBYFDfx9ePp6PwjP95woA;USER_MANAGEMENT_AUTHORITY;ACCOUNT_INFO_AUTHORITY;ROLE_MANAGEMENT_AUTHORITY"
+        - "user;$argon2id$v=19$m=4096,t=3,p=1$QnVwdGpUVmR3OUtHV29Pdw$QDBYFDfx9ePp6PwjP95woA;ACCOUNT_INFO_AUTHORITY"
+
+# logging:
+#   level:
+#     org.hibernate.SQL: DEBUG
+#     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+#     org.hibernate.stat: DEBUG

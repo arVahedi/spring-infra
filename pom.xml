@@ -322,6 +322,8 @@
                 <directory>src/main/resources</directory>
                 <includes>
                     <include>**/*.properties</include>
+                    <include>**/*.yml</include>
+                    <include>**/*.yaml</include>
                 </includes>
                 <filtering>true</filtering>
             </resource>
@@ -329,6 +331,8 @@
                 <directory>src/main/resources</directory>
                 <excludes>
                     <exclude>**/*.properties</exclude>
+                    <exclude>**/*.yml</exclude>
+                    <exclude>**/*.yaml</exclude>
                 </excludes>
                 <filtering>false</filtering>
             </resource>
