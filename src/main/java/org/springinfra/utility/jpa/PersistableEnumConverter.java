@@ -1,9 +1,9 @@
 package org.springinfra.utility.jpa;
 
-import org.springinfra.assets.PersistableEnum;
-
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
+import org.springinfra.assets.PersistableEnum;
+
 import java.lang.reflect.ParameterizedType;
 import java.util.stream.Stream;
 

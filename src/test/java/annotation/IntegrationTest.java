@@ -10,6 +10,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springinfra.SpringInfraApplication;
+import org.springinfra.assets.DeploymentProfile;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -20,7 +21,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @SpringBootTest(classes = SpringInfraApplication.class)
 @AutoConfigureMockMvc
-@ActiveProfiles("test")
+@ActiveProfiles(DeploymentProfile.TEST)
 @Import({MockIdentityProviderConfig.class})
 @ExtendWith(SpringExtension.class)
 @TestExecutionListeners(

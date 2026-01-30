@@ -1,6 +1,7 @@
 package examples.assets;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.Converter;
 import org.springinfra.assets.PersistableEnum;
 import org.springinfra.utility.jpa.PersistableEnumConverter;
 
@@ -21,6 +22,7 @@ public enum UserStatus implements PersistableEnum<UserStatus> {
         return this.code;
     }
 
-    public static class Converter extends PersistableEnumConverter<UserStatus> {
+    @Converter(autoApply = true)
+    public static class UserStatusPersistableEnumConverter extends PersistableEnumConverter<UserStatus> {
     }
 }

@@ -6,14 +6,13 @@ import examples.domain.User;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.jpa.test.autoconfigure.TestEntityManager;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
 @IntegrationTest
-class UserSoftDeleteIT {
+class UserEntityDatabaseRequirementIT {
 
     @Autowired
     private UserRepository userRepository;
@@ -23,7 +22,7 @@ class UserSoftDeleteIT {
 
     @Test
     void whenDeleteUser_thenPerformSoftDelete() {
-        // arrange
+        // Arrange
         User user = new User();
         user.setFirstName("Joe");
         user.setLastName("Doe");
@@ -37,11 +36,11 @@ class UserSoftDeleteIT {
 
         Long id = user.getId();
 
-        // act
+        // Act
         this.userRepository.delete(user);
         this.userRepository.flush();      // important: force SQL execution
 
-        // assert 1: row still exists physically
+        // Assert 1: row still exists physically
         Integer rows = this.jdbc.queryForObject(
                 "SELECT COUNT(*) FROM users WHERE id = ?",
                 Integer.class,
@@ -49,7 +48,7 @@ class UserSoftDeleteIT {
         );
         assertThat(rows).isEqualTo(1);
 
-        // assert 2: deleted flag was updated
+        // Assert 2: deleted flag was updated
         Boolean deleted = this.jdbc.queryForObject(
                 "SELECT deleted FROM users WHERE id = ?",
                 Boolean.class,
@@ -59,5 +58,31 @@ class UserSoftDeleteIT {
 
         assertThat(this.userRepository.findById(id)).isEmpty();
         assertThat(this.userRepository.findAll()).extracting(User::getId).doesNotContain(id);
+    }
+
+    @Test
+    void whenUpsertUser_thenUserStatusMustBeEnumPersistableCode() {
+        // Arrange
+        User user = new User();
+        user.setFirstName("Joe");
+        user.setLastName("Doe");
+        user.setEmail("a@a.com");
+        user.setPhone("123-456-7890");
+        user.setStatus(UserStatus.ACTIVE);
+
+        // Act
+        user = this.userRepository.save(user);
+        this.userRepository.flush();
+
+        // Assert 1: row still exists physically
+        Long id = user.getId();
+
+        // Assert 2: deleted flag was updated
+        Integer statusId = this.jdbc.queryForObject(
+                "SELECT status FROM users WHERE id = ?",
+                Integer.class,
+                id
+        );
+        assertThat(statusId).isEqualTo(UserStatus.ACTIVE.getCode());
     }
 }

@@ -34,6 +34,5 @@ public class User extends BaseDomain<Long> {
     private String email;
 
     @Column(name = "status")
-    @Convert(converter = UserStatus.Converter.class)
     private UserStatus status;
 }

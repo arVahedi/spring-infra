@@ -47,7 +47,8 @@ class UserRestControllerIT {
                         .content(this.objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.statusCode").value(HttpStatus.OK.value()))
-                .andExpect(jsonPath("$.result.firstName").value("John"));
+                .andExpect(jsonPath("$.result.firstName").value("John"))
+                .andExpect(jsonPath("$.result.status").value(UserStatus.ACTIVE.name()));
     }
 
     @Test

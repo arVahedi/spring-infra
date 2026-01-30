@@ -3,6 +3,11 @@ spring:
     locations: classpath:db/migration,classpath:/db/testdata
   jpa:
     show-sql: false
+    properties:
+      hibernate:
+        format_sql: true  # Format SQL nicely
+        highlight_sql: true  # Syntax highlighting (console only)
+        use_sql_comments: true  # Add helpful comments
 
 # security:
 #   idp:
@@ -16,8 +21,8 @@ springdoc:
   api-docs:
     enabled: true
 
-# logging:
-#   level:
-#     org.hibernate.SQL: DEBUG
-#     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
-#     org.hibernate.stat: DEBUG
+#logging:
+#  level:
+#    org.hibernate.SQL: DEBUG
+#    org.hibernate.orm.jdbc.bind: TRACE
+#    org.hibernate.stat: DEBUG
