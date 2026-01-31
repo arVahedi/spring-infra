@@ -118,6 +118,11 @@ class UserEntityDatabaseRequirementIT {
 
         // Assert
         Long id = user.getId();
+        Instant createdDate = this.jdbc.queryForObject(
+                "SELECT created_date FROM users WHERE id = ?",
+                Instant.class,
+                id
+        );
 
         Instant lastModifiedDate = this.jdbc.queryForObject(
                 "SELECT last_modified_date FROM users WHERE id = ?",
@@ -126,6 +131,7 @@ class UserEntityDatabaseRequirementIT {
         );
         assertThat(lastModifiedDate)
                 .isNotNull()
+                .isAfter(createdDate)
                 .isAfter(beforeUpdateTime);
     }
 
