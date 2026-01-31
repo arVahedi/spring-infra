@@ -40,7 +40,7 @@ public class User extends BaseDomain {
     private String phone;
 
     @Basic
-    @Column(name = "email")
+    @Column(name = "email", nullable = false)
     private String email;
 
     @Column(name = "status")

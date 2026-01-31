@@ -19,7 +19,7 @@ import lombok.Setter;
 public abstract class OptimisticLockableDomain extends BaseDomain {
 
     @Version
-    @Column(name = "version")
+    @Column(name = "version", nullable = false)
     private long version;
 
 }

@@ -7,6 +7,7 @@ CREATE SEQUENCE credential_id_seq
 CREATE TABLE credential
 (
     id                 BIGINT PRIMARY KEY DEFAULT nextval('credential_id_seq'),
+    public_id          UUID NOT NULL UNIQUE,
     created_date       TIMESTAMP,
     last_modified_date TIMESTAMP,
     password           VARCHAR(255),
@@ -24,6 +25,7 @@ CREATE SEQUENCE credential_role_id_seq
 CREATE TABLE credential_role
 (
     id                 BIGINT PRIMARY KEY DEFAULT nextval('credential_role_id_seq'),
+    public_id          UUID NOT NULL UNIQUE,
     created_date       TIMESTAMP,
     last_modified_date TIMESTAMP,
     credential_id      BIGINT,
@@ -35,6 +37,7 @@ ALTER SEQUENCE credential_role_id_seq OWNED BY credential_role.id;
 CREATE TABLE credential_role_audit_log
 (
     id            INTEGER NOT NULL,
+    public_id     UUID,
     rev           INTEGER NOT NULL,
     revtype       SMALLINT,
     credential_id BIGINT,
@@ -51,6 +54,7 @@ CREATE SEQUENCE revision_info_id_seq
 CREATE TABLE revision_info
 (
     id              BIGINT PRIMARY KEY DEFAULT nextval('revision_info_id_seq'),
+    public_id       UUID NOT NULL UNIQUE,
     occurrence_date TIMESTAMP,
     principal       VARCHAR(255)
 );
@@ -65,6 +69,7 @@ CREATE SEQUENCE role_id_seq
 CREATE TABLE role
 (
     id                 BIGINT PRIMARY KEY DEFAULT nextval('role_id_seq'),
+    public_id          UUID NOT NULL UNIQUE,
     created_date       TIMESTAMP,
     last_modified_date TIMESTAMP,
     name               VARCHAR(255)
@@ -73,10 +78,11 @@ ALTER SEQUENCE role_id_seq OWNED BY role.id;
 
 CREATE TABLE role_audit_log
 (
-    id      INTEGER NOT NULL,
-    rev     INTEGER NOT NULL,
-    revtype SMALLINT,
-    name    VARCHAR(255),
+    id        INTEGER NOT NULL,
+    public_id UUID,
+    rev       INTEGER NOT NULL,
+    revtype   SMALLINT,
+    name      VARCHAR(255),
     PRIMARY KEY (id, rev)
 );
 
@@ -105,6 +111,7 @@ CREATE SEQUENCE users_id_seq
 CREATE TABLE users
 (
     id                 BIGINT PRIMARY KEY DEFAULT nextval('users_id_seq'),
+    public_id          UUID NOT NULL UNIQUE,
     created_date       TIMESTAMP,
     last_modified_date TIMESTAMP,
     deleted            boolean,
@@ -119,6 +126,7 @@ ALTER SEQUENCE users_id_seq OWNED BY users.id;
 CREATE TABLE users_audit_log
 (
     id         BIGINT  NOT NULL,
+    public_id  UUID,
     rev        INTEGER NOT NULL,
     revtype    SMALLINT,
     deleted    boolean,

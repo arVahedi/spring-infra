@@ -28,7 +28,7 @@ public class Role extends BaseDomain {
     private Long id;
 
     @Basic
-    @Column(name = "name")
+    @Column(name = "name",  nullable = false)
     private String name;
 
     @Enumerated(EnumType.STRING)

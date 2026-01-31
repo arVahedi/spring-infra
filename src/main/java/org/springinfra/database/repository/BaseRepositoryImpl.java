@@ -10,6 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springinfra.model.domain.BaseDomain;
 
+import java.util.Optional;
+import java.util.UUID;
+
 @NoRepositoryBean
 @Transactional
 @Getter

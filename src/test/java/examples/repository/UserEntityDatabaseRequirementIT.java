@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.time.Instant;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -31,10 +32,7 @@ class UserEntityDatabaseRequirementIT {
         user.setEmail("a@a.com");
         user.setPhone("123-456-7890");
         user.setStatus(UserStatus.ACTIVE);
-        //todo: fix this
-//        this.userRepository.saveAndFlush(user);
-        user = this.userRepository.save(user);
-        this.userRepository.flush();
+        user = this.userRepository.saveAndFlush(user);
 
         Long id = user.getId();
 
@@ -73,8 +71,7 @@ class UserEntityDatabaseRequirementIT {
         Instant beforeInsertTime = Instant.now();
 
         // Act
-        user = this.userRepository.save(user);
-        this.userRepository.flush();
+        user = this.userRepository.saveAndFlush(user);
 
         // Assert
         Long id = user.getId();
@@ -99,7 +96,7 @@ class UserEntityDatabaseRequirementIT {
     }
 
     @Test
-    void whenUpdateUser_thenLastModifiedDateMustBeFilled() {
+    void whenUpdateUser_thenLastModifiedDateMustBeUpdated() {
         // Arrange
         User user = new User();
         user.setFirstName("Joe");
@@ -109,12 +106,11 @@ class UserEntityDatabaseRequirementIT {
         user.setStatus(UserStatus.ACTIVE);
 
         // Act
-        user = this.userRepository.save(user);
-        this.userRepository.flush();
+        user = this.userRepository.saveAndFlush(user);
         user.setFirstName("Updated");
+        Instant firstModifiedDate = user.getLastModifiedDate();
         Instant beforeUpdateTime = Instant.now();
-        this.userRepository.save(user);
-        this.userRepository.flush();
+        this.userRepository.saveAndFlush(user);
 
         // Assert
         Long id = user.getId();
@@ -132,7 +128,34 @@ class UserEntityDatabaseRequirementIT {
         assertThat(lastModifiedDate)
                 .isNotNull()
                 .isAfter(createdDate)
+                .isAfter(firstModifiedDate)
                 .isAfter(beforeUpdateTime);
+    }
+
+    @Test
+    void whenInsertUser_thenPublicIdMustBeGenerated() {
+        // Arrange
+        User user = new User();
+        user.setFirstName("Joe");
+        user.setLastName("Doe");
+        user.setEmail("a@a.com");
+        user.setPhone("123-456-7890");
+        user.setStatus(UserStatus.ACTIVE);
+
+        // Act
+        user = this.userRepository.saveAndFlush(user);
+
+        // Assert
+        Long id = user.getId();
+
+        UUID publicId = this.jdbc.queryForObject(
+                "SELECT public_id FROM users WHERE id = ?",
+                UUID.class,
+                id
+        );
+        assertThat(publicId)
+                .isNotNull()
+                .isEqualTo(user.getPublicId());
     }
 
     @Test
@@ -146,8 +169,7 @@ class UserEntityDatabaseRequirementIT {
         user.setStatus(UserStatus.ACTIVE);
 
         // Act
-        user = this.userRepository.save(user);
-        this.userRepository.flush();
+        user = this.userRepository.saveAndFlush(user);
 
         // Assert
         Long id = user.getId();
