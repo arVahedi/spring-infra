@@ -2,7 +2,7 @@ spring:
   flyway:
     locations: classpath:db/migration,classpath:/db/testdata
   jpa:
-    show-sql: false
+    show-sql: true
     properties:
       hibernate:
         format_sql: true  # Format SQL nicely
@@ -21,8 +21,8 @@ springdoc:
   api-docs:
     enabled: true
 
-#logging:
-#  level:
-#    org.hibernate.SQL: DEBUG
-#    org.hibernate.orm.jdbc.bind: TRACE
-#    org.hibernate.stat: DEBUG
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
+    org.hibernate.orm.jdbc.bind: TRACE
+    org.hibernate.stat: DEBUG

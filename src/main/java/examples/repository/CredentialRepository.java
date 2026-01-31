@@ -10,7 +10,7 @@ import java.util.Optional;
 
 @Repository
 @Transactional(readOnly = true)
-public interface CredentialRepository extends BaseRepository<Credential, Long> {
+public interface CredentialRepository extends BaseRepository<Credential> {
 
     Optional<Credential> findByUsername(String username);
 }

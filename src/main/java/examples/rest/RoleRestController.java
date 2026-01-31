@@ -41,7 +41,7 @@ public class RoleRestController extends BaseRestController {
 
     @Operation(summary = "Update role", description = "Updating an existing role")
     @PutMapping("/{id}")
-    public ResponseEntity<ResponseTemplate<RoleDto>> update(@PathVariable @Min(value = 1, message = "Minimum acceptable value for id is 1") int id,
+    public ResponseEntity<ResponseTemplate<RoleDto>> update(@PathVariable @Min(value = 1, message = "Minimum acceptable value for id is 1") long id,
                                                             @RequestBody @Validated(ValidationGroups.UpdateValidationGroup.class) RoleDto request) {
         Role role = this.roleService.update(id, request);
         return ResponseEntity.ok(new ResponseTemplate<>(HttpStatus.OK, this.roleMapper.toDto(role)));
@@ -49,14 +49,14 @@ public class RoleRestController extends BaseRestController {
 
     @Operation(summary = "Delete role", description = "Deleting an existing role")
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable @Min(value = 1, message = "Minimum acceptable value for id is 1") int id) {
+    public ResponseEntity<Void> delete(@PathVariable @Min(value = 1, message = "Minimum acceptable value for id is 1") long id) {
         this.roleService.delete(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @Operation(summary = "Find role", description = "Retrieving an exising role")
     @GetMapping("/{id}")
-    public ResponseEntity<ResponseTemplate<RoleDto>> find(@PathVariable @Min(value = 1, message = "Minimum acceptable value for id is 1") int id) {
+    public ResponseEntity<ResponseTemplate<RoleDto>> find(@PathVariable @Min(value = 1, message = "Minimum acceptable value for id is 1") long id) {
         Role role = this.roleService.find(id);
         return ResponseEntity.ok(new ResponseTemplate<>(HttpStatus.OK, this.roleMapper.toDto(role)));
     }

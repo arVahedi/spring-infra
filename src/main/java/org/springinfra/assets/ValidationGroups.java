@@ -22,7 +22,7 @@ public interface ValidationGroups {
     class DynamicCrudValidationGroup implements AbstractiveValidationGroup {
         @Override
         public Class<?>[] getGroups(Object object) {
-            if (object instanceof BaseCrudDto<?, ?> baseCrudDto) {
+            if (object instanceof BaseCrudDto baseCrudDto) {
                 if (baseCrudDto.getId() == null) {
                     return new Class[]{InsertValidationGroup.class};
                 } else {

@@ -22,7 +22,7 @@ import java.util.Optional;
  * @param <D> the target crud DTO class (usually a child of {@link BaseCrudDto} class
  */
 
-public interface DefaultCrudService<I extends Number, E extends BaseDomain<I>, D extends BaseCrudDto<E, I>> extends CrudService<I, E, D> {
+public interface DefaultCrudService<E extends BaseDomain, D extends BaseCrudDto> extends CrudService<E, D> {
 
     @Transactional(rollbackFor = Exception.class)
     default E save(D request) {
@@ -31,14 +31,14 @@ public interface DefaultCrudService<I extends Number, E extends BaseDomain<I>, D
     }
 
     @Transactional(rollbackFor = Exception.class)
-    default E update(I id, D request) {
+    default E update(Long id, D request) {
         E entity = find(id);
         getMapper().updateEntity(entity, request);
         return getRepository().save(entity);
     }
 
     @Transactional(rollbackFor = Exception.class)
-    default E patch(I id, GenericDto genericDto) {
+    default E patch(Long id, GenericDto genericDto) {
         E entity = find(id);
         D dto = getMapper().toDto(entity);
         getMapper().patchDto(dto, genericDto.getProperties());
@@ -46,13 +46,13 @@ public interface DefaultCrudService<I extends Number, E extends BaseDomain<I>, D
     }
 
     @Transactional(rollbackFor = Exception.class)
-    default E delete(I id) {
+    default E delete(Long id) {
         E entity = find(id);
         getRepository().delete(entity);
         return entity;
     }
 
-    default E find(I id) {
+    default E find(Long id) {
         Optional<E> optional = getRepository().findById(id);
         return optional.orElseThrow(() -> new EntityNotFoundException(MessageFormat.format("The entity with id [{0}] does not exist", id)));
     }
@@ -65,7 +65,7 @@ public interface DefaultCrudService<I extends Number, E extends BaseDomain<I>, D
         return getRepository().findAll(pageable).toList();
     }
 
-    BaseRepository<E, I> getRepository();
+    BaseRepository<E> getRepository();
 
     BaseCrudMapper<E, D> getMapper();
 

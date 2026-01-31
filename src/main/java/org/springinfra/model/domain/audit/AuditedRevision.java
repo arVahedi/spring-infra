@@ -26,10 +26,14 @@ import java.util.Date;
 public class AuditedRevision {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "revision_info_seq")
+    @SequenceGenerator(
+            name = "revision_info_seq",
+            sequenceName = "revision_info_id_seq",
+            allocationSize = 50)
     @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @RevisionNumber
-    private int id;
+    private Long id;
 
     @Basic
     @Column(name = "occurrence_date")

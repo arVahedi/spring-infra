@@ -5,7 +5,7 @@ import org.springframework.data.repository.NoRepositoryBean;
 import org.springinfra.model.domain.BaseDomain;
 
 @NoRepositoryBean
-public interface BaseRepository<E extends BaseDomain<I>, I extends Number> extends JpaRepository<E, I> {
+public interface BaseRepository<E extends BaseDomain> extends JpaRepository<E, Long> {
 
     void detach(E entity);
 }

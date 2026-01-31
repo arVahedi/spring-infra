@@ -18,7 +18,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class CredentialService extends BaseService implements DefaultCrudService<Long, Credential, CredentialDto> {
+public class CredentialService extends BaseService implements DefaultCrudService<Credential, CredentialDto> {
 
     @Getter
     private final CredentialRepository repository;

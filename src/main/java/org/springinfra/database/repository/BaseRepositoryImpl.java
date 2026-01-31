@@ -13,7 +13,7 @@ import org.springinfra.model.domain.BaseDomain;
 @NoRepositoryBean
 @Transactional
 @Getter
-public class BaseRepositoryImpl<E extends BaseDomain<I>, I extends Number> extends SimpleJpaRepository<E, I> implements BaseRepository<E, I> {
+public class BaseRepositoryImpl<E extends BaseDomain> extends SimpleJpaRepository<E, Long> implements BaseRepository<E> {
 
     private final EntityManager entityManager;
 

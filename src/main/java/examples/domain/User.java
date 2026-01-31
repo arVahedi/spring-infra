@@ -16,7 +16,17 @@ import org.springinfra.model.domain.BaseDomain;
 @Getter
 @Setter
 @SoftDelete
-public class User extends BaseDomain<Long> {
+public class User extends BaseDomain {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "users_seq")
+    @SequenceGenerator(
+            name = "users_seq",
+            sequenceName = "users_id_seq",
+            allocationSize = 50)
+    @Column(name = "id")
+    private Long id;
+
     @Basic
     @Column(name = "first_name")
     private String firstName;

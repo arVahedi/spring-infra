@@ -12,7 +12,7 @@ import java.util.List;
 
 @Getter
 @Setter
-public class RoleDto extends BaseCrudDto<Role, Integer> {
+public class RoleDto extends BaseCrudDto {
     @NotBlank(message = "Role name is required")
     private String name;
     @NotEmpty(message = "AuthorityType is required")

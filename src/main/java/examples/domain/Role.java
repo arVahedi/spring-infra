@@ -16,7 +16,16 @@ import java.util.List;
 @Audited
 @Getter
 @Setter
-public class Role extends BaseDomain<Integer> {
+public class Role extends BaseDomain {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "role_seq")
+    @SequenceGenerator(
+            name = "role_seq",
+            sequenceName = "role_id_seq",
+            allocationSize = 50)
+    @Column(name = "id")
+    private Long id;
 
     @Basic
     @Column(name = "name")

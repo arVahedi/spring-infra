@@ -38,7 +38,7 @@ public abstract class CredentialMapper implements BaseCrudMapper<Credential, Cre
     @Mapping(target = "password", constant = Constant.PASSWORD_MASK)
     public abstract CredentialDto toDto(Credential entity);
 
-    public List<CredentialRole> mapToCredentialRole(List<Integer> roleIdList) {
+    public List<CredentialRole> mapToCredentialRole(List<Long> roleIdList) {
         List<CredentialRole> result = new ArrayList<>();
         roleIdList.forEach(item -> {
             Role role = this.roleService.find(item);
@@ -49,7 +49,7 @@ public abstract class CredentialMapper implements BaseCrudMapper<Credential, Cre
         return result;
     }
 
-    public List<Integer> mapToRoleIdList(List<CredentialRole> credentialRoles) {
+    public List<Long> mapToRoleIdList(List<CredentialRole> credentialRoles) {
         return credentialRoles.stream().map(item -> item.getRole().getId()).toList();
     }
 
@@ -66,7 +66,7 @@ public abstract class CredentialMapper implements BaseCrudMapper<Credential, Cre
             List<CredentialRole> newCredentialRoles = credential.getRoles();
             Optional<Credential> oldCredential = this.credentialRepository.findById(credential.getId());
             if (oldCredential.isPresent()) {
-                Map<Integer, CredentialRole> existingCredentialRoles = oldCredential.get().getRoles().stream().collect(Collectors.toMap(credentialRole -> credentialRole.getRole().getId(), Function.identity()));
+                Map<Long, CredentialRole> existingCredentialRoles = oldCredential.get().getRoles().stream().collect(Collectors.toMap(credentialRole -> credentialRole.getRole().getId(), Function.identity()));
                 newCredentialRoles.forEach(item -> mergedCredentialRoles.add(existingCredentialRoles.getOrDefault(item.getRole().getId(), item)));
 
                 credential.setRoles(mergedCredentialRoles);

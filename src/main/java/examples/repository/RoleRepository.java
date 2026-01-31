@@ -9,7 +9,7 @@ import java.util.Optional;
 
 @Repository
 @Transactional(readOnly = true)
-public interface RoleRepository extends BaseRepository<Role, Integer> {
+public interface RoleRepository extends BaseRepository<Role> {
 
     Optional<Role> findFirstByName(String name);
 }

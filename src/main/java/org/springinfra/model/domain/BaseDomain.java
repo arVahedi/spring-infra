@@ -14,10 +14,9 @@ import java.io.Serializable;
 import java.time.Instant;
 
 /**
- * The parent of all entity classes. As you can see all entities will have an {@link #id}, {@link #createdDate},
+ * The parent of all entity classes. As you can see all entities will have a {@link #createdDate},
  * and {@link #lastModifiedDate}.
  *
- * @param <I> the type of identity of entity which should be a subclass of {@link Number}
  */
 
 @Getter
@@ -25,12 +24,7 @@ import java.time.Instant;
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 @JsonIgnoreProperties({"hibernateLazyInitializer"})
-public abstract class BaseDomain<I extends Number> implements Persistable<I>, Serializable {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private I id;
+public abstract class BaseDomain implements Persistable<Long>, Serializable {
 
     @Basic
     @CreatedDate
@@ -45,6 +39,6 @@ public abstract class BaseDomain<I extends Number> implements Persistable<I>, Se
     @Override
     @JsonIgnore
     public boolean isNew() {
-        return this.id == null || this.id.longValue() == 0;
+        return getId() == null || getId() == 0;
     }
 }

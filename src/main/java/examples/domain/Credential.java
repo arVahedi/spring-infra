@@ -14,7 +14,17 @@ import java.util.List;
 @Table(name = "credential")
 @Getter
 @Setter
-public class Credential extends BaseDomain<Long> {
+public class Credential extends BaseDomain {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "credential_seq")
+    @SequenceGenerator(
+            name = "credential_seq",
+            sequenceName = "credential_id_seq",
+            allocationSize = 50)
+    @Column(name = "id")
+    private Long id;
+
     @Basic
     @Column(name = "username")
     private String username;
@@ -25,7 +35,8 @@ public class Credential extends BaseDomain<Long> {
 
     @ManyToOne(targetEntity = User.class, fetch = FetchType.LAZY, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "user_id", referencedColumnName = "id")
-    @NotFound(action = NotFoundAction.IGNORE)   //We've set this because User has a soft delete (@SoftDelete), but Credential doesn't
+    @NotFound(action = NotFoundAction.IGNORE)
+    //We've set this because User has a soft delete (@SoftDelete), but Credential doesn't
     private User user;
 
     @OneToMany(mappedBy = "credential", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)

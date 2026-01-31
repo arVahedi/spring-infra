@@ -20,7 +20,7 @@ import static org.springinfra.assets.Constant.PASSWORD_MASK;
 
 @Getter
 @Setter
-public class CredentialDto extends BaseCrudDto<Credential, Long> {
+public class CredentialDto extends BaseCrudDto {
     @NotBlank(message = "username is required")
     private String username;
     @NotBlank(message = "password is required")
@@ -29,7 +29,7 @@ public class CredentialDto extends BaseCrudDto<Credential, Long> {
     @NotNull(message = "user property is required")
     private UserDto user;
     @SecureProperty(accessibleFor = ROLE_MANAGEMENT_AUTHORITY, message = "roles property doesn't exist")
-    private List<Integer> roles = new ArrayList<>();
+    private List<Long> roles = new ArrayList<>();
 
     @Transient
     @AssertFalse(message = "Password value is not valid", groups = ValidationGroups.InsertValidationGroup.class)

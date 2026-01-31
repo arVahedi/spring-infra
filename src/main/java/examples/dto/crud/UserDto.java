@@ -12,7 +12,7 @@ import org.springinfra.model.dto.crud.BaseCrudDto;
 
 @Getter
 @Setter
-public class UserDto extends BaseCrudDto<User, Long> {
+public class UserDto extends BaseCrudDto {
     @NotBlank(message = "First-Name is required")
     private String firstName;
     @NotBlank(message = "Last-Name is required")

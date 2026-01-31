@@ -12,7 +12,7 @@ import org.springinfra.service.DefaultCrudService;
 
 @Service
 @RequiredArgsConstructor
-public class UserService extends BaseService implements DefaultCrudService<Long, User, UserDto> {
+public class UserService extends BaseService implements DefaultCrudService<User, UserDto> {
 
     @Getter
     private final UserRepository repository;

@@ -18,7 +18,7 @@ import java.util.Map;
  * @param <D> the target DTO (basically a child of {@link BaseCrudDto})
  */
 
-public interface BaseCrudMapper<E extends BaseDomain<?>, D extends BaseCrudDto<E, ?>> {
+public interface BaseCrudMapper<E extends BaseDomain, D extends BaseCrudDto> {
 
     E toEntity(D dto);
 

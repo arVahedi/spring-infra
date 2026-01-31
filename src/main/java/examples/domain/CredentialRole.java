@@ -14,7 +14,16 @@ import org.springinfra.model.domain.BaseDomain;
 @Table(name = "credential_role")
 @NoArgsConstructor
 @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
-public class CredentialRole extends BaseDomain<Integer> {
+public class CredentialRole extends BaseDomain {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "credential_role_seq")
+    @SequenceGenerator(
+            name = "credential_role_seq",
+            sequenceName = "credential_role_id_seq",
+            allocationSize = 50)
+    @Column(name = "id")
+    private Long id;
 
     @ManyToOne(targetEntity = Credential.class, fetch = FetchType.EAGER, cascade = {CascadeType.DETACH, CascadeType.REFRESH})
     @JoinColumn(name = "credential_id", referencedColumnName = "id")

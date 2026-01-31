@@ -6,7 +6,6 @@ import jakarta.validation.constraints.Null;
 import lombok.Getter;
 import lombok.Setter;
 import org.springinfra.assets.ValidationGroups;
-import org.springinfra.model.domain.BaseDomain;
 import org.springinfra.model.dto.BaseDto;
 
 import java.time.Instant;
@@ -15,16 +14,13 @@ import java.time.Instant;
  * This DTO is presented as the parent of all crud DTOs.
  * A crud DTO is a DTO class that completely corresponds to an entity class.
  *
- * @param <E> The corresponding entity class. (Please consider this parameter is not used so far apparently, but it's not
- *            redundant, it's used as a reference check of I to make sure the type of identifier of entity and DTO are the same)
- * @param <I> The Identifier type of the corresponding entity class in order to be used as the same identifier type at DTO
  */
 
 @Getter
 @Setter
-public abstract class BaseCrudDto<E extends BaseDomain<I>, I extends Number> extends BaseDto {
+public abstract class BaseCrudDto extends BaseDto {
     @Null(message = "id should be null for insert/update operation (use path variable instead)")
-    private I id;
+    private Long id;
     @NotNull(message = "version is required", groups = ValidationGroups.UpdateValidationGroup.class)
     @Null(message = "version should be null for insert operation", groups = ValidationGroups.InsertValidationGroup.class)
     private Long version;

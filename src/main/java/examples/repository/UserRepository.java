@@ -8,5 +8,5 @@ import examples.domain.User;
 
 @Repository
 @Transactional(readOnly = true)
-public interface UserRepository extends BaseRepository<User, Long>, UserCustomRepository {
+public interface UserRepository extends BaseRepository<User>, UserCustomRepository {
 }

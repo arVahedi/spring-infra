@@ -16,7 +16,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class RoleService extends BaseService implements DefaultCrudService<Integer, Role, RoleDto> {
+public class RoleService extends BaseService implements DefaultCrudService<Role, RoleDto> {
 
     @Getter
     private final RoleRepository repository;
@@ -25,19 +25,19 @@ public class RoleService extends BaseService implements DefaultCrudService<Integ
 
     @Override
     public Role save(RoleDto request) {
-        checkUniqueRoleName(request.getName(), Optional.empty());
+        checkUniqueRoleName(request.getName(), null);
         return DefaultCrudService.super.save(request);
     }
 
     @Override
-    public Role update(Integer id, RoleDto request) {
-        checkUniqueRoleName(request.getName(), Optional.of(id));
+    public Role update(Long id, RoleDto request) {
+        checkUniqueRoleName(request.getName(), id);
         return DefaultCrudService.super.update(id, request);
     }
 
-    private void checkUniqueRoleName(String name, Optional<Integer> excluded) {
-        Optional<Role> exisingRole = this.repository.findFirstByName(name);
-        if (exisingRole.isPresent() && (excluded.isEmpty() || excluded.get().intValue() != exisingRole.get().getId())) {
+    private void checkUniqueRoleName(String name, Long excluded) {
+        Optional<Role> existingRole = this.repository.findFirstByName(name);
+        if (existingRole.isPresent() && (excluded == null || !excluded.equals(existingRole.get().getId()))) {
             throw new UniqueConstraintAlreadyExistsException(MessageFormat.format("The role with the same name {0} is already exists", name));
         }
     }
