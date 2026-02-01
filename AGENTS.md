@@ -1,5 +1,8 @@
 # Repository Guidelines
 
+## Architectural Guide & Collaboration Convention
+- Read architecture guide file under ./misc/document/domain_service_architecture_guide.md
+
 ## Project Structure & Module Organization
 - `src/main/java/org/springinfra`: core Spring Boot infrastructure (security, web, data, utilities).
 - `src/main/java/examples`: sample domain, services, mappers, and controllers.
