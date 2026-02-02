@@ -1,7 +1,9 @@
 # Repository Guidelines
 
 ## Architectural Guide & Collaboration Convention
-- Read architecture guide file under ./misc/document/domain_service_architecture_guide.md
+- Read and follow all development guide files at [./misc/document/](./misc/document) : 
+  - Architecture guide: [domain_service_architecture_guide.md](./misc/document/domain_service_architecture_guide.md)
+  - MapStruct integration guide: [mapstruct_integration_guide.md](./misc/document/mapstruct_integration_guide.md)
 
 ## Project Structure & Module Organization
 - `src/main/java/org/springinfra`: core Spring Boot infrastructure (security, web, data, utilities).
@@ -38,6 +40,20 @@
 - Commit messages in this repo are short and past-tense (e.g., “Updated Dockerfile”, “Fixed issue in …”).
 - Keep commits focused on a single change or concern.
 - No formal PR template is present; include a concise summary, testing notes (commands run), and any config or migration steps.
+
+## Code Review Guidelines
+- Implementation details should be strictly aligned with the project architecture guide at ./misc/document/domain_service_architecture_guide.md
+- Consider clean-architecture and clean-code principals, secure coding standards, and Java best practices
+- Ensure all above guidelines are met
+- Check existing tests to cover PR changes both happy-path and failure cases
+- Require a brief risk/impact note (behavioral change, data migration, perf/security impact)
+- Verify transaction boundaries and error handling in service layers
+- Check MapStruct/Lombok usage doesn’t hide nullability or mapping gaps
+- Ensure DTO validation is at controller edge, not in domain services
+- Confirm repository queries are indexed/efficient and pagination is used where needed
+- Look for logging of PII/secrets and ensure log levels are appropriate
+- Require test evidence (command + key assertions) and note any gaps
+- Validate API changes include backward-compat notes and OpenAPI docs if present
 
 ## Security & Configuration Notes
 - Dependency services are managed via `docker-compose.yml`.
