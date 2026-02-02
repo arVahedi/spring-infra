@@ -2,8 +2,8 @@ package examples.rest;
 
 import annotation.IntegrationTest;
 import annotation.WithMockJwt;
-import examples.domain.Role;
-import examples.dto.crud.RoleDto;
+import examples.model.dto.CreateRoleRequest;
+import examples.model.entity.Role;
 import examples.repository.RoleRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -41,7 +41,7 @@ class RoleRestControllerIT {
 
     @Test
     void whenSaveRequestIsValid_thenReturnsOkResponse() throws Exception {
-        RoleDto request = buildRoleRequest();
+        CreateRoleRequest request = new CreateRoleRequest("Administration", List.of(AuthorityType.USER_MANAGEMENT_AUTHORITY, AuthorityType.ROLE_MANAGEMENT_AUTHORITY));
 
         this.mockMvc.perform(post(BASE_URL)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -53,8 +53,7 @@ class RoleRestControllerIT {
 
     @Test
     void whenSaveRequestMissingName_thenReturnsBadRequest() throws Exception {
-        RoleDto request = buildRoleRequest();
-        request.setName("");
+        CreateRoleRequest request = new CreateRoleRequest("", List.of(AuthorityType.USER_MANAGEMENT_AUTHORITY, AuthorityType.ROLE_MANAGEMENT_AUTHORITY));
 
         this.mockMvc.perform(post(BASE_URL)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -67,11 +66,9 @@ class RoleRestControllerIT {
     @Test
     void whenUpdateRequestIsValid_thenReturnsOkResponse() throws Exception {
         Role existingRole = persistRole("Viewer");
-        RoleDto request = buildRoleRequest();
-        request.setName("Editor");
-        request.setVersion(1L);
+        CreateRoleRequest request = new CreateRoleRequest("Editor", List.of(AuthorityType.USER_MANAGEMENT_AUTHORITY, AuthorityType.ROLE_MANAGEMENT_AUTHORITY));
 
-        this.mockMvc.perform(put(BASE_URL + "/{id}", existingRole.getId())
+        this.mockMvc.perform(put(BASE_URL + "/{id}", existingRole.getPublicId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(this.objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
@@ -80,23 +77,10 @@ class RoleRestControllerIT {
     }
 
     @Test
-    void whenUpdateRequestMissingVersion_thenReturnsBadRequest() throws Exception {
-        Role existingRole = persistRole("Viewer");
-        RoleDto request = buildRoleRequest();
-
-        this.mockMvc.perform(put(BASE_URL + "/{id}", existingRole.getId())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(this.objectMapper.writeValueAsString(request)))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.statusCode").value(HttpStatus.BAD_REQUEST.value()))
-                .andExpect(jsonPath("$.result", hasItem("version is required")));
-    }
-
-    @Test
     void whenDeleteRequest_thenReturnsNoContent() throws Exception {
         Role existingRole = persistRole("ToDelete");
 
-        this.mockMvc.perform(delete(BASE_URL + "/{id}", existingRole.getId()))
+        this.mockMvc.perform(delete(BASE_URL + "/{id}", existingRole.getPublicId()))
                 .andExpect(status().isNoContent());
     }
 
@@ -104,7 +88,7 @@ class RoleRestControllerIT {
     void whenFindRequest_thenReturnsOkResponse() throws Exception {
         Role savedRole = persistRole("Finder");
 
-        this.mockMvc.perform(get(BASE_URL + "/{id}", savedRole.getId()))
+        this.mockMvc.perform(get(BASE_URL + "/{id}", savedRole.getPublicId()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.statusCode").value(HttpStatus.OK.value()))
                 .andExpect(jsonPath("$.result.name").value("Finder"));
@@ -123,13 +107,6 @@ class RoleRestControllerIT {
                 .andExpect(jsonPath("$.result", hasSize(2)))
                 .andExpect(jsonPath("$.result[*].name", hasItem("ListRoleOne")))
                 .andExpect(jsonPath("$.result[*].name", hasItem("ListRoleTwo")));
-    }
-
-    private RoleDto buildRoleRequest() {
-        RoleDto roleDto = new RoleDto();
-        roleDto.setName("Administration");
-        roleDto.setAuthorities(List.of(AuthorityType.USER_MANAGEMENT_AUTHORITY, AuthorityType.ROLE_MANAGEMENT_AUTHORITY));
-        return roleDto;
     }
 
     private Role persistRole(String name) {

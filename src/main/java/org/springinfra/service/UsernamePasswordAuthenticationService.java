@@ -1,6 +1,6 @@
 package org.springinfra.service;
 
-import examples.dto.AuthRequest;
+import examples.model.dto.AuthenticationRequest;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -61,14 +61,15 @@ public class UsernamePasswordAuthenticationService extends BaseService {
     private final SecurityContextHolderStrategy defaultSecurityContextHolderStrategy = SecurityContextHolder.getContextHolderStrategy();
     private final RememberMeServices defaultRememberMeServices = new NullRememberMeServices();
 
-    public Authentication authenticate(HttpServletRequest request, HttpServletResponse response, AuthRequest authRequest) throws OperationNotSupportedException, ServletException, IOException {
+    public Authentication authenticate(HttpServletRequest request, HttpServletResponse response, AuthenticationRequest authenticationDto) throws OperationNotSupportedException, ServletException, IOException {
         try {
-            if (authenticationManager.isEmpty()) {     // If the AuthenticationManager is not exposed globally as a bean, means we don't support build-in authentication on this server. (likely because we are using oAuth2)
+            if (this.authenticationManager.isEmpty()) {     // If the AuthenticationManager is not exposed globally as a bean, means we don't support build-in authentication on this server. (likely because we are using oAuth2)
                 throw new OperationNotSupportedException("Build-in Authentication is not supported. 410 http status would be returned to the client.");
             }
 
-            Authentication authentication = this.authenticationManager.get().authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
-            log.info("User [{}] has been authenticated successfully", authRequest.getUsername());
+            Authentication authentication = this.authenticationManager.get().authenticate(new UsernamePasswordAuthenticationToken(
+                    authenticationDto.username(), authenticationDto.password()));
+            log.info("User [{}] has been authenticated successfully", authenticationDto.username());
 
             this.sessionStrategy.orElse(this.defaultSessionStrategy).onAuthentication(authentication, request, response);
             successfulAuthentication(request, response, authentication);

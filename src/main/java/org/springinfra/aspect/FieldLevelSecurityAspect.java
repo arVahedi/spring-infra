@@ -12,7 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springinfra.SpringContext;
 import org.springinfra.annotation.validation.SecureProperty;
-import org.springinfra.model.dto.GenericDto;
+import org.springinfra.model.dto.PropertyBagDto;
 import org.springinfra.security.validator.SecurePropertyValidator;
 import tools.jackson.databind.ObjectMapper;
 
@@ -48,7 +48,7 @@ public class FieldLevelSecurityAspect implements BaseAspect {
         if (returnValue instanceof ResponseEntity<?> responseEntity) {
             Object body = responseEntity.getBody();
             if (body != null) {
-                GenericDto responseBody = SpringContext.getApplicationContext().getBean(ObjectMapper.class).convertValue(body, GenericDto.class);
+                PropertyBagDto responseBody = SpringContext.getApplicationContext().getBean(ObjectMapper.class).convertValue(body, PropertyBagDto.class);
 
                 returnValue = new ResponseEntity<>(filter(responseBody.getProperties(), body), responseEntity.getHeaders(), responseEntity.getStatusCode());
             }
@@ -59,8 +59,8 @@ public class FieldLevelSecurityAspect implements BaseAspect {
         return returnValue;
     }
 
-    private GenericDto filter(Map<String, Object> input, Object object) throws IllegalAccessException {
-        GenericDto result = new GenericDto();
+    private PropertyBagDto filter(Map<String, Object> input, Object object) throws IllegalAccessException {
+        PropertyBagDto result = new PropertyBagDto();
         List<Field> fields = Arrays.asList(object.getClass().getDeclaredFields());
 
         for (Map.Entry<String, Object> entry : input.entrySet()) {
@@ -91,7 +91,7 @@ public class FieldLevelSecurityAspect implements BaseAspect {
             List<Object> filteredValuesPerKey = new ArrayList<>();
             for (Object value : entryValueList) {
                 if (value != null && Map.class.isAssignableFrom(value.getClass())) {
-                    GenericDto innerDto = filter((Map<String, Object>) value, filedObject);
+                    PropertyBagDto innerDto = filter((Map<String, Object>) value, filedObject);
 
                     filteredValuesPerKey.add(innerDto.getProperties());
                 } else {

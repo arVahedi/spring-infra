@@ -30,10 +30,11 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import org.springinfra.assets.Constant;
 import org.springinfra.assets.ErrorCode;
 import org.springinfra.assets.ResponseTemplate;
+import org.springinfra.exception.EmailAlreadyExistException;
 import org.springinfra.exception.UsernameAlreadyExistsException;
 import org.springinfra.system.listener.SuccessfulAuthenticationHandler;
-import org.springinfra.utility.http.HttpRequestUtility;
-import org.springinfra.utility.identity.IdentityUtility;
+import org.springinfra.utility.http.HttpRequestUtil;
+import org.springinfra.utility.identity.IdentityUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -64,8 +65,8 @@ public class RestExceptionAdvisor extends ResponseEntityExceptionHandler {
         log.error(ex.getMessage(), ex);
         try {
             HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-            if (HttpRequestUtility.isUiRequest(request)) {
-                String redirectUrl = IdentityUtility.isAuthenticated() ? "/403" : "/login";
+            if (HttpRequestUtil.isUiRequest(request)) {
+                String redirectUrl = IdentityUtil.isAuthenticated() ? "/403" : "/login";
 
                 HttpHeaders headers = new HttpHeaders();
                 headers.add("Location", redirectUrl);
@@ -75,7 +76,7 @@ public class RestExceptionAdvisor extends ResponseEntityExceptionHandler {
             log.warn(e.getMessage());
         }
 
-        HttpStatus status = IdentityUtility.isAuthenticated() ? HttpStatus.FORBIDDEN : HttpStatus.UNAUTHORIZED;
+        HttpStatus status = IdentityUtil.isAuthenticated() ? HttpStatus.FORBIDDEN : HttpStatus.UNAUTHORIZED;
         return ResponseEntity.status(status).build();
     }
 
@@ -86,7 +87,7 @@ public class RestExceptionAdvisor extends ResponseEntityExceptionHandler {
             ServletRequestAttributes requestAttributes = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes());
             if (requestAttributes != null) {
                 HttpServletRequest request = requestAttributes.getRequest();
-                if (HttpRequestUtility.isUiRequest(request)) {
+                if (HttpRequestUtil.isUiRequest(request)) {
                     HttpServletResponse httpServletResponse = requestAttributes.getResponse();
                     if (httpServletResponse != null && Arrays.stream(request.getCookies()).anyMatch(cookie -> cookie.getName().equalsIgnoreCase(Constant.AUTHORIZATION_TOKEN_COOKIE_NAME))) {
                         httpServletResponse.addCookie(SuccessfulAuthenticationHandler.generateAuthorizationCookie(Optional.empty()));
@@ -108,6 +109,12 @@ public class RestExceptionAdvisor extends ResponseEntityExceptionHandler {
     public ResponseEntity<ResponseTemplate<String>> handleUsernameAlreadyExistsException(UsernameAlreadyExistsException ex) {
         log.error(ex.getMessage(), ex);
         return new ResponseEntity<>(new ResponseTemplate<>(HttpStatus.CONFLICT, "Username already exists"), HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(EmailAlreadyExistException.class)
+    public ResponseEntity<ResponseTemplate<String>> handleUsernameAlreadyExistsException(EmailAlreadyExistException ex) {
+        log.error(ex.getMessage(), ex);
+        return new ResponseEntity<>(new ResponseTemplate<>(HttpStatus.CONFLICT, "Email already exists"), HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(PropertyReferenceException.class)

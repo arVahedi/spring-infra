@@ -14,7 +14,7 @@ import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 import org.springinfra.assets.ClaimName;
-import org.springinfra.utility.identity.JwtUtility;
+import org.springinfra.utility.identity.JwtUtil;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -47,7 +47,7 @@ public class SuccessfulAuthenticationHandler extends SavedRequestAwareAuthentica
                 Map<String, Object> claims = new HashMap<>();
                 claims.put(ClaimName.USERNAME, user.getUsername());
                 log.info("Generating id token for user {}", user.getUsername());
-                authToken = JwtUtility.generateToken(claims);
+                authToken = JwtUtil.generateToken(claims);
             }
 
             request.setAttribute(AUTH_TOKEN_REQUEST_ATTRIBUTE, authToken);

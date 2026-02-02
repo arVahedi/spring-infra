@@ -1,53 +1,102 @@
 package examples.service;
 
-import examples.domain.Credential;
-import examples.dto.crud.CredentialDto;
-import examples.mapper.CredentialMapper;
+import examples.domain.CredentialDomainService;
+import examples.model.dto.CreateCredentialRequest;
+import examples.model.entity.Credential;
+import examples.model.entity.Role;
+import examples.model.mapper.CredentialMapper;
+import examples.model.view.CredentialView;
 import examples.repository.CredentialRepository;
+import examples.repository.RoleRepository;
 import jakarta.persistence.EntityNotFoundException;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springinfra.exception.UsernameAlreadyExistsException;
+import org.springinfra.model.dto.PropertyBagDto;
 import org.springinfra.service.BaseService;
-import org.springinfra.service.DefaultCrudService;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
-public class CredentialService extends BaseService implements DefaultCrudService<Credential, CredentialDto> {
+public class CredentialService extends BaseService {
 
-    @Getter
-    private final CredentialRepository repository;
-    @Getter
-    private final CredentialMapper mapper;
+    private final CredentialDomainService credentialDomainService;
+    private final CredentialRepository credentialRepository;
+    private final RoleRepository roleRepository;
+    private final CredentialMapper credentialMapper;
 
-    @Transactional(rollbackFor = Exception.class)
-    @Override
-    public Credential save(CredentialDto request) {
+    public CredentialView save(CreateCredentialRequest request) {
         //Prevent duplicate usernames
-        checkUsernameDuplication(request.getUsername(), Optional.empty());
-        return DefaultCrudService.super.save(request);
+        checkUsernameUniqueness(request.username());
+        var credential = this.credentialMapper.toEntity(request);
+        this.credentialDomainService.changePassword(credential, request.password());
+        List<Role> roleEntities = new ArrayList<>();
+        request.roles().forEach(rolePId -> {
+            Role role = this.roleRepository.findByPublicId(rolePId)
+                    .orElseThrow(() -> new EntityNotFoundException(MessageFormat.format("The ID [{0}] does not exist", rolePId)));
+            roleEntities.add(role);
+        });
+        this.credentialDomainService.updateRoles(credential, roleEntities);
+
+        credential = this.credentialRepository.save(credential);
+        return this.credentialMapper.toView(credential);
     }
 
-    @Transactional(rollbackFor = Exception.class)
-    @Override
-    public Credential update(Long id, CredentialDto request) {
-        //Prevent duplicate usernames
-        checkUsernameDuplication(request.getUsername(), Optional.of(id));
-        return DefaultCrudService.super.update(id, request);
+    public CredentialView patch(UUID publicId, PropertyBagDto propertyBagDto) {
+        var credential = this.credentialRepository.findByPublicId(publicId)
+                .orElseThrow(() -> new EntityNotFoundException(MessageFormat.format("The ID [{0}] does not exist", publicId)));
+
+        if (propertyBagDto.getProperties().containsKey("password")) {
+            this.credentialDomainService.changePassword(credential, (String) propertyBagDto.getProperty("password"));
+        }
+
+        if (propertyBagDto.getProperties().containsKey("roles")) {
+            List<Role> roleEntities = new ArrayList<>();
+            ((List<UUID>) propertyBagDto.getProperty("roles")).forEach(rolePublicId -> {
+                Role role = this.roleRepository.findByPublicId(rolePublicId)
+                        .orElseThrow(() -> new EntityNotFoundException(MessageFormat.format("The ID [{0}] does not exist", publicId)));
+                roleEntities.add(role);
+            });
+
+            this.credentialDomainService.updateRoles(credential, roleEntities);
+        }
+
+        credential = this.credentialRepository.save(credential);
+        return this.credentialMapper.toView(credential);
     }
 
-    public Credential findByUsername(String username) {
-        return this.repository.findByUsername((username)).orElseThrow(() -> new EntityNotFoundException(MessageFormat.format("The username [{0}] does not exist", username)));
+    public CredentialView findById(UUID publicId) {
+        var credential = this.credentialRepository.findByPublicId(publicId)
+                .orElseThrow(() -> new EntityNotFoundException(MessageFormat.format("The ID [{0}] does not exist", publicId)));
+        return this.credentialMapper.toView(credential);
     }
 
-    private void checkUsernameDuplication(String username, Optional<Long> excludedId) {
-        Optional<Credential> credential = this.repository.findByUsername((username));
-        if (credential.isPresent() && (excludedId.isEmpty() || (excludedId.get().longValue() != credential.get().getId()))) {
+    public void delete(UUID publicId) {
+        this.credentialRepository.deleteByPublicId(publicId);
+    }
+
+    public List<CredentialView> findAll(Pageable pageable) {
+        var credentials = this.credentialRepository.findAll(pageable);
+        return this.credentialMapper.toViews(credentials.getContent());
+    }
+
+    public CredentialView findByUsername(String username) {
+        var credential = this.credentialRepository.findByUsername((username))
+                .orElseThrow(() -> new EntityNotFoundException(MessageFormat.format("The username [{0}] does not exist", username)));
+        return this.credentialMapper.toView(credential);
+    }
+
+    private void checkUsernameUniqueness(String username) {
+        Optional<Credential> credential = this.credentialRepository.findByUsername((username.toLowerCase()));
+        if (credential.isPresent()) {
             throw new UsernameAlreadyExistsException();
         }
     }

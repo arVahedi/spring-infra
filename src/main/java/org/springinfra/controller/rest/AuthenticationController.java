@@ -1,7 +1,7 @@
 package org.springinfra.controller.rest;
 
-import examples.dto.AuthRequest;
-import examples.dto.AuthResponse;
+import examples.model.dto.AuthenticationRequest;
+import examples.model.view.TokenAuthenticationView;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.ServletException;
@@ -48,13 +48,15 @@ public class AuthenticationController extends BaseRestController {
 
     @Operation(summary = "Authenticating user", description = "Authenticating an existing user via username and password")
     @PostMapping
-    public ResponseEntity<ResponseTemplate<AuthResponse>> authenticate(HttpServletRequest request, HttpServletResponse response, @RequestBody @Validated AuthRequest authRequest) throws ServletException, IOException {
+    public ResponseEntity<ResponseTemplate<TokenAuthenticationView>> authenticate(HttpServletRequest request, HttpServletResponse response,
+                                                                                  @RequestBody @Validated AuthenticationRequest authenticationDto)
+            throws ServletException, IOException {
         try {
-            log.info("Received authentication request with username [{}]", authRequest.getUsername());
-            this.authenticationService.authenticate(request, response, authRequest);
+            log.info("Received authentication request with username [{}]", authenticationDto.username());
+            this.authenticationService.authenticate(request, response, authenticationDto);
             return ResponseEntity.ok()
                     .body(new ResponseTemplate<>(HttpStatus.OK,
-                            AuthResponse.builder()
+                            TokenAuthenticationView.builder()
                                     .token((String) request.getAttribute(AUTH_TOKEN_REQUEST_ATTRIBUTE))
                                     .build()));
         } catch (OperationNotSupportedException ex) {

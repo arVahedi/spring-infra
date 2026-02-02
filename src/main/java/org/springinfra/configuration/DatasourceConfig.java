@@ -5,11 +5,11 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springinfra.database.repository.BaseRepositoryImpl;
+import org.springinfra.database.repository.BaseRepository;
 
 @Configuration
 @EnableJpaAuditing
-@EnableJpaRepositories(repositoryBaseClass = BaseRepositoryImpl.class, basePackages = {"org/springinfra", "examples"})
+@EnableJpaRepositories(basePackages = {"org/springinfra", "examples"})
 @EntityScan(basePackages = {"org/springinfra", "examples"})
 @EnableTransactionManagement
 public class DatasourceConfig implements BaseConfig {

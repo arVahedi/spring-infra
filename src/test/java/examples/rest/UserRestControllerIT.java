@@ -3,8 +3,8 @@ package examples.rest;
 import annotation.IntegrationTest;
 import annotation.WithMockJwt;
 import examples.assets.UserStatus;
-import examples.domain.User;
-import examples.dto.crud.UserDto;
+import examples.model.dto.CreateUserRequest;
+import examples.model.entity.User;
 import examples.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -40,7 +40,7 @@ class UserRestControllerIT {
 
     @Test
     void whenSaveRequestIsValid_thenReturnsOkResponse() throws Exception {
-        UserDto request = buildUserRequest();
+        CreateUserRequest request = new CreateUserRequest("John", "Doe", "john.doe@example.com", "123-456-7890", UserStatus.ACTIVE);
 
         this.mockMvc.perform(post(BASE_URL)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -53,8 +53,7 @@ class UserRestControllerIT {
 
     @Test
     void whenSaveRequestMissingFirstName_thenReturnsBadRequest() throws Exception {
-        UserDto request = buildUserRequest();
-        request.setFirstName(null);
+        CreateUserRequest request = new CreateUserRequest(null, "Doe", "john.doe@example.com", "123-456-7890", UserStatus.ACTIVE);
 
         this.mockMvc.perform(post(BASE_URL)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -65,38 +64,10 @@ class UserRestControllerIT {
     }
 
     @Test
-    void whenUpdateRequestIsValid_thenReturnsOkResponse() throws Exception {
-        User existingUser = persistUser("Before");
-        UserDto request = buildUserRequest();
-        request.setFirstName("Updated");
-        request.setVersion(1L);
-
-        this.mockMvc.perform(put(BASE_URL + "/{id}", existingUser.getId())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(this.objectMapper.writeValueAsString(request)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.statusCode").value(HttpStatus.OK.value()))
-                .andExpect(jsonPath("$.result.firstName").value("Updated"));
-    }
-
-    @Test
-    void whenUpdateRequestMissingVersion_thenReturnsBadRequest() throws Exception {
-        User existingUser = persistUser("Before");
-        UserDto request = buildUserRequest();
-
-        this.mockMvc.perform(put(BASE_URL + "/{id}", existingUser.getId())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(this.objectMapper.writeValueAsString(request)))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.statusCode").value(HttpStatus.BAD_REQUEST.value()))
-                .andExpect(jsonPath("$.result", hasItem("version is required")));
-    }
-
-    @Test
     void whenPatchRequestIsValid_thenReturnsOkResponse() throws Exception {
         User existingUser = persistUser("Before");
 
-        this.mockMvc.perform(patch(BASE_URL + "/{id}", existingUser.getId())
+        this.mockMvc.perform(patch(BASE_URL + "/{id}", existingUser.getPublicId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"firstName\":\"Patched\"}"))
                 .andExpect(status().isOk())
@@ -108,7 +79,7 @@ class UserRestControllerIT {
     void whenPatchRequestHasUnknownField_thenReturnsBadRequest() throws Exception {
         User existingUser = persistUser("Before");
 
-        this.mockMvc.perform(patch(BASE_URL + "/{id}", existingUser.getId())
+        this.mockMvc.perform(patch(BASE_URL + "/{id}", existingUser.getPublicId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"notAField\":\"value\"}"))
                 .andExpect(status().isBadRequest())
@@ -120,7 +91,7 @@ class UserRestControllerIT {
     void whenDeleteRequest_thenReturnsNoContent() throws Exception {
         User existingUser = persistUser("ToDelete");
 
-        this.mockMvc.perform(delete(BASE_URL + "/{id}", existingUser.getId()))
+        this.mockMvc.perform(delete(BASE_URL + "/{id}", existingUser.getPublicId()))
                 .andExpect(status().isNoContent());
     }
 
@@ -128,7 +99,7 @@ class UserRestControllerIT {
     void whenFindRequest_thenReturnsOkResponse() throws Exception {
         User savedUser = persistUser("Finder");
 
-        this.mockMvc.perform(get(BASE_URL + "/{id}", savedUser.getId()))
+        this.mockMvc.perform(get(BASE_URL + "/{id}", savedUser.getPublicId()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.statusCode").value(HttpStatus.OK.value()))
                 .andExpect(jsonPath("$.result.firstName").value("Finder"));
@@ -147,16 +118,6 @@ class UserRestControllerIT {
                 .andExpect(jsonPath("$.result", hasSize(2)))
                 .andExpect(jsonPath("$.result[*].email", hasItem("list.one@example.com")))
                 .andExpect(jsonPath("$.result[*].email", hasItem("list.two@example.com")));
-    }
-
-    private UserDto buildUserRequest() {
-        UserDto userDto = new UserDto();
-        userDto.setFirstName("John");
-        userDto.setLastName("Doe");
-        userDto.setEmail("john.doe@example.com");
-        userDto.setPhone("123-456-7890");
-        userDto.setStatus(UserStatus.ACTIVE);
-        return userDto;
     }
 
     private User persistUser(String firstName) {

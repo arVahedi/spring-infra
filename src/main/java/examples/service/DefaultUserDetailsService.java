@@ -1,8 +1,8 @@
 package examples.service;
 
 import examples.assets.UserStatus;
-import examples.domain.Credential;
-import examples.domain.CredentialRole;
+import examples.model.entity.Credential;
+import examples.model.entity.CredentialRole;
 import examples.repository.CredentialRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;

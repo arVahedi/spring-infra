@@ -2,7 +2,7 @@ package examples.repository;
 
 import annotation.IntegrationTest;
 import examples.assets.UserStatus;
-import examples.domain.User;
+import examples.model.entity.User;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

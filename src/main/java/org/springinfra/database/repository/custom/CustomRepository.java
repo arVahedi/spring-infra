@@ -1,7 +1,7 @@
 package org.springinfra.database.repository.custom;
 
-import org.springinfra.model.domain.BaseDomain;
+import org.springinfra.model.entity.BaseEntity;
 
-public interface CustomRepository<E extends BaseDomain> {
+public interface CustomRepository<E extends BaseEntity> {
 
 }

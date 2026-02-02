@@ -26,7 +26,7 @@ spring:
       max-lifetime: 1800000
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
-    open-in-view: true
+    open-in-view: false
     show-sql: false
     hibernate:
       ddl-auto: none

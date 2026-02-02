@@ -1,6 +1,7 @@
 package examples.ui;
 
 import annotation.IntegrationTest;
+import examples.controller.ui.AccessDeniedUIController;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

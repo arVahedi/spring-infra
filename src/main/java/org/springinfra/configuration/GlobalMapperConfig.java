@@ -1,9 +1,8 @@
 package org.springinfra.configuration;
 
 
-import org.mapstruct.*;
-import org.springinfra.model.domain.BaseDomain;
-import org.springinfra.model.dto.crud.BaseCrudDto;
+import org.mapstruct.MapperConfig;
+import org.mapstruct.MappingInheritanceStrategy;
 
 /**
  * This is global configuration of mapstruct mappers.
@@ -17,7 +16,4 @@ import org.springinfra.model.dto.crud.BaseCrudDto;
 )
 public interface GlobalMapperConfig extends BaseConfig {
 
-    @Mapping(target = "createdDate", ignore = true)
-    @Mapping(target = "lastModifiedDate", ignore = true)
-    BaseDomain anyCrudDtoToDomainObjectConfiguration(BaseCrudDto dto);
 }

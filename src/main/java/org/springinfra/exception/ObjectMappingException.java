@@ -1,6 +1,7 @@
 package org.springinfra.exception;
 
-public class ObjectMappingException extends RuntimeException {
+public class ObjectMappingException extends BaseRuntimeException {
+
     public ObjectMappingException() {
     }
 

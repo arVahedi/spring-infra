@@ -8,7 +8,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springinfra.annotation.validation.SecureProperty;
 import org.springinfra.assets.AuthorityType;
-import org.springinfra.utility.identity.IdentityUtility;
+import org.springinfra.utility.identity.IdentityUtil;
 
 import java.util.Collections;
 import java.util.List;
@@ -26,10 +26,10 @@ public class SecurePropertyValidator implements ConstraintValidator<SecureProper
 
     public static boolean isAccessible(SecureProperty secureProperty) {
         if (secureProperty.accessibleForAnyAuthenticatedUser()) {
-            return IdentityUtility.isAuthenticated();
+            return IdentityUtil.isAuthenticated();
         }
 
-        if (!IdentityUtility.isAuthenticated()) {
+        if (!IdentityUtil.isAuthenticated()) {
             return false;
         }
 

@@ -10,8 +10,8 @@ CREATE TABLE credential
     public_id          UUID NOT NULL UNIQUE,
     created_date       TIMESTAMP,
     last_modified_date TIMESTAMP,
-    password           VARCHAR(255),
-    username           VARCHAR(255),
+    password           VARCHAR(255) NOT NULL,
+    username           VARCHAR(255) NOT NULL,
     user_id            BIGINT
 );
 ALTER SEQUENCE credential_id_seq OWNED BY credential.id;
@@ -72,7 +72,7 @@ CREATE TABLE role
     public_id          UUID NOT NULL UNIQUE,
     created_date       TIMESTAMP,
     last_modified_date TIMESTAMP,
-    name               VARCHAR(255)
+    name               VARCHAR(255) NOT NULL
 );
 ALTER SEQUENCE role_id_seq OWNED BY role.id;
 
@@ -115,11 +115,11 @@ CREATE TABLE users
     created_date       TIMESTAMP,
     last_modified_date TIMESTAMP,
     deleted            boolean,
-    email              VARCHAR(255),
-    first_name         VARCHAR(255),
-    last_name          VARCHAR(255),
+    email              VARCHAR(255) NOT NULL,
+    first_name         VARCHAR(255) NOT NULL,
+    last_name          VARCHAR(255) NOT NULL,
     phone              VARCHAR(255),
-    status             INTEGER
+    status             INTEGER NOT NULL
 );
 ALTER SEQUENCE users_id_seq OWNED BY users.id;
 

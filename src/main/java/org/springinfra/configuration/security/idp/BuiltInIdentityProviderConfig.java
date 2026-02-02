@@ -19,7 +19,7 @@ import org.springframework.security.oauth2.server.resource.web.BearerTokenResolv
 import org.springinfra.assets.ClaimName;
 import org.springinfra.security.oauth2.EnhancedBearerTokenResolver;
 import org.springinfra.security.oauth2.EnhancedJwtAuthenticationConverter;
-import org.springinfra.utility.identity.JwtUtility;
+import org.springinfra.utility.identity.JwtUtil;
 
 import java.time.Instant;
 
@@ -60,10 +60,10 @@ public abstract class BuiltInIdentityProviderConfig extends BaseIdentityProvider
     public JwtDecoder jwtDecoder() {
         return token -> {
             try {
-                JwtUtility.validateToken(token);
+                JwtUtil.validateToken(token);
 
                 Jwt.Builder jwtBuilder = Jwt.withTokenValue(token);
-                JwtUtility.getClaims(token).forEach((key, value) -> {
+                JwtUtil.getClaims(token).forEach((key, value) -> {
                     if (key.equalsIgnoreCase("exp")) {
                         jwtBuilder.expiresAt(Instant.ofEpochSecond((Long) value));
                     } else if (key.equalsIgnoreCase("iat")) {
@@ -72,7 +72,7 @@ public abstract class BuiltInIdentityProviderConfig extends BaseIdentityProvider
                         jwtBuilder.claim(key, value);
                     }
                 });
-                JwtUtility.getHeaders(token).forEach(jwtBuilder::header);
+                JwtUtil.getHeaders(token).forEach(jwtBuilder::header);
 
                 return jwtBuilder.build();
 

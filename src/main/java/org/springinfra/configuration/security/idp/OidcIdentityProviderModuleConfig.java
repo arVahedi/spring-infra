@@ -49,7 +49,7 @@ import org.springinfra.SpringContext;
 import org.springinfra.configuration.BeanConfig;
 import org.springinfra.security.oauth2.*;
 import org.springinfra.system.listener.SuccessfulAuthenticationHandler;
-import org.springinfra.utility.identity.JwtUtility;
+import org.springinfra.utility.identity.JwtUtil;
 
 import java.net.URI;
 import java.util.*;
@@ -157,7 +157,7 @@ public class OidcIdentityProviderModuleConfig extends BaseIdentityProviderModule
                     OidcIdToken idToken = oidcUserAuthority.getIdToken();
                     Map<String, Object> headers = new LinkedHashMap<>();
                     try {
-                        headers = JwtUtility.getHeadersWithoutValidation(idToken.getTokenValue());
+                        headers = JwtUtil.getHeadersWithoutValidation(idToken.getTokenValue());
                     } catch (InvalidJwtException | JoseException e) {
                         log.info(e.getMessage(), e);
                     }

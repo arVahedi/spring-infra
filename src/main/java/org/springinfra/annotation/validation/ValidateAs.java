@@ -15,11 +15,9 @@ public @interface ValidateAs {
 
     String message() default "";
 
-    Class<?>[] groups() default {};
-
     Class<? extends Payload>[] payload() default {};
 
     String value();
 
-    Class<?>[] withGroups() default {};
+    Class<?>[] groups() default {};
 }

@@ -1,7 +1,7 @@
 package org.springinfra.controller.rest;
 
 import annotation.IntegrationTest;
-import examples.dto.AuthRequest;
+import examples.model.dto.AuthenticationRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +43,7 @@ class AuthenticationControllerIT {
 
     @Test
     void whenAuthenticateRequestIsValid_thenReturnsOkResponse() throws Exception {
-        AuthRequest request = buildAuthRequest(USERNAME, PASSWORD);
+        var request = new AuthenticationRequest(USERNAME, PASSWORD);
 
         this.mockMvc.perform(post(BASE_URL)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -55,18 +55,11 @@ class AuthenticationControllerIT {
 
     @Test
     void whenAuthenticateRequestHasInvalidPassword_thenReturnsUnauthorized() throws Exception {
-        AuthRequest request = buildAuthRequest(USERNAME, "wrong-password");
+        var request = new AuthenticationRequest(USERNAME, "wrong-password");
 
         this.mockMvc.perform(post(BASE_URL)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(this.objectMapper.writeValueAsString(request)))
                 .andExpect(status().isUnauthorized());
-    }
-
-    private AuthRequest buildAuthRequest(String username, String password) {
-        AuthRequest request = new AuthRequest();
-        request.setUsername(username);
-        request.setPassword(password);
-        return request;
     }
 }
