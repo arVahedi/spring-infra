@@ -45,6 +45,10 @@ mvn clean package
 mvn test
 ```
 
+```bash
+mvn verify
+```
+
 ## Project layout
 - `src/main/java/org/springinfra`: core infrastructure (security, web, data, utilities).
 - `src/main/java/examples`: sample domain, services, mappers, and controllers.
