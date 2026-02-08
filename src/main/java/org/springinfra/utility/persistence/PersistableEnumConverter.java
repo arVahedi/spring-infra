@@ -1,4 +1,4 @@
-package org.springinfra.utility.jpa;
+package org.springinfra.utility.persistence;
 
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;

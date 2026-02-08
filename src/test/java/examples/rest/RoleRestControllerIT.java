@@ -2,7 +2,7 @@ package examples.rest;
 
 import annotation.IntegrationTest;
 import annotation.WithMockJwt;
-import examples.model.dto.CreateRoleRequest;
+import examples.model.dto.request.CreateRoleRequest;
 import examples.model.entity.Role;
 import examples.repository.RoleRepository;
 import lombok.extern.slf4j.Slf4j;

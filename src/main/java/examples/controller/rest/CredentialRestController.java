@@ -1,11 +1,10 @@
 package examples.controller.rest;
 
-import examples.model.dto.CreateCredentialRequest;
-import examples.model.view.CredentialView;
+import examples.model.dto.request.CreateCredentialRequest;
+import examples.model.dto.view.CredentialView;
 import examples.service.CredentialService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -18,7 +17,7 @@ import org.springinfra.annotation.FieldLevelSecurity;
 import org.springinfra.annotation.validation.ValidateAs;
 import org.springinfra.assets.ResponseTemplate;
 import org.springinfra.controller.rest.BaseRestController;
-import org.springinfra.model.dto.PropertyBagDto;
+import org.springinfra.model.dto.request.PropertyBagRequest;
 import org.springinfra.utility.identity.IdentityUtil;
 
 import java.util.List;
@@ -45,8 +44,8 @@ public class CredentialRestController extends BaseRestController {
     @Operation(summary = "Patch credential", description = "Partial updating an existing credential")
     @PatchMapping("/{pId}")
     public ResponseEntity<ResponseTemplate<CredentialView>> patch(@PathVariable UUID pId,
-                                                                  @RequestBody @ValidateAs(value = "examples.model.dto.UpdateCredentialRequest") PropertyBagDto propertyBagDto) {
-        var credentialView = this.credentialService.patch(pId, propertyBagDto);
+                                                                  @RequestBody @ValidateAs(value = "examples.model.dto.request.UpdateCredentialRequest") PropertyBagRequest propertyBagRequest) {
+        var credentialView = this.credentialService.patch(pId, propertyBagRequest);
         return ResponseEntity.ok(new ResponseTemplate<>(HttpStatus.OK, credentialView));
     }
 

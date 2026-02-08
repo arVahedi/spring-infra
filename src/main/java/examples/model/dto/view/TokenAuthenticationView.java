@@ -1,4 +1,4 @@
-package examples.model.view;
+package examples.model.dto.view;
 
 import lombok.Builder;
 import lombok.Getter;

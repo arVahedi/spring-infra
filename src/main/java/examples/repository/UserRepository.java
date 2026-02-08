@@ -2,7 +2,7 @@ package examples.repository;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import org.springinfra.database.repository.BaseRepository;
+import org.springinfra.persistence.repository.BaseRepository;
 import examples.repository.custom.UserCustomRepository;
 import examples.model.entity.User;
 

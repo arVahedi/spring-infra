@@ -40,6 +40,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 @Slf4j
 @RestControllerAdvice
@@ -89,7 +90,8 @@ public class RestExceptionAdvisor extends ResponseEntityExceptionHandler {
                 HttpServletRequest request = requestAttributes.getRequest();
                 if (HttpRequestUtil.isUiRequest(request)) {
                     HttpServletResponse httpServletResponse = requestAttributes.getResponse();
-                    if (httpServletResponse != null && Arrays.stream(request.getCookies()).anyMatch(cookie -> cookie.getName().equalsIgnoreCase(Constant.AUTHORIZATION_TOKEN_COOKIE_NAME))) {
+                    if (httpServletResponse != null && Optional.ofNullable(request.getCookies()).stream().flatMap(Arrays::stream)
+                            .anyMatch(cookie -> cookie.getName().equalsIgnoreCase(Constant.AUTHORIZATION_TOKEN_COOKIE_NAME))) {
                         httpServletResponse.addCookie(SuccessfulAuthenticationHandler.generateAuthorizationCookie(Optional.empty()));
                     }
 

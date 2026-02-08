@@ -1,11 +1,11 @@
 package examples.service;
 
 import examples.domain.CredentialDomainService;
-import examples.model.dto.CreateCredentialRequest;
+import examples.model.dto.request.CreateCredentialRequest;
+import examples.model.dto.view.CredentialView;
 import examples.model.entity.Credential;
 import examples.model.entity.Role;
 import examples.model.mapper.CredentialMapper;
-import examples.model.view.CredentialView;
 import examples.repository.CredentialRepository;
 import examples.repository.RoleRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -14,7 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springinfra.exception.UsernameAlreadyExistsException;
-import org.springinfra.model.dto.PropertyBagDto;
+import org.springinfra.model.dto.request.PropertyBagRequest;
 import org.springinfra.service.BaseService;
 
 import java.text.MessageFormat;
@@ -50,21 +50,23 @@ public class CredentialService extends BaseService {
         return this.credentialMapper.toView(credential);
     }
 
-    public CredentialView patch(UUID publicId, PropertyBagDto propertyBagDto) {
+    public CredentialView patch(UUID publicId, PropertyBagRequest propertyBagRequest) {
         var credential = this.credentialRepository.findByPublicId(publicId)
                 .orElseThrow(() -> new EntityNotFoundException(MessageFormat.format("The ID [{0}] does not exist", publicId)));
 
-        if (propertyBagDto.getProperties().containsKey("password")) {
-            this.credentialDomainService.changePassword(credential, (String) propertyBagDto.getProperty("password"));
+        if (propertyBagRequest.getProperties().containsKey("password")) {
+            this.credentialDomainService.changePassword(credential, (String) propertyBagRequest.getProperty("password"));
         }
 
-        if (propertyBagDto.getProperties().containsKey("roles")) {
+        if (propertyBagRequest.getProperties().containsKey("roles")) {
             List<Role> roleEntities = new ArrayList<>();
-            ((List<UUID>) propertyBagDto.getProperty("roles")).forEach(rolePublicId -> {
-                Role role = this.roleRepository.findByPublicId(rolePublicId)
-                        .orElseThrow(() -> new EntityNotFoundException(MessageFormat.format("The ID [{0}] does not exist", publicId)));
-                roleEntities.add(role);
-            });
+            ((List<?>) propertyBagRequest.getProperty("roles")).stream()
+                    .map(item -> UUID.fromString(item.toString()))
+                    .forEach(rolePublicId -> {
+                        Role role = this.roleRepository.findByPublicId(rolePublicId)
+                                .orElseThrow(() -> new EntityNotFoundException(MessageFormat.format("The ID [{0}] does not exist", publicId)));
+                        roleEntities.add(role);
+                    });
 
             this.credentialDomainService.updateRoles(credential, roleEntities);
         }

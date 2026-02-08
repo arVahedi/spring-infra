@@ -7,11 +7,11 @@ CREATE SEQUENCE credential_id_seq
 CREATE TABLE credential
 (
     id                 BIGINT PRIMARY KEY DEFAULT nextval('credential_id_seq'),
-    public_id          UUID NOT NULL UNIQUE,
+    public_id          UUID         NOT NULL UNIQUE,
     created_date       TIMESTAMP,
     last_modified_date TIMESTAMP,
     password           VARCHAR(255) NOT NULL,
-    username           VARCHAR(255) NOT NULL,
+    username           VARCHAR(255) NOT NULL UNIQUE,
     user_id            BIGINT
 );
 ALTER SEQUENCE credential_id_seq OWNED BY credential.id;
@@ -69,7 +69,7 @@ CREATE SEQUENCE role_id_seq
 CREATE TABLE role
 (
     id                 BIGINT PRIMARY KEY DEFAULT nextval('role_id_seq'),
-    public_id          UUID NOT NULL UNIQUE,
+    public_id          UUID         NOT NULL UNIQUE,
     created_date       TIMESTAMP,
     last_modified_date TIMESTAMP,
     name               VARCHAR(255) NOT NULL
@@ -111,15 +111,15 @@ CREATE SEQUENCE users_id_seq
 CREATE TABLE users
 (
     id                 BIGINT PRIMARY KEY DEFAULT nextval('users_id_seq'),
-    public_id          UUID NOT NULL UNIQUE,
+    public_id          UUID         NOT NULL UNIQUE,
     created_date       TIMESTAMP,
     last_modified_date TIMESTAMP,
     deleted            boolean,
-    email              VARCHAR(255) NOT NULL,
+    email              VARCHAR(255) NOT NULL UNIQUE,
     first_name         VARCHAR(255) NOT NULL,
     last_name          VARCHAR(255) NOT NULL,
     phone              VARCHAR(255),
-    status             INTEGER NOT NULL
+    status             INTEGER      NOT NULL
 );
 ALTER SEQUENCE users_id_seq OWNED BY users.id;
 

@@ -27,7 +27,7 @@ import static org.springinfra.assets.Constant.AUTHORIZATION_TOKEN_PREFIX;
 @Setter
 public class EnhancedBearerTokenResolver implements BearerTokenResolver {
 
-    private static final List<String> ALLOW_COOKIE_AUTHORIZATION_METHODS = Arrays.asList(HttpMethod.GET.name(), HttpMethod.OPTIONS.name(), HttpMethod.TRACE.name());
+    private static final List<String> ALLOW_COOKIE_AUTHORIZATION_METHODS = Arrays.asList(HttpMethod.GET.name(), HttpMethod.OPTIONS.name());
     private DefaultBearerTokenResolver defaultBearerTokenResolver;
 
     public EnhancedBearerTokenResolver() {

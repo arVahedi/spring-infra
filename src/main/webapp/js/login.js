@@ -3,7 +3,10 @@ $(document).ready(function () {
         let username = $("#Username").val();
         let password = $("#Password").val();
 
-        let data = "{\"username\": \"" + username + "\", \"password\": \"" + password + "\"}";
+        let data = JSON.stringify({
+                   username: username,
+                   password: password
+               });
 
         $.ajax({
             type: "POST",
@@ -13,7 +16,8 @@ $(document).ready(function () {
             dataType: "json",
             success: function (data) {
                 console.log(data);
-                // window.localStorage.setItem("authorization", data.result.token);
+//                localStorage.setItem("authorization", data.result.token);
+                sessionStorage.setItem("authorization", data.result.token);
                 location.reload();
             },
             error: function (errMsg) {

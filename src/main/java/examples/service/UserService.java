@@ -1,9 +1,9 @@
 package examples.service;
 
 import examples.assets.UserStatus;
-import examples.model.dto.CreateUserRequest;
+import examples.model.dto.request.CreateUserRequest;
 import examples.model.mapper.UserMapper;
-import examples.model.view.UserView;
+import examples.model.dto.view.UserView;
 import examples.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springinfra.exception.EmailAlreadyExistException;
-import org.springinfra.model.dto.PropertyBagDto;
+import org.springinfra.model.dto.request.PropertyBagRequest;
 import org.springinfra.service.BaseService;
 
 import java.text.MessageFormat;
@@ -34,11 +34,11 @@ public class UserService extends BaseService {
         return this.userMapper.toView(user);
     }
 
-    public UserView patch(UUID pId, PropertyBagDto propertyBagDto) {
+    public UserView patch(UUID pId, PropertyBagRequest propertyBagRequest) {
         var user = this.userRepository.findByPublicId(pId)
                 .orElseThrow(() -> new EntityNotFoundException(MessageFormat.format("The ID [{0}] does not exist", pId)));
 
-        this.userMapper.patchEntity(user, propertyBagDto.getProperties());
+        this.userMapper.patchEntity(user, propertyBagRequest.getProperties());
         user = this.userRepository.save(user);
         return this.userMapper.toView(user);
     }

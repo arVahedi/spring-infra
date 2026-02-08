@@ -1,13 +1,11 @@
 package examples.controller.rest;
 
-import examples.model.dto.UpdateRoleRequest;
-import examples.model.entity.Role;
-import examples.model.dto.CreateRoleRequest;
-import examples.model.view.RoleView;
+import examples.model.dto.request.UpdateRoleRequest;
+import examples.model.dto.request.CreateRoleRequest;
+import examples.model.dto.view.RoleView;
 import examples.service.RoleService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -17,7 +15,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springinfra.assets.ResponseTemplate;
-import org.springinfra.assets.ValidationGroups;
 import org.springinfra.controller.rest.BaseRestController;
 
 import java.util.List;

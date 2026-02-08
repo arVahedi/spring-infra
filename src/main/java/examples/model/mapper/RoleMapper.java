@@ -1,9 +1,9 @@
 package examples.model.mapper;
 
-import examples.model.dto.CreateRoleRequest;
-import examples.model.dto.UpdateRoleRequest;
+import examples.model.dto.request.CreateRoleRequest;
+import examples.model.dto.request.UpdateRoleRequest;
 import examples.model.entity.Role;
-import examples.model.view.RoleView;
+import examples.model.dto.view.RoleView;
 import org.mapstruct.Mapper;
 import org.springinfra.configuration.GlobalMapperConfig;
 import org.springinfra.model.mapper.CrudMapper;

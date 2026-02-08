@@ -1,7 +1,7 @@
 package examples.controller.rest;
 
-import examples.model.dto.CreateUserRequest;
-import examples.model.view.UserView;
+import examples.model.dto.request.CreateUserRequest;
+import examples.model.dto.view.UserView;
 import examples.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springinfra.annotation.validation.ValidateAs;
 import org.springinfra.assets.ResponseTemplate;
 import org.springinfra.controller.rest.BaseRestController;
-import org.springinfra.model.dto.PropertyBagDto;
+import org.springinfra.model.dto.request.PropertyBagRequest;
 
 import java.util.List;
 import java.util.UUID;
@@ -41,8 +41,8 @@ public class UserRestController extends BaseRestController {
     @Operation(summary = "Patch user", description = "Partial updating an existing user")
     @PatchMapping("/{pId}")
     public ResponseEntity<ResponseTemplate<UserView>> patch(@PathVariable UUID pId,
-                                                            @RequestBody @ValidateAs(value = "examples.model.dto.UpdateUserRequest") PropertyBagDto propertyBagDto) {
-        var userView = this.userService.patch(pId, propertyBagDto);
+                                                            @RequestBody @ValidateAs(value = "examples.model.dto.request.UpdateUserRequest") PropertyBagRequest propertyBagRequest) {
+        var userView = this.userService.patch(pId, propertyBagRequest);
         return ResponseEntity.ok(new ResponseTemplate<>(HttpStatus.OK, userView));
     }
 

@@ -1,10 +1,10 @@
 package examples.model.mapper;
 
-import examples.model.dto.CreateCredentialRequest;
-import examples.model.dto.UpdateCredentialRequest;
+import examples.model.dto.request.CreateCredentialRequest;
+import examples.model.dto.request.UpdateCredentialRequest;
 import examples.model.entity.Credential;
 import examples.model.entity.CredentialRole;
-import examples.model.view.CredentialView;
+import examples.model.dto.view.CredentialView;
 import org.apache.commons.lang3.StringUtils;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

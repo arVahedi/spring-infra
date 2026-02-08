@@ -1,12 +1,11 @@
-package examples.model.dto;
+package examples.model.dto.request;
 
 import jakarta.validation.constraints.AssertFalse;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.springinfra.annotation.validation.SecureProperty;
-import org.springinfra.model.dto.BaseRequest;
+import org.springinfra.model.dto.request.BaseRequest;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 

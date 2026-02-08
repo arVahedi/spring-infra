@@ -26,7 +26,7 @@ public class Credential extends BaseEntity {
     private Long id;
 
     @Basic
-    @Column(name = "username", nullable = false, updatable = false)
+    @Column(name = "username", nullable = false, updatable = false, unique = true)
     private String username;
 
     @Basic

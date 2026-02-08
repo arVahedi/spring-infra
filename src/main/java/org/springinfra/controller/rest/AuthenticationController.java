@@ -1,7 +1,7 @@
 package org.springinfra.controller.rest;
 
-import examples.model.dto.AuthenticationRequest;
-import examples.model.view.TokenAuthenticationView;
+import examples.model.dto.request.AuthenticationRequest;
+import examples.model.dto.view.TokenAuthenticationView;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.ServletException;

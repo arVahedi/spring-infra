@@ -2,7 +2,7 @@ package org.springinfra.model.mapper;
 
 import org.mapstruct.InheritConfiguration;
 import org.mapstruct.MappingTarget;
-import org.springinfra.model.dto.BaseRequest;
+import org.springinfra.model.dto.request.BaseRequest;
 import org.springinfra.model.entity.BaseEntity;
 import org.springinfra.utility.mapping.ObjectMapperUtil;
 

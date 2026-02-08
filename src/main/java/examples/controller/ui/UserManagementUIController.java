@@ -1,6 +1,6 @@
 package examples.controller.ui;
 
-import examples.model.view.UserView;
+import examples.model.dto.view.UserView;
 import examples.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;

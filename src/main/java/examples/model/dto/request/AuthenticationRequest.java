@@ -1,7 +1,7 @@
-package examples.model.dto;
+package examples.model.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
-import org.springinfra.model.dto.BaseRequest;
+import org.springinfra.model.dto.request.BaseRequest;
 
 public record AuthenticationRequest(
         @NotBlank(message = "username parameter is required and can not be blank")

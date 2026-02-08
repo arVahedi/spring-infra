@@ -3,11 +3,13 @@ package examples.rest;
 import annotation.IntegrationTest;
 import annotation.WithMockJwt;
 import examples.assets.UserStatus;
-import examples.model.dto.CreateCredentialRequest;
-import examples.model.dto.CreateUserRequest;
+import examples.model.dto.request.CreateCredentialRequest;
+import examples.model.dto.request.CreateUserRequest;
 import examples.model.entity.Credential;
+import examples.model.entity.Role;
 import examples.model.entity.User;
 import examples.repository.CredentialRepository;
+import examples.repository.RoleRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,7 @@ import org.springinfra.controller.rest.BaseRestController;
 import tools.jackson.databind.ObjectMapper;
 
 import java.util.Collections;
+import java.util.List;
 
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasSize;
@@ -43,6 +46,9 @@ class CredentialRestControllerIT {
     @Autowired
     private CredentialRepository credentialRepository;
 
+    @Autowired
+    private RoleRepository roleRepository;
+
     @Test
     void whenSaveRequestIsValid_thenReturnsOkResponse() throws Exception {
         CreateCredentialRequest request = new CreateCredentialRequest("admin", "secret123",
@@ -53,7 +59,8 @@ class CredentialRestControllerIT {
                         .content(this.objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.statusCode").value(HttpStatus.OK.value()))
-                .andExpect(jsonPath("$.result.username").value("admin"));
+                .andExpect(jsonPath("$.result.username").value("admin"))
+                .andExpect(jsonPath("$.result.id").isNotEmpty());
     }
 
     @Test
@@ -76,6 +83,18 @@ class CredentialRestControllerIT {
         this.mockMvc.perform(patch(BASE_URL + "/{id}", existingCredential.getPublicId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"password\":\"patched\"}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.statusCode").value(HttpStatus.OK.value()));
+    }
+
+    @Test
+    void whenPatchRequestContainsRoleIds_thenReturnsOkResponse() throws Exception {
+        Credential existingCredential = persistCredential("role-user");
+        Role role = persistRole("ROLE_USER");
+
+        this.mockMvc.perform(patch(BASE_URL + "/{id}", existingCredential.getPublicId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"roles\":[\"" + role.getPublicId() + "\"]}"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.statusCode").value(HttpStatus.OK.value()));
     }
@@ -155,6 +174,13 @@ class CredentialRestControllerIT {
         credential.setPassword("hashed");
         credential.setUser(buildUserEntity(username));
         return this.credentialRepository.save(credential);
+    }
+
+    private Role persistRole(String roleName) {
+        Role role = new Role();
+        role.setName(roleName);
+        role.setAuthorities(List.of(AuthorityType.USER_MANAGEMENT_AUTHORITY));
+        return this.roleRepository.save(role);
     }
 
     private User buildUserEntity(String usernameSeed) {

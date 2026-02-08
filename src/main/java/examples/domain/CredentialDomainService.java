@@ -31,7 +31,7 @@ public class CredentialDomainService extends BaseDomainService {
 
         List<CredentialRole> newRoles = new ArrayList<>();
         roles.forEach(role -> {
-            if (!existingRolesMap.containsKey(role.getId())) {
+            if (existingRolesMap.containsKey(role.getId())) {
                 newRoles.add(existingRolesMap.get(role.getId()));
             } else {
                 CredentialRole credentialRole = new CredentialRole();
@@ -41,6 +41,7 @@ public class CredentialDomainService extends BaseDomainService {
             }
         });
 
+        credential.getRoles().clear();
         credential.getRoles().addAll(newRoles);
     }
 }

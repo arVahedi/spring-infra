@@ -1,4 +1,4 @@
-package org.springinfra.model.dto;
+package org.springinfra.model.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
@@ -16,7 +16,7 @@ import java.util.Map;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 //@JsonIdentityInfo(generator = JSOGGenerator.class)
 //@JsonSerialize(using = DTOSerializer.class)
-public class PropertyBagDto {
+public class PropertyBagRequest {
 
     private final Map<String, Object> properties = new HashMap<>();
 

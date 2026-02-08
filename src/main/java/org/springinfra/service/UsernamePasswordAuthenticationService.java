@@ -1,6 +1,6 @@
 package org.springinfra.service;
 
-import examples.model.dto.AuthenticationRequest;
+import examples.model.dto.request.AuthenticationRequest;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

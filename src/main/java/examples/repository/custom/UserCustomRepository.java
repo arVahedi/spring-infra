@@ -1,7 +1,7 @@
 package examples.repository.custom;
 
 import examples.model.entity.User;
-import org.springinfra.database.repository.custom.CustomRepository;
+import org.springinfra.persistence.repository.custom.CustomRepository;
 
 public interface UserCustomRepository extends CustomRepository<User> {
 

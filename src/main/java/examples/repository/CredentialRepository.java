@@ -4,7 +4,7 @@ package examples.repository;
 import examples.model.entity.Credential;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import org.springinfra.database.repository.BaseRepository;
+import org.springinfra.persistence.repository.BaseRepository;
 
 import java.util.Optional;
 

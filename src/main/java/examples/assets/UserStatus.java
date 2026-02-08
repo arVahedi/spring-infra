@@ -3,7 +3,7 @@ package examples.assets;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Converter;
 import org.springinfra.assets.PersistableEnum;
-import org.springinfra.utility.jpa.PersistableEnumConverter;
+import org.springinfra.utility.persistence.PersistableEnumConverter;
 
 @Schema(enumAsRef = true)
 public enum UserStatus implements PersistableEnum<UserStatus> {

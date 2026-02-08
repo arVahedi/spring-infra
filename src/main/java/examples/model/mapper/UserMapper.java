@@ -1,19 +1,18 @@
 package examples.model.mapper;
 
-import examples.assets.UserStatus;
-import examples.model.dto.UpdateUserRequest;
+import examples.model.dto.request.CreateUserRequest;
+import examples.model.dto.request.UpdateUserRequest;
+import examples.model.dto.view.UserView;
 import examples.model.entity.User;
-import examples.model.dto.CreateUserRequest;
-import examples.model.view.UserView;
-import jakarta.persistence.Basic;
-import jakarta.persistence.Column;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.springinfra.configuration.GlobalMapperConfig;
 import org.springinfra.model.mapper.CrudMapper;
-import org.springinfra.model.mapper.DefaultMapper;
 
 @Mapper(config = GlobalMapperConfig.class)
 public interface UserMapper extends CrudMapper<CreateUserRequest, UpdateUserRequest, User, UserView> {
 
+    @Mapping(target = "email", expression = "java(request.email().toLowerCase())")
+    User toEntity(CreateUserRequest request);
 
 }

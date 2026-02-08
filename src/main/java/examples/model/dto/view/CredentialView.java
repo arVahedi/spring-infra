@@ -1,13 +1,16 @@
-package examples.model.view;
+package examples.model.dto.view;
 
-import examples.model.dto.CreateUserRequest;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Data
 public class CredentialView {
+    @JsonProperty("id")
+    private UUID publicId;
     private String username;
     private String password;
     private UserView user;

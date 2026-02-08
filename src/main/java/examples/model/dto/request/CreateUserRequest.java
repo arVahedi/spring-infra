@@ -1,13 +1,14 @@
-package examples.model.dto;
+package examples.model.dto.request;
 
 import examples.assets.UserStatus;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import org.springinfra.assets.Regex;
-import org.springinfra.model.dto.BaseRequest;
+import org.springinfra.model.dto.request.BaseRequest;
 
-public record UpdateUserRequest(
+
+public record CreateUserRequest(
         @NotBlank(message = "First-Name is required")
         String firstName,
         @NotBlank(message = "Last-Name is required")
@@ -20,4 +21,5 @@ public record UpdateUserRequest(
         @NotNull(message = "status is required")
         UserStatus status
 ) implements BaseRequest {
+
 }

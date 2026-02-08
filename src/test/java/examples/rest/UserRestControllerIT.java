@@ -3,7 +3,7 @@ package examples.rest;
 import annotation.IntegrationTest;
 import annotation.WithMockJwt;
 import examples.assets.UserStatus;
-import examples.model.dto.CreateUserRequest;
+import examples.model.dto.request.CreateUserRequest;
 import examples.model.entity.User;
 import examples.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -48,6 +48,7 @@ class UserRestControllerIT {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.statusCode").value(HttpStatus.OK.value()))
                 .andExpect(jsonPath("$.result.firstName").value("John"))
+                .andExpect(jsonPath("$.result.id").isNotEmpty())
                 .andExpect(jsonPath("$.result.status").value(UserStatus.ACTIVE.name()));
     }
 

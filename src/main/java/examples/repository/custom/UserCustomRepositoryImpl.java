@@ -3,7 +3,7 @@ package examples.repository.custom;
 import examples.assets.UserStatus;
 import examples.model.entity.User;
 import org.springframework.transaction.annotation.Transactional;
-import org.springinfra.database.repository.custom.BaseCustomRepository;
+import org.springinfra.persistence.repository.custom.BaseCustomRepository;
 
 @Transactional(readOnly = true)
 public class UserCustomRepositoryImpl extends BaseCustomRepository<User> implements UserCustomRepository {

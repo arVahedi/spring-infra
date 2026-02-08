@@ -68,7 +68,7 @@ public class SuccessfulAuthenticationHandler extends SavedRequestAwareAuthentica
         Cookie authCookie = new Cookie(AUTHORIZATION_TOKEN_COOKIE_NAME, token.orElse(null));
         authCookie.setPath("/");
         authCookie.setSecure(true);
-        authCookie.setHttpOnly(false);
+        authCookie.setHttpOnly(true);
         authCookie.setAttribute("SameSite", org.springframework.boot.web.server.Cookie.SameSite.STRICT.attributeValue());
         if (token.isEmpty()) {
             authCookie.setMaxAge(0);

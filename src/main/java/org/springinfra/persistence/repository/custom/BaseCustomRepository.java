@@ -1,4 +1,4 @@
-package org.springinfra.database.repository.custom;
+package org.springinfra.persistence.repository.custom;
 
 import lombok.Getter;
 import lombok.Setter;

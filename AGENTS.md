@@ -25,6 +25,7 @@
 - Package naming stays under `org.springinfra.*`.
 - Use Lombok and MapStruct where applicable; keep annotations consistent with existing classes.
 - Keep constants in `springinfra.assets` and follow existing naming (UPPER_SNAKE_CASE).
+- All field access operations must be qualified (e.g., `this.field`) to avoid confusion with locals or parameters.
 
 ## Testing Guidelines
 - Any code changes must be tested by at least one of unit/integration test(s) or even both.

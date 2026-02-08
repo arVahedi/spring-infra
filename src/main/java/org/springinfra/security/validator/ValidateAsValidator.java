@@ -9,7 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.hibernate.validator.internal.engine.ConstraintViolationImpl;
 import org.hibernate.validator.internal.engine.path.PathImpl;
 import org.springinfra.annotation.validation.ValidateAs;
-import org.springinfra.model.dto.PropertyBagDto;
+import org.springinfra.model.dto.request.PropertyBagRequest;
 
 import java.lang.reflect.Field;
 import java.text.MessageFormat;
@@ -20,14 +20,14 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * Validator for {@link PropertyBagDto}
+ * Validator for {@link PropertyBagRequest}
  * <p>
  * Ensures only fields defined in the target DTO class are present
  */
 
 @Slf4j
 @RequiredArgsConstructor
-public class ValidateAsValidator extends BaseValidator<ValidateAs, PropertyBagDto> {
+public class ValidateAsValidator extends BaseValidator<ValidateAs, PropertyBagRequest> {
 
     private final Validator validator;
 
@@ -39,11 +39,15 @@ public class ValidateAsValidator extends BaseValidator<ValidateAs, PropertyBagDt
     }
 
     @Override
-    public boolean isValid(final PropertyBagDto propertyBagDto, final ConstraintValidatorContext constraintValidatorContext) {
+    public boolean isValid(final PropertyBagRequest propertyBagRequest, final ConstraintValidatorContext constraintValidatorContext) {
+        if (propertyBagRequest == null) {
+            return true;
+        }
+
         try {
             Class<?> delegateClass = Class.forName(this.constraintAnnotation.value());
-            Set<ConstraintViolation<?>> constraintViolations = validateMapFields(delegateClass, propertyBagDto.getProperties());
-            constraintViolations.addAll(validateMapValues(delegateClass, propertyBagDto.getProperties(), null, this.constraintAnnotation.groups()));
+            Set<ConstraintViolation<?>> constraintViolations = validateMapFields(delegateClass, propertyBagRequest.getProperties());
+            constraintViolations.addAll(validateMapValues(delegateClass, propertyBagRequest.getProperties(), null, this.constraintAnnotation.groups()));
 
             if (!constraintViolations.isEmpty()) {
                 constraintValidatorContext.disableDefaultConstraintViolation();

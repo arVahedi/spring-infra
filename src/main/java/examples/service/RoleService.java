@@ -1,10 +1,10 @@
 package examples.service;
 
-import examples.model.dto.CreateRoleRequest;
-import examples.model.dto.UpdateRoleRequest;
+import examples.model.dto.request.CreateRoleRequest;
+import examples.model.dto.request.UpdateRoleRequest;
 import examples.model.entity.Role;
 import examples.model.mapper.RoleMapper;
-import examples.model.view.RoleView;
+import examples.model.dto.view.RoleView;
 import examples.repository.RoleRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;

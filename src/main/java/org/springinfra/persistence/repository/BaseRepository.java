@@ -1,15 +1,15 @@
-package org.springinfra.database.repository;
+package org.springinfra.persistence.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.NoRepositoryBean;
+import org.springframework.transaction.annotation.Transactional;
 import org.springinfra.model.entity.BaseEntity;
 
 import java.util.Optional;
 import java.util.UUID;
 
 @NoRepositoryBean
-public interface BaseRepository<E extends BaseEntity> extends JpaRepository<E, Long> {
-
+@Transactional(readOnly = true)
+public interface BaseRepository<E extends BaseEntity> extends EnhancedJpaRepository<E> {
     Optional<E> findByPublicId(UUID pId);
 
     void deleteByPublicId(UUID pId);

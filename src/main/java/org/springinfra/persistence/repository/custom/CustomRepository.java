@@ -1,4 +1,4 @@
-package org.springinfra.database.repository.custom;
+package org.springinfra.persistence.repository.custom;
 
 import org.springinfra.model.entity.BaseEntity;
 
