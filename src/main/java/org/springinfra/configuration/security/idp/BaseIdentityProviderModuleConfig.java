@@ -1,5 +1,6 @@
 package org.springinfra.configuration.security.idp;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
@@ -18,6 +19,7 @@ import java.util.Optional;
  *
  * @see WebSecurityConfig
  */
+@Slf4j
 @Order(99)
 public abstract class BaseIdentityProviderModuleConfig implements BaseConfig {
 
@@ -40,18 +42,5 @@ public abstract class BaseIdentityProviderModuleConfig implements BaseConfig {
      */
     public Optional<AuthenticationManager> getAuthenticationManager(AuthenticationConfiguration authenticationConfiguration) {
         return Optional.empty();
-    }
-
-    /**
-     * This method is used for customizing logout configuration based on the identity module if needed.
-     * <strong>We don't use {@link HttpSecurity#logout(Customizer) logout} method in the HttpSecurity because it causes
-     * the {@link org.springframework.security.web.authentication.logout.LogoutFilter LogoutFilter} be put before all authentication filters
-     * which causes we don't have access to the Authentication object in our LogoutHandlers and LogoutSuccessfulHandlers.</strong>
-     * To fix this issue we have to disable the logout feature of HttpSecurity and then configure the logout logic manually. (For further information take a look at {@link WebSecurityConfig#createLogoutFilter(HttpSecurity)}
-     * So we use this method for doing any identity module-base customization on the logoutConfigurer.
-     *
-     * @param logoutConfigurer The LogoutConfigurer object which would be used for creating LogoutFilter
-     */
-    public <H extends HttpSecurityBuilder<H>> void configureLogout(LogoutConfigurer<H> logoutConfigurer) {
     }
 }

@@ -5,10 +5,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jose4j.jwt.consumer.InvalidJwtException;
 import org.jose4j.lang.JoseException;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.core.ResolvableType;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.http.HttpEntity;
@@ -17,9 +19,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.config.Customizer;
-import org.springframework.security.config.annotation.web.HttpSecurityBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configurers.LogoutConfigurer;
 import org.springframework.security.config.annotation.web.configurers.oauth2.client.OAuth2LoginConfigurer;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -80,10 +80,10 @@ public class OidcIdentityProviderModuleConfig extends BaseIdentityProviderModule
     private boolean activateSingleSignOut;
 
     private final SuccessfulAuthenticationHandler successfulAuthenticationHandler;
-    private final ClientRegistrationRepository clientRegistrationRepository;
-    private final BearerTokenResolver bearerTokenResolver;
-    private final JwtDecoder jwtDecoder;
-    private final Converter<Jwt, AbstractAuthenticationToken> enhancedJwtAuthenticationConverter;
+    private final ObjectProvider<ClientRegistrationRepository> clientRegistrationRepository;
+    private final ObjectProvider<BearerTokenResolver> bearerTokenResolver;
+    private final ObjectProvider<JwtDecoder> jwtDecoder;
+    private final ObjectProvider<Converter<Jwt, AbstractAuthenticationToken>> enhancedJwtAuthenticationConverter;
 
     /**
      * @param httpSecurity the global HttpSecurity retrieved from WebSecurityConfig
@@ -93,13 +93,13 @@ public class OidcIdentityProviderModuleConfig extends BaseIdentityProviderModule
     public void configure(HttpSecurity httpSecurity) {
         //This line is responsible for handling post-authentication requests, which means this causes we be able to convert the authorization header to the corresponding ID token and realize whether the user is authenticated or not.
         httpSecurity.oauth2ResourceServer(oAuth2ResourceServerConfigurer -> oAuth2ResourceServerConfigurer
-                .bearerTokenResolver(this.bearerTokenResolver)
+                .bearerTokenResolver(this.bearerTokenResolver.getObject())
                 .authenticationEntryPoint((request, response, authException) -> {
                     throw new InvalidBearerTokenException(authException.getMessage(), authException);
                 })
                 .jwt(jwtConfigurer -> jwtConfigurer
                         .decoder(jwtDecoderDecorator())
-                        .jwtAuthenticationConverter(this.enhancedJwtAuthenticationConverter)));
+                        .jwtAuthenticationConverter(this.enhancedJwtAuthenticationConverter.getObject())));
 
         httpSecurity.oauth2Client(Customizer.withDefaults());
 
@@ -108,16 +108,6 @@ public class OidcIdentityProviderModuleConfig extends BaseIdentityProviderModule
                 .loginPage("/login")    // It disables the default login page generator of Spring (DefaultLoginPageGeneratingFilter) in order to we can use our custom login page
                 .successHandler(this.successfulAuthenticationHandler)
                 .userInfoEndpoint(userInfoEndpointConfig -> userInfoEndpointConfig.oidcUserService(oidcUserService())));
-    }
-
-
-    /**
-     * @param logoutConfigurer The LogoutConfigurer object which would be used for creating LogoutFilter
-     * @see BaseIdentityProviderModuleConfig#configureLogout(LogoutConfigurer)
-     */
-    @Override
-    public <H extends HttpSecurityBuilder<H>> void configureLogout(LogoutConfigurer<H> logoutConfigurer) {
-        logoutConfigurer.addLogoutHandler(getRevocationTokenLogoutHandler());
     }
 
     @Bean
@@ -134,7 +124,7 @@ public class OidcIdentityProviderModuleConfig extends BaseIdentityProviderModule
      */
     @Bean
     public Converter<Jwt, AbstractAuthenticationToken> jwtAuthenticationConverter() {
-        ClientRegistration clientRegistration = this.clientRegistrationRepository.findByRegistrationId(this.oidcProvider);
+        ClientRegistration clientRegistration = this.clientRegistrationRepository.getObject().findByRegistrationId(this.oidcProvider);
         EnhancedJwtAuthenticationConverter converter = new EnhancedJwtAuthenticationConverter();
         converter.setPrincipalClaimName(clientRegistration.getProviderDetails().getUserInfoEndpoint().getUserNameAttributeName());
         converter.setJwtGrantedAuthoritiesConverter(oidcJwtGrantedAuthoritiesConverter());
@@ -177,6 +167,36 @@ public class OidcIdentityProviderModuleConfig extends BaseIdentityProviderModule
     }
 
     /**
+     * This is a custom LogoutHandler that handles ending sessions of OIDC in the authorization provider and also revokes the user's ID token.
+     * As a result the id token wouldn't be valid (active) anymore if we do inquiry from the introspect token endpoint of the OIDC provider as well as
+     * the user's session would be closed there.
+     *
+     * @return a custom LogoutHandler
+     * @see org.springframework.security.web.authentication.logout.LogoutHandler
+     */
+    @Bean
+    public LogoutHandler revocationTokenLogoutHandler() {
+        return (request, response, authentication) -> {
+            ClientRegistration clientRegistration = this.clientRegistrationRepository.getObject().findByRegistrationId(this.oidcProvider);
+            Optional<URI> endSessionEndpoint = endSessionEndpoint(clientRegistration);
+            if (authentication instanceof EnhancedJwtAuthenticationToken enhancedJwtAuthenticationToken && endSessionEndpoint.isPresent()) {
+                HttpHeaders headers = new HttpHeaders();
+                headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+
+                MultiValueMap<String, String> payload = new LinkedMultiValueMap<>();
+                payload.add("id_token_hint", enhancedJwtAuthenticationToken.getToken().getTokenValue());
+
+                HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(payload, headers);
+
+                ResponseEntity<String> revocationResponse = SpringContext.getApplicationContext().getBean(BeanConfig.INTERNAL_REST_TEMPLATE_BEAN_NAME, RestTemplate.class).postForEntity(endSessionEndpoint.get(), entity, String.class);
+                if (revocationResponse.getStatusCode().is2xxSuccessful()) {
+                    log.info("OIDC session is closed successfully for user [{}]", ((User) authentication.getPrincipal()).getUsername());
+                }
+            }
+        };
+    }
+
+    /**
      * This method returns all active login urls that support OIDC login (Usually we support only one (keycloak) but technically
      * it could be more (e.g: keycloak + google + facebook + any other OIDC provider)
      * <p>
@@ -187,9 +207,9 @@ public class OidcIdentityProviderModuleConfig extends BaseIdentityProviderModule
     @SuppressWarnings("unchecked")
     public Map<String, String> getLoginLinks() {
         Iterable<ClientRegistration> clientRegistrations = null;
-        ResolvableType type = ResolvableType.forInstance(this.clientRegistrationRepository).as(Iterable.class);
+        ResolvableType type = ResolvableType.forInstance(this.clientRegistrationRepository.getObject()).as(Iterable.class);
         if (type != ResolvableType.NONE && ClientRegistration.class.isAssignableFrom(type.resolveGenerics()[0])) {
-            clientRegistrations = (Iterable<ClientRegistration>) this.clientRegistrationRepository;
+            clientRegistrations = (Iterable<ClientRegistration>) this.clientRegistrationRepository.getObject();
         }
         if (clientRegistrations == null) {
             return Collections.emptyMap();
@@ -215,37 +235,8 @@ public class OidcIdentityProviderModuleConfig extends BaseIdentityProviderModule
      * @see OidcJwtGrantedAuthoritiesConverter
      */
     private Converter<Jwt, Collection<GrantedAuthority>> oidcJwtGrantedAuthoritiesConverter() {
-        ClientRegistration clientRegistration = this.clientRegistrationRepository.findByRegistrationId(this.oidcProvider);
+        ClientRegistration clientRegistration = this.clientRegistrationRepository.getObject().findByRegistrationId(this.oidcProvider);
         return new OidcJwtGrantedAuthoritiesConverter(clientRegistration.getClientId(), AUTHORITY_POSTFIX);
-    }
-
-    /**
-     * This is a custom LogoutHandler that handles ending sessions of OIDC in the authorization provider and also revokes the user's ID token.
-     * As a result the id token wouldn't be valid (active) anymore if we do inquiry from the introspect token endpoint of the OIDC provider as well as
-     * the user's session would be closed there.
-     *
-     * @return a custom LogoutHandler
-     * @see org.springframework.security.web.authentication.logout.LogoutHandler
-     */
-    private LogoutHandler getRevocationTokenLogoutHandler() {
-        return (request, response, authentication) -> {
-            ClientRegistration clientRegistration = this.clientRegistrationRepository.findByRegistrationId(this.oidcProvider);
-            Optional<URI> endSessionEndpoint = endSessionEndpoint(clientRegistration);
-            if (authentication instanceof EnhancedJwtAuthenticationToken enhancedJwtAuthenticationToken && endSessionEndpoint.isPresent()) {
-                HttpHeaders headers = new HttpHeaders();
-                headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-
-                MultiValueMap<String, String> payload = new LinkedMultiValueMap<>();
-                payload.add("id_token_hint", enhancedJwtAuthenticationToken.getToken().getTokenValue());
-
-                HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(payload, headers);
-
-                ResponseEntity<String> revocationResponse = SpringContext.getApplicationContext().getBean(BeanConfig.INTERNAL_REST_TEMPLATE_BEAN_NAME, RestTemplate.class).postForEntity(endSessionEndpoint.get(), entity, String.class);
-                if (revocationResponse.getStatusCode().is2xxSuccessful()) {
-                    log.info("Oidc session is closed successfully for user [{}]", ((User) authentication.getPrincipal()).getUsername());
-                }
-            }
-        };
     }
 
     /**
@@ -259,20 +250,20 @@ public class OidcIdentityProviderModuleConfig extends BaseIdentityProviderModule
      * @return a decorated {@link JwtDecoder} with custom {@link OAuth2TokenValidator}
      */
     private JwtDecoder jwtDecoderDecorator() {
-        if (this.jwtDecoder instanceof NimbusJwtDecoder nimbusJwtDecoder) {
+        if (this.jwtDecoder.getObject() instanceof NimbusJwtDecoder nimbusJwtDecoder) {
             List<OAuth2TokenValidator<Jwt>> extraValidators = new ArrayList<>();
 
             getOidcSingSignOutValidator().ifPresent(extraValidators::add);
 
             if (extraValidators.isEmpty()) {
-                return this.jwtDecoder;
+                return this.jwtDecoder.getObject();
             }
 
             return new NimbusJwtDecoderDecorator(nimbusJwtDecoder, new DelegatingOAuth2TokenValidator<>(extraValidators));
         }
 
         log.warn("The default Spring JwtDecoder is not instance of NimbusJwtDecoder, so decorating logic is interrupted");
-        return this.jwtDecoder;
+        return this.jwtDecoder.getObject();
 
     }
 
@@ -313,7 +304,7 @@ public class OidcIdentityProviderModuleConfig extends BaseIdentityProviderModule
     private Optional<OAuth2TokenValidator<Jwt>> getOidcSingSignOutValidator() {
         OAuth2TokenValidator<Jwt> result = null;
         if (this.activateSingleSignOut) {
-            ClientRegistration clientRegistration = this.clientRegistrationRepository.findByRegistrationId(this.oidcProvider);
+            ClientRegistration clientRegistration = this.clientRegistrationRepository.getObject().findByRegistrationId(this.oidcProvider);
             Optional<URI> introspectionEndpoint = introspectionEndpoint(clientRegistration);
             if (introspectionEndpoint.isPresent()) {
                 result = new OidcCloudSessionValidator(introspectionEndpoint.get(), clientRegistration.getClientId(), clientRegistration.getClientSecret());

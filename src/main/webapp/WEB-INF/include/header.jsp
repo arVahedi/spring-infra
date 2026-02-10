@@ -22,7 +22,7 @@
     <a href="/">Home</a>
     <c:choose>
         <c:when test="${isAuthenticated}">
-            <a href="/logout">Logout</a>
+            <a href="/api/v1/logout">Logout</a>
             <security:authorize access="hasAuthority('${AuthorityType.USER_MANAGEMENT_AUTHORITY}')">
                 <a href="/admin/user-management">User Management</a>
             </security:authorize>

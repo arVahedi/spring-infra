@@ -58,35 +58,33 @@ spring:
       FAIL_ON_EMPTY_BEANS: false
     deserialization:
       FAIL-ON-UNKNOWN-PROPERTIES: false
+  security:
+    # OIDC resource server configuration
+#    oauth2:
+#      resourceserver:
+#        jwt:
+#          issuer-uri: http://localhost:9090/realms/spring_infra
+#          jwk-set-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}/protocol/openid-connect/certs
+#      client:
+#        registration:
+#          keycloak:
+#            client-id: spring_infra_app
+#            client-secret: Edb94bpfurgYInXHbkyseAWwbTdL3C6x
+#            scope: openid
+#            authorization-grant-type: authorization_code
+#            redirect-uri: "https://localhost:${server.port}/login/oauth2/code/"
+#        provider:
+#          keycloak:
+#            issuer-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}
+#            user-name-attribute: preferred_username
 
 security:
   idp:
     module: dataSourceIdentityProviderModule
-    # module: oidcIdentityProviderModule
-    # oidc:
-    #   provider: keycloak
-    #   single-sign-out: true
-
-# OIDC resource server configuration
-# spring:
-#   security:
-#     oauth2:
-#       resourceserver:
-#         jwt:
-#           issuer-uri: http://localhost:9090/realms/spring_infra
-#           jwk-set-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}/protocol/openid-connect/certs
-#       client:
-#         registration:
-#           keycloak:
-#             client-id: spring_infra_app
-#             client-secret: Edb94bpfurgYInXHbkyseAWwbTdL3C6x
-#             scope: openid
-#             authorization-grant-type: authorization_code
-#             redirect-uri: "https://localhost:${server.port}/login/oauth2/code/"
-#         provider:
-#           keycloak:
-#             issuer-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}
-#             user-name-attribute: preferred_username
+#     module: oidcIdentityProviderModule
+#     oidc:
+#       provider: keycloak
+#       single-sign-out: true
 
 springdoc:
   api-docs:
