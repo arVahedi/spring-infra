@@ -1,9 +1,7 @@
 package org.springinfra.controller.rest;
 
-import examples.model.dto.view.TokenAuthenticationView;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -16,15 +14,11 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
-import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.header.writers.ClearSiteDataHeaderWriter;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springinfra.assets.ResponseTemplate;
 
-import java.io.IOException;
 import java.net.URI;
 import java.util.List;
 
@@ -46,8 +40,8 @@ public class LogoutController extends BaseRestController {
 //    @PostMapping
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Void> authenticate(HttpServletRequest request,
-                                                                                  HttpServletResponse response,
-                                                                                  Authentication authentication) {
+                                             HttpServletResponse response,
+                                             Authentication authentication) {
 
         // 1) Clear browser data (cookies, cache, storage) via response header
         this.clearSiteDataWriter.writeHeaders(request, response);
