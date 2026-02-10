@@ -1,6 +1,7 @@
 package examples.controller.rest;
 
 import examples.model.dto.request.CreateCredentialRequest;
+import examples.model.dto.request.UpdateCredentialRequest;
 import examples.model.dto.view.CredentialView;
 import examples.service.CredentialService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -44,7 +45,7 @@ public class CredentialRestController extends BaseRestController {
     @Operation(summary = "Patch credential", description = "Partial updating an existing credential")
     @PatchMapping("/{pId}")
     public ResponseEntity<ResponseTemplate<CredentialView>> patch(@PathVariable UUID pId,
-                                                                  @RequestBody @ValidateAs(value = "examples.model.dto.request.UpdateCredentialRequest") PropertyBagRequest propertyBagRequest) {
+                                                                  @RequestBody @ValidateAs(UpdateCredentialRequest.class) PropertyBagRequest propertyBagRequest) {
         var credentialView = this.credentialService.patch(pId, propertyBagRequest);
         return ResponseEntity.ok(new ResponseTemplate<>(HttpStatus.OK, credentialView));
     }

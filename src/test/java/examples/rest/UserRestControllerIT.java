@@ -89,6 +89,18 @@ class UserRestControllerIT {
     }
 
     @Test
+    void whenPatchRequestHasInvalidEmail_thenReturnsBadRequest() throws Exception {
+        User existingUser = persistUser("Before");
+
+        this.mockMvc.perform(patch(BASE_URL + "/{id}", existingUser.getPublicId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"email\":\"value\"}"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.statusCode").value(HttpStatus.BAD_REQUEST.value()))
+                .andExpect(jsonPath("$.result", hasItem("[email]: Email format is wrong")));
+    }
+
+    @Test
     void whenDeleteRequest_thenReturnsNoContent() throws Exception {
         User existingUser = persistUser("ToDelete");
 

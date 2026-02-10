@@ -1,6 +1,7 @@
 package examples.controller.rest;
 
 import examples.model.dto.request.CreateUserRequest;
+import examples.model.dto.request.UpdateUserRequest;
 import examples.model.dto.view.UserView;
 import examples.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -41,7 +42,7 @@ public class UserRestController extends BaseRestController {
     @Operation(summary = "Patch user", description = "Partial updating an existing user")
     @PatchMapping("/{pId}")
     public ResponseEntity<ResponseTemplate<UserView>> patch(@PathVariable UUID pId,
-                                                            @RequestBody @ValidateAs(value = "examples.model.dto.request.UpdateUserRequest") PropertyBagRequest propertyBagRequest) {
+                                                            @RequestBody @ValidateAs(UpdateUserRequest.class) PropertyBagRequest propertyBagRequest) {
         var userView = this.userService.patch(pId, propertyBagRequest);
         return ResponseEntity.ok(new ResponseTemplate<>(HttpStatus.OK, userView));
     }

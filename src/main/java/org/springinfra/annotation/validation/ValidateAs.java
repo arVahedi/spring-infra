@@ -13,11 +13,11 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ValidateAs {
 
+    Class<?> value();
+
     String message() default "";
 
     Class<? extends Payload>[] payload() default {};
-
-    String value();
 
     Class<?>[] groups() default {};
 }

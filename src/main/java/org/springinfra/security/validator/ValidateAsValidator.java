@@ -44,27 +44,20 @@ public class ValidateAsValidator extends BaseValidator<ValidateAs, PropertyBagRe
             return true;
         }
 
-        try {
-            Class<?> delegateClass = Class.forName(this.constraintAnnotation.value());
-            Set<ConstraintViolation<?>> constraintViolations = validateMapFields(delegateClass, propertyBagRequest.getProperties());
-            constraintViolations.addAll(validateMapValues(delegateClass, propertyBagRequest.getProperties(), null, this.constraintAnnotation.groups()));
+        Class<?> delegateClass = this.constraintAnnotation.value();
+        Set<ConstraintViolation<?>> constraintViolations = validateMapFields(delegateClass, propertyBagRequest.getProperties());
+        constraintViolations.addAll(validateMapValues(delegateClass, propertyBagRequest.getProperties(), null, this.constraintAnnotation.groups()));
 
-            if (!constraintViolations.isEmpty()) {
-                constraintValidatorContext.disableDefaultConstraintViolation();
-                for (ConstraintViolation<?> violation : constraintViolations) {
-                    constraintValidatorContext
-                            .buildConstraintViolationWithTemplate(MessageFormat.format("[{0}]: {1}", violation.getPropertyPath(), violation.getMessage()))
-                            .addConstraintViolation();
-                }
+        if (!constraintViolations.isEmpty()) {
+            constraintValidatorContext.disableDefaultConstraintViolation();
+            for (ConstraintViolation<?> violation : constraintViolations) {
+                constraintValidatorContext
+                        .buildConstraintViolationWithTemplate(MessageFormat.format("[{0}]: {1}", violation.getPropertyPath(), violation.getMessage()))
+                        .addConstraintViolation();
             }
-
-            return constraintViolations.isEmpty();
-
-        } catch (ClassNotFoundException e) {
-            log.error(e.getMessage(), e);
         }
 
-        return false;
+        return constraintViolations.isEmpty();
     }
 
     private Set<ConstraintViolation<?>> validateMapFields(Class<?> delegateClass, Map<String, Object> properties) {

@@ -9,7 +9,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springinfra.annotation.validation.ValidateAs;
-import org.springinfra.model.dto.request.PropertyBagRequest;
 
 import java.lang.annotation.Annotation;
 
@@ -41,36 +40,21 @@ class ValidateAsValidatorTest {
         assertThat(result).isTrue();
     }
 
-    @Test
-    void whenDelegateClassIsMissing_thenReturnsFalse() {
-        ValidateAsValidator localSubject = new ValidateAsValidator(this.validator);
-        localSubject.initialize(buildValidateAs("missing.Type"));
-
-        PropertyBagRequest propertyBagRequest = new PropertyBagRequest();
-
-        boolean result = localSubject.isValid(propertyBagRequest, null);
-
-        assertThat(result).isFalse();
-    }
-
-    private ValidateAs buildValidateAs(Class<?> delegateClass) {
-        return buildValidateAs(delegateClass.getName());
-    }
-
-    private ValidateAs buildValidateAs(String delegateClassName) {
+    private ValidateAs buildValidateAs(Class<?> delegateClassName) {
         return new ValidateAs() {
             @Override
             public String message() {
                 return "";
             }
 
+            @SuppressWarnings("unchecked")
             @Override
             public Class<? extends Payload>[] payload() {
-                return new Class[0];
+                return new Class[]{};
             }
 
             @Override
-            public String value() {
+            public Class<?> value() {
                 return delegateClassName;
             }
 
