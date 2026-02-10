@@ -2,8 +2,8 @@ package examples.service;
 
 import examples.assets.UserStatus;
 import examples.model.dto.request.CreateUserRequest;
-import examples.model.mapper.UserMapper;
 import examples.model.dto.view.UserView;
+import examples.model.mapper.UserMapper;
 import examples.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
