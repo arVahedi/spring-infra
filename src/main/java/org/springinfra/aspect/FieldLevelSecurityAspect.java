@@ -10,7 +10,6 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springinfra.SpringContext;
 import org.springinfra.annotation.validation.SecureProperty;
 import org.springinfra.model.dto.request.PropertyBagRequest;
 import org.springinfra.security.validator.SecurePropertyValidator;
@@ -31,6 +30,8 @@ import java.util.*;
 @RequiredArgsConstructor
 public class FieldLevelSecurityAspect implements BaseAspect {
 
+    private final ObjectMapper objectMapper;
+
     @Pointcut("@annotation(springinfra.annotation.FieldLevelSecurity)")
     public void annotatedMethod() {
     }
@@ -48,7 +49,7 @@ public class FieldLevelSecurityAspect implements BaseAspect {
         if (returnValue instanceof ResponseEntity<?> responseEntity) {
             Object body = responseEntity.getBody();
             if (body != null) {
-                PropertyBagRequest responseBody = SpringContext.getApplicationContext().getBean(ObjectMapper.class).convertValue(body, PropertyBagRequest.class);
+                PropertyBagRequest responseBody = this.objectMapper.convertValue(body, PropertyBagRequest.class);
 
                 returnValue = new ResponseEntity<>(filter(responseBody.getProperties(), body), responseEntity.getHeaders(), responseEntity.getStatusCode());
             }

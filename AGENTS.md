@@ -54,7 +54,7 @@
 - Confirm repository queries are indexed/efficient and pagination is used where needed
 - Look for logging of PII/secrets and ensure log levels are appropriate
 - Require test evidence (command + key assertions) and note any gaps
-- Validate API changes include backward-compat notes and OpenAPI docs if present
+- Validate API changes include backward-compatible notes and OpenAPI docs if present
 
 ## Security & Configuration Notes
 - Dependency services are managed via `docker-compose.yml`.

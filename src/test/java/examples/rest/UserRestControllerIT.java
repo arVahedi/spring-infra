@@ -16,8 +16,7 @@ import org.springinfra.assets.AuthorityType;
 import org.springinfra.controller.rest.BaseRestController;
 import tools.jackson.databind.ObjectMapper;
 
-import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -84,8 +83,8 @@ class UserRestControllerIT {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"notAField\":\"value\"}"))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.statusCode").value(HttpStatus.BAD_REQUEST.value()))
-                .andExpect(jsonPath("$.result", hasItem("[notAField]: Property does not exist")));
+                .andExpect(jsonPath("$.status").value(HttpStatus.BAD_REQUEST.value()))
+                .andExpect(jsonPath("$.detail", containsString("[notAField]: Property does not exist")));
     }
 
     @Test
@@ -96,8 +95,8 @@ class UserRestControllerIT {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"email\":\"value\"}"))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.statusCode").value(HttpStatus.BAD_REQUEST.value()))
-                .andExpect(jsonPath("$.result", hasItem("[email]: Email format is wrong")));
+                .andExpect(jsonPath("$.status").value(HttpStatus.BAD_REQUEST.value()))
+                .andExpect(jsonPath("$.detail", containsString("[email]: Email format is wrong")));
     }
 
     @Test

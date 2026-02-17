@@ -9,10 +9,7 @@ import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.StaleObjectStateException;
 import org.springframework.data.core.PropertyReferenceException;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationServiceException;
@@ -40,29 +37,28 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 @Slf4j
 @RestControllerAdvice
 public class RestExceptionAdvisor extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler({StaleObjectStateException.class, ObjectOptimisticLockingFailureException.class, EntityNotFoundException.class})
-    public ResponseEntity<ResponseTemplate<String>> handleExpiredDataException(Exception ex) {
+    public ResponseEntity<ProblemDetail> handleExpiredDataException(Exception ex) {
         log.error(ex.getMessage(), ex);
-        ResponseTemplate<String> responseTemplate = new ResponseTemplate<>(ErrorCode.EXPIRED_DATA, "Row was updated or deleted by another transaction");
-        return new ResponseEntity<>(responseTemplate, HttpStatus.BAD_REQUEST);
+        var problemDetail = ProblemDetail.forStatus(ErrorCode.EXPIRED_DATA.getCode());
+        problemDetail.setDetail("Row was updated or deleted by another transaction");
+        return ResponseEntity.badRequest().body(problemDetail);
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<ResponseTemplate<List<String>>> handleConstraintViolationException(ConstraintViolationException ex) {
+    public ResponseEntity<ProblemDetail> handleConstraintViolationException(ConstraintViolationException ex) {
         log.error(ex.getMessage(), ex);
         List<String> messages = ex.getConstraintViolations().stream().map(ConstraintViolation::getMessage).toList();
-        ResponseTemplate<List<String>> responseTemplate = new ResponseTemplate<>(HttpStatus.BAD_REQUEST, messages);
-        return new ResponseEntity<>(responseTemplate, HttpStatus.BAD_REQUEST);
+        return ResponseEntity.badRequest().body(ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, String.join("\n", messages)));
     }
 
     @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<ResponseTemplate<String>> handleAccessDeniedException(AccessDeniedException ex) {
+    public ResponseEntity<ProblemDetail> handleAccessDeniedException(AccessDeniedException ex) {
         log.error(ex.getMessage(), ex);
         try {
             HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
@@ -82,7 +78,7 @@ public class RestExceptionAdvisor extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler({BadCredentialsException.class, InvalidBearerTokenException.class, JwtValidationException.class, AuthenticationServiceException.class})
-    public ResponseEntity<ResponseTemplate<String>> handleBadCredentialsException(Exception ex) {
+    public ResponseEntity<ProblemDetail> handleBadCredentialsException(Exception ex) {
         log.error(ex.getMessage(), ex);
         try {
             ServletRequestAttributes requestAttributes = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes());
@@ -108,27 +104,27 @@ public class RestExceptionAdvisor extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(UsernameAlreadyExistsException.class)
-    public ResponseEntity<ResponseTemplate<String>> handleUsernameAlreadyExistsException(UsernameAlreadyExistsException ex) {
+    public ResponseEntity<ProblemDetail> handleUsernameAlreadyExistsException(UsernameAlreadyExistsException ex) {
         log.error(ex.getMessage(), ex);
-        return new ResponseEntity<>(new ResponseTemplate<>(HttpStatus.CONFLICT, "Username already exists"), HttpStatus.CONFLICT);
+        return new ResponseEntity<>(ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, "Username already exists"), HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(EmailAlreadyExistException.class)
-    public ResponseEntity<ResponseTemplate<String>> handleUsernameAlreadyExistsException(EmailAlreadyExistException ex) {
+    public ResponseEntity<ProblemDetail> handleUsernameAlreadyExistsException(EmailAlreadyExistException ex) {
         log.error(ex.getMessage(), ex);
-        return new ResponseEntity<>(new ResponseTemplate<>(HttpStatus.CONFLICT, "Email already exists"), HttpStatus.CONFLICT);
+        return new ResponseEntity<>(ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, "Email already exists"), HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(PropertyReferenceException.class)
-    public ResponseEntity<ResponseTemplate<String>> handleGeneralException(PropertyReferenceException ex) {
+    public ResponseEntity<ProblemDetail> handleGeneralException(PropertyReferenceException ex) {
         log.error(ex.getMessage(), ex);
-        return new ResponseEntity<>(new ResponseTemplate<>(HttpStatus.BAD_REQUEST, "No property found"), HttpStatus.BAD_REQUEST);
+        return ResponseEntity.badRequest().body(ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, "No property found"));
     }
 
     @ExceptionHandler({Exception.class, InternalAuthenticationServiceException.class})
-    public ResponseEntity<ResponseTemplate<String>> handleGeneralException(Exception ex) {
+    public ResponseEntity<ProblemDetail> handleGeneralException(Exception ex) {
         log.error(ex.getMessage(), ex);
-        return new ResponseEntity<>(new ResponseTemplate<>(HttpStatus.INTERNAL_SERVER_ERROR), HttpStatus.INTERNAL_SERVER_ERROR);
+        return ResponseEntity.internalServerError().body(ProblemDetail.forStatus(HttpStatus.INTERNAL_SERVER_ERROR));
     }
 
     @Override

@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springinfra.assets.AuthorityType;
 import org.springinfra.assets.Constant;
 import org.springinfra.controller.rest.BaseRestController;
@@ -24,8 +25,7 @@ import tools.jackson.databind.ObjectMapper;
 import java.util.Collections;
 import java.util.List;
 
-import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -106,9 +106,10 @@ class CredentialRestControllerIT {
         this.mockMvc.perform(patch(BASE_URL + "/{id}", existingCredential.getPublicId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"notAField\":\"value\"}"))
+                .andDo(MockMvcResultHandlers.print())
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.statusCode").value(HttpStatus.BAD_REQUEST.value()))
-                .andExpect(jsonPath("$.result", hasItem("[notAField]: Property does not exist")));
+                .andExpect(jsonPath("$.status").value(HttpStatus.BAD_REQUEST.value()))
+                .andExpect(jsonPath("$.detail", containsString("[notAField]: Property does not exist")));
     }
 
     @Test

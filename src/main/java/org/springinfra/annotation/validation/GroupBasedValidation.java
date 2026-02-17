@@ -16,7 +16,7 @@ import java.lang.annotation.Target;
  * considering a validation group.
  * Also bear in mind that this annotation provides a way for us to be able to change the validation group conditionally at run-time. For instance,
  * it means if the condition Z is true, B should be validated as group X, and otherwise should be validated as group Y. For further information and example
- * you can take look at {@link ValidationGroups.DynamicCrudValidationGroup DynamicCrudValidationGroup} and its usage.
+ * you can take look at {@link ValidationGroups ValidationGroups} and {@link GroupBasedValidationValidator GroupBasedValidationValidator}.
  */
 
 @Constraint(validatedBy = GroupBasedValidationValidator.class)

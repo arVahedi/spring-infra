@@ -6,7 +6,7 @@ package org.springinfra.assets;
  * By calling {@link #getGroups(Object)} method, we can get all its effective validation groups for validating.
  * Obviously, this method provides a way for us can make decisions about effective validation groups at run-time. For instance:
  *
- * @see ValidationGroups.DynamicCrudValidationGroup
+ * @see ValidationGroups
  */
 
 @FunctionalInterface
